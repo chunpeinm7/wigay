@@ -3,3 +3,23 @@
 # You can modify this file to suit your needs.
 /.esphome/
 /secrets.yaml
+__pycache__/
+*.pyc
+
+# Wi-Care Web
+wi-care-web/node_modules/
+wi-care-web/.env
+wi-care-web/.env.local
+wi-care-web/data/*.log
+wi-care-web/dist/
+wi-care-web/build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
