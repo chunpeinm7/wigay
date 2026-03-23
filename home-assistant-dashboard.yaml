@@ -1,0 +1,125 @@
+# ESPectre - Home Assistant 儀表板配置
+#
+# 使用方式：
+# 1. 在 Home Assistant 中，前往 設定 → 儀表板 → 新增儀表板
+# 2. 打開新儀表板，點擊"編輯"（鉛筆圖示）
+# 3. 點擊右上角三個點選單 → "原始配置編輯器"
+# 4. 刪除預設內容，將此 YAML 完整貼上
+# 5. 點擊"儲存"
+#
+# 注意：如果您更改了設備名稱，請將所有 "espectre_" 替換為您的設備名稱
+
+views:
+  - title: 🛜 ESPectre 運動偵測
+    type: sections
+    sections:
+      # 主要控制區
+      - type: grid
+        title: 運動偵測
+        cards:
+          # 運動程度儀表
+          - type: gauge
+            entity: sensor.espectre_movement_score
+            name: 運動程度
+            min: 0
+            max: 10
+            needle: true
+            segments:
+              - from: 0
+                color: green
+              - from: 0.5
+                color: yellow
+              - from: 1
+                color: orange
+              - from: 2
+                color: red
+          
+          # 運動偵測狀態
+          - type: tile
+            grid_options:
+              columns: 12
+              rows: 1
+            entity: binary_sensor.espectre_motion_detected
+            name: 運動偵測
+            show_entity_picture: false
+            hide_state: false
+            state_content:
+              - state
+              - last_changed
+            vertical: false
+          
+          # 靈敏度設定
+          - type: entities
+            entities:
+              - entity: number.espectre_threshold
+                icon: mdi:tune-vertical
+                name: 偵測閾值
+              - entity: switch.espectre_motion_detection_enabled
+                icon: mdi:motion-sensor
+                name: 啟用運動偵測
+            show_header_toggle: false
+            state_color: true
+      
+      # 歷史圖表
+      - type: grid
+        title: 運動歷史
+        cards:
+          - type: history-graph
+            title: 24小時運動歷史
+            hours_to_show: 24
+            entities:
+              - entity: sensor.espectre_movement_score
+                name: 運動程度
+              - entity: number.espectre_threshold
+                name: 閾值
+            grid_options:
+              columns: 12
+              rows: 5
+      
+      # 設備狀態
+      - type: grid
+        title: 設備狀態
+        cards:
+          - type: entities
+            entities:
+              - entity: sensor.espectre_wifi_signal_strength
+                name: WiFi 信號
+                icon: mdi:wifi
+              - entity: sensor.espectre_ip_address
+                name: IP 地址
+                icon: mdi:ip-network
+              - entity: sensor.espectre_uptime
+                name: 運行時間
+                icon: mdi:clock-outline
+              - entity: sensor.espectre_internal_temperature
+                name: 內部溫度
+                icon: mdi:thermometer
+            show_header_toggle: false
+            state_color: true
+          
+          - type: entities
+            entities:
+              - entity: text_sensor.espectre_connected_wifi
+                name: 連接的網路
+                icon: mdi:wifi-star
+              - entity: text_sensor.espectre_mac_address
+                name: MAC 地址
+                icon: mdi:lan
+              - entity: text_sensor.espectre_esphome_version
+                name: 韌體版本
+                icon: mdi:chip
+            show_header_toggle: false
+      
+      # 設備控制
+      - type: grid
+        title: 設備控制
+        cards:
+          - type: entities
+            entities:
+              - entity: button.espectre_restart
+                name: 重新啟動
+                icon: mdi:restart
+              - entity: button.espectre_safe_mode_restart
+                name: 安全模式重啟
+                icon: mdi:restart-alert
+            show_header_toggle: false

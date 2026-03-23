@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESPectre 即時監控面板</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card.compact {
+            padding: 12px 20px;
+        }
+
+        .collapsible-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .collapsible-header:hover {
+            opacity: 0.8;
+        }
+
+        .collapsible-header h2 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+
+        .collapsible-content {
+            margin-top: 15px;
+        }
+
+        .collapsible-content.collapsed {
+            display: none;
+        }
+
+        .config-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 0.9em;
+        }
+
+        .input-group input {
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-sm {
+            padding: 6px 15px;
+            font-size: 12px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-success {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #27ae60;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95em;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.connected {
+            background: #2ecc71;
+        }
+
+        .status-indicator.disconnected {
+            background: #e74c3c;
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .metric-card {
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .metric-card.idle {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+        }
+
+        .metric-card.motion {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .metric-card.neutral {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .metric-label {
+            font-size: 0.85em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 500px;
+            margin-bottom: 10px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .chart-title {
+            font-size: 1.3em;
+            margin: 0;
+        }
+
+        .arrow {
+            transition: transform 0.3s;
+            font-size: 0.9em;
+        }
+
+        .arrow.rotate {
+            transform: rotate(180deg);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 10px;
+            font-size: 0.95em;
+        }
+
+        .info-grid > div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #667eea08 0%, #764ba208 100%);
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .info-grid > div > span:first-child {
+            font-weight: 600;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .info-grid > div > span:last-child {
+            font-family: monospace;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Threshold slider */
+        .threshold-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .threshold-control label {
+            font-weight: 600;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .threshold-control input[type="range"] {
+            flex: 1;
+        }
+
+        .threshold-control input[type="number"] {
+            width: 70px;
+            padding: 6px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .notification.success { background: #2ecc71; }
+        .notification.error { background: #e74c3c; }
+        .notification.info { background: #3498db; }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Help box */
+        .help-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: #856404;
+            line-height: 1.6;
+        }
+
+        .help-box code {
+            background: rgba(0,0,0,0.08);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        /* Debug panel */
+        .debug-panel {
+            background: #1e1e1e;
+            color: #0f0;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.8em;
+            padding: 10px;
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .debug-panel .log-entry {
+            padding: 2px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .debug-panel .log-time { color: #888; }
+        .debug-panel .log-id { color: #5dade2; }
+        .debug-panel .log-value { color: #f39c12; }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛜 ESPectre 👻</h1>
+            <p>WiFi CSI 即時動作偵測監控面板</p>
+        </div>
+
+        <!-- Connection Configuration -->
+        <div class="card compact">
+            <div class="collapsible-header" onclick="toggleSection('connection')" style="display: flex; align-items: center; gap: 15px;">
+                <h2 style="margin: 0;">⚙️ 連線設定</h2>
+                <div class="status-item" style="margin-left: auto;">
+                    <div class="status-indicator disconnected" id="statusIndicator"></div>
+                    <span id="statusText">未連線</span>
+                </div>
+                <span class="arrow" id="connectionArrow">▼</span>
+            </div>
+            <div class="collapsible-content" id="connectionContent">
+                <div class="help-box" id="helpBox">
+                    💡 <b>啟動方式：</b>請執行代理伺服器：<code>python proxy_server.py</code><br>
+                    然後在瀏覽器開啟 <code>http://localhost:8080/espectre-monitor-esphome.html</code><br>
+                    代理伺服器已自動解決 CORS 問題，點擊「連線」即可接收 ESP32-S3 即時數據。
+                </div>
+                <div class="config-section">
+                    <div class="input-group">
+                        <label for="host">裝置位址</label>
+                        <input type="text" id="host" placeholder="172.20.10.4" value="172.20.10.4">
+                    </div>
+                    <div class="input-group">
+                        <label for="port">連接埠</label>
+                        <input type="number" id="port" placeholder="80" value="80">
+                    </div>
+                    <div class="input-group">
+                        <label for="username">帳號（選填）</label>
+                        <input type="text" id="username" placeholder="留空表示無驗證" value="">
+                    </div>
+                    <div class="input-group">
+                        <label for="password">密碼（選填）</label>
+                        <input type="password" id="password" placeholder="留空表示無驗證" value="">
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                    <button class="btn btn-primary" id="connectBtn" onclick="toggleConnection()">連線</button>
+                    <button class="btn btn-danger" id="clearBtn" onclick="clearData()" style="display: none;">清除數據</button>
+                    <label style="font-size: 0.85em; display: flex; align-items: center; gap: 5px; cursor: pointer; margin-left: auto;">
+                        <input type="checkbox" id="showDebug" onchange="toggleDebug()"> 顯示除錯訊息
+                    </label>
+                </div>
+                <div class="debug-panel" id="debugPanel" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Device Info -->
+        <div class="card compact">
+            <div class="collapsible-header" onclick="toggleSection('deviceInfo')">
+                <h2>📱 裝置資訊</h2>
+                <span class="arrow rotate" id="deviceInfoArrow">▼</span>
+            </div>
+            <div class="collapsible-content collapsed" id="deviceInfoContent">
+                <div class="info-grid">
+                    <div><span>🌐 IP 位址:</span> <span id="deviceIP">-</span></div>
+                    <div><span>🏷️ MAC 位址:</span> <span id="deviceMAC">-</span></div>
+                    <div><span>📶 WiFi 名稱:</span> <span id="deviceSSID">-</span></div>
+                    <div><span>📡 WiFi 訊號:</span> <span id="wifiSignal">-</span></div>
+                    <div><span>🌡️ 晶片溫度:</span> <span id="chipTemp">-</span></div>
+                    <div><span>⏱️ 運行時間:</span> <span id="uptime">-</span></div>
+                    <div><span>📋 ESPHome 版本:</span> <span id="espVersion">-</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metrics Cards -->
+        <div class="card compact">
+            <div class="metrics-grid">
+                <div class="metric-card idle" id="stateCard">
+                    <div class="metric-label">偵測狀態</div>
+                    <div class="metric-value" id="stateValue">-</div>
+                </div>
+                <div class="metric-card neutral">
+                    <div class="metric-label">移動量</div>
+                    <div class="metric-value" id="movementValue">-</div>
+                </div>
+                <div class="metric-card neutral" id="thresholdCard">
+                    <div class="metric-label">門檻值</div>
+                    <div class="metric-value" id="thresholdValue">-</div>
+                </div>
+                <div class="metric-card neutral">
+                    <div class="metric-label">最後更新</div>
+                    <div class="metric-value" id="lastUpdate">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-Time Chart -->
+        <div class="card">
+            <div class="chart-header">
+                <h2 class="chart-title" id="chartTitle">📈 即時圖表</h2>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-warning btn-sm" id="pauseBtn" onclick="togglePause()">⏸️ 暫停</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="motionChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // =========================================
+        // State
+        // =========================================
+        let eventSource = null;
+        let pollInterval = null;
+        let chart = null;
+        let isPaused = false;
+        let pendingData = [];
+        let isConnected = false;
+        const maxDataPoints = 120;
+
+        // Detect if running via proxy (same origin) or directly
+        const IS_PROXY = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+        const PROXY_BASE = window.location.origin;
+
+        let currentMovement = 0;
+        let currentThreshold = 0;
+        let currentMotionState = false;
+
+        const chartData = {
+            labels: [],
+            movement: [],
+            threshold: []
+        };
+
+        // =========================================
+        // Chart Initialization
+        // =========================================
+        function initChart() {
+            const ctx = document.getElementById('motionChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartData.labels,
+                    datasets: [
+                        {
+                            label: '移動量 (Movement)',
+                            data: chartData.movement,
+                            borderColor: '#e74c3c',
+                            backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true,
+                            yAxisID: 'y',
+                            pointRadius: 0,
+                            pointHitRadius: 8
+                        },
+                        {
+                            label: '門檻值 (Threshold)',
+                            data: chartData.threshold,
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            tension: 0,
+                            fill: false,
+                            yAxisID: 'y',
+                            pointRadius: 0,
+                            pointHitRadius: 8
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 200 },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            beginAtZero: true,
+                            title: { display: true, text: '移動量 / 門檻值' }
+                        },
+                        x: {
+                            title: { display: true, text: '時間' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: true, position: 'top' },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                afterBody: function(context) {
+                                    const idx = context[0].dataIndex;
+                                    const mv = chartData.movement[idx];
+                                    const th = chartData.threshold[idx];
+                                    if (mv !== undefined && th !== undefined && th > 0) {
+                                        const pct = ((mv / th) * 100).toFixed(0);
+                                        return [`\n進度: ${pct}%`];
+                                    }
+                                    return [];
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // =========================================
+        // Connection Management
+        // =========================================
+        function toggleConnection() {
+            if (isConnected || eventSource || pollInterval) {
+                disconnect();
+            } else {
+                connect();
+            }
+        }
+
+        async function connect() {
+            const host = document.getElementById('host').value.trim();
+            const port = document.getElementById('port').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!host) {
+                showNotification('請輸入裝置位址', 'error');
+                return;
+            }
+
+            const directBase = `http://${host}:${port}`;
+            // If running via proxy server (localhost), use relative /events to avoid CORS
+            const baseUrl = IS_PROXY ? PROXY_BASE : directBase;
+            const eventsUrl = IS_PROXY ? `${PROXY_BASE}/events` : `${directBase}/events`;
+            debugLog('連線模式: ' + (IS_PROXY ? '代理伺服器 ✅ (無CORS問題)' : '直接連線'));
+            debugLog('EventSource 網址: ' + eventsUrl);
+
+            // Try EventSource connection
+            try {
+                let evtUrl = eventsUrl;
+
+                eventSource = new EventSource(evtUrl);
+
+                eventSource.addEventListener('state', (e) => {
+                    try {
+                        const data = JSON.parse(e.data);
+                        handleStateEvent(data);
+                    } catch (err) {
+                        debugLog('JSON 解析錯誤: ' + err.message);
+                    }
+                });
+
+                eventSource.addEventListener('ping', () => {
+                    // Keepalive - no action needed
+                });
+
+                eventSource.onopen = () => {
+                    debugLog('EventSource 連線成功');
+                    updateStatus(true);
+                    // Collapse config section
+                    document.getElementById('connectionContent').classList.add('collapsed');
+                    document.getElementById('connectionArrow').classList.add('rotate');
+                    // Hide help box
+                    document.getElementById('helpBox').style.display = 'none';
+                    showNotification('已連線至 ESPectre 裝置', 'success');
+                };
+
+                eventSource.onerror = (e) => {
+                    if (eventSource && eventSource.readyState === EventSource.CLOSED) {
+                        debugLog('EventSource 連線已關閉，嘗試輪詢模式...');
+                        updateStatus(false);
+                        // Fallback to polling
+                        startPolling(baseUrl, username, password);
+                    } else if (eventSource && eventSource.readyState === EventSource.CONNECTING) {
+                        debugLog('EventSource 嘗試重新連線...');
+                    }
+                };
+
+            } catch (err) {
+                debugLog('EventSource 失敗: ' + err.message);
+                showNotification('EventSource 失敗，切換輪詢模式', 'info');
+                // Try polling fallback
+                startPolling(baseUrl, username, password);
+            }
+        }
+
+        function disconnect() {
+            if (eventSource) {
+                eventSource.close();
+                eventSource = null;
+            }
+            if (pollInterval) {
+                clearInterval(pollInterval);
+                pollInterval = null;
+            }
+            updateStatus(false);
+            debugLog('已斷線');
+            showNotification('已斷線', 'info');
+        }
+
+        // Fallback: Polling via REST API (queries each sensor individually)
+        async function startPolling(baseUrl, username, password) {
+            debugLog('啟動輪詢模式 (每2秒)...');
+
+            const headers = {};
+            if (username && password) {
+                headers['Authorization'] = 'Basic ' + btoa(username + ':' + password);
+            }
+
+            // Known sensor endpoints to poll
+            const sensorEndpoints = [
+                'sensor/movement_score',
+                'binary_sensor/motion_detected',
+                'number/threshold',
+                'sensor/wifi_signal',
+                'sensor/uptime_sensor',
+                'sensor/internal_temp_sensor',
+                'text_sensor/ip_address_sensor',
+                'text_sensor/connected_wifi_sensor',
+                'text_sensor/mac_address_sensor',
+                'text_sensor/esphome_version_sensor'
+            ];
+
+            async function poll() {
+                let anySuccess = false;
+                for (const ep of sensorEndpoints) {
+                    try {
+                        const response = await fetch(`${baseUrl}/${ep}`, { headers });
+                        if (!response.ok) continue;
+                        const data = await response.json();
+                        if (data && data.id) {
+                            handleStateEvent(data);
+                            anySuccess = true;
+                        }
+                    } catch (err) {
+                        // Silently skip unavailable endpoints
+                    }
+                }
+                if (anySuccess && !isConnected) {
+                    updateStatus(true);
+                    showNotification('已連線（輪詢模式）', 'success');
+                } else if (!anySuccess && isConnected) {
+                    debugLog('輪詢無回應');
+                    updateStatus(false);
+                }
+            }
+
+            await poll();
+            pollInterval = setInterval(poll, 2000);
+        }
+
+        // =========================================
+        // Event Handling
+        // =========================================
+        const knownEntities = {};
+
+        function handleStateEvent(data) {
+            if (!data || !data.id) return;
+
+            const id = data.id.toLowerCase();
+            const state = data.state;
+            const value = data.value;
+
+            // Track entity for debugging
+            if (!knownEntities[data.id]) {
+                knownEntities[data.id] = true;
+                debugLog(`發現實體: ${data.id} = ${state}`);
+            }
+
+            // --- Movement Sensor ---
+            if (id.startsWith('sensor-') && id.includes('movement')) {
+                currentMovement = parseFloat(value) || parseFloat(state) || 0;
+                document.getElementById('movementValue').textContent = currentMovement.toFixed(4);
+                document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('zh-TW', { hour12: false });
+
+                // Add chart data point each time movement updates
+                addChartDataPoint();
+                return;
+            }
+
+            // --- Motion Binary Sensor ---
+            if (id.startsWith('binary_sensor-') && id.includes('motion')) {
+                currentMotionState = (state === 'ON' || value === true);
+                updateMotionDisplay();
+                return;
+            }
+
+            // --- Threshold Number ---
+            if (id.startsWith('number-') && id.includes('threshold')) {
+                currentThreshold = parseFloat(value) || parseFloat(state) || 0;
+                document.getElementById('thresholdValue').textContent = currentThreshold.toFixed(2);
+                return;
+            }
+
+            // --- Uptime ---
+            if (id.includes('uptime')) {
+                const secs = parseFloat(value) || parseFloat(state) || 0;
+                document.getElementById('uptime').textContent = formatUptime(secs);
+                return;
+            }
+
+            // --- WiFi Signal ---
+            if (id.includes('wifi_signal') || (id.startsWith('sensor-') && id.includes('wifi') && !id.includes('info'))) {
+                document.getElementById('wifiSignal').textContent = state + ' dBm';
+                return;
+            }
+
+            // --- Internal Temperature ---
+            if (id.includes('temp') && id.startsWith('sensor-')) {
+                document.getElementById('chipTemp').textContent = parseFloat(state).toFixed(1) + ' °C';
+                return;
+            }
+
+            // --- IP Address ---
+            if (id.includes('ip_address') || (id.includes('ip') && id.startsWith('text_sensor-'))) {
+                document.getElementById('deviceIP').textContent = state;
+                return;
+            }
+
+            // --- MAC Address ---
+            if (id.includes('mac_address') || (id.includes('mac') && id.startsWith('text_sensor-'))) {
+                document.getElementById('deviceMAC').textContent = state;
+                return;
+            }
+
+            // --- Connected WiFi SSID ---
+            if (id.includes('connected_wifi') || id.includes('ssid')) {
+                document.getElementById('deviceSSID').textContent = state;
+                return;
+            }
+
+            // --- ESPHome Version ---
+            if (id.includes('version') && id.startsWith('text_sensor-')) {
+                document.getElementById('espVersion').textContent = state;
+                return;
+            }
+        }
+
+        // =========================================
+        // Chart & UI Updates
+        // =========================================
+        function addChartDataPoint() {
+            const dataPoint = {
+                movement: currentMovement,
+                threshold: currentThreshold
+            };
+
+            if (isPaused) {
+                pendingData.push(dataPoint);
+                return;
+            }
+
+            pushDataToChart(dataPoint);
+        }
+
+        function pushDataToChart(data) {
+            const now = new Date();
+            const timeLabel = now.toLocaleTimeString('zh-TW', { hour12: false });
+
+            chartData.labels.push(timeLabel);
+            chartData.movement.push(data.movement);
+            chartData.threshold.push(data.threshold);
+
+            while (chartData.labels.length > maxDataPoints) {
+                chartData.labels.shift();
+                chartData.movement.shift();
+                chartData.threshold.shift();
+            }
+
+            chart.update('none');
+        }
+
+        function updateMotionDisplay() {
+            const stateCard = document.getElementById('stateCard');
+            const stateValue = document.getElementById('stateValue');
+
+            if (currentMotionState) {
+                stateValue.textContent = '偵測到動作';
+                stateCard.classList.remove('idle');
+                stateCard.classList.add('motion');
+            } else {
+                stateValue.textContent = '靜止';
+                stateCard.classList.remove('motion');
+                stateCard.classList.add('idle');
+            }
+        }
+
+        function updateStatus(connected) {
+            isConnected = connected;
+            const indicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            const connectBtn = document.getElementById('connectBtn');
+            const clearBtn = document.getElementById('clearBtn');
+
+            if (connected) {
+                indicator.classList.remove('disconnected');
+                indicator.classList.add('connected');
+                statusText.textContent = '已連線';
+                connectBtn.textContent = '斷線';
+                connectBtn.classList.remove('btn-primary');
+                connectBtn.classList.add('btn-danger');
+                clearBtn.style.display = 'inline-block';
+            } else {
+                indicator.classList.remove('connected');
+                indicator.classList.add('disconnected');
+                statusText.textContent = '未連線';
+                connectBtn.textContent = '連線';
+                connectBtn.classList.remove('btn-danger');
+                connectBtn.classList.add('btn-primary');
+                clearBtn.style.display = 'none';
+            }
+        }
+
+        // =========================================
+        // UI Controls
+        // =========================================
+        function togglePause() {
+            isPaused = !isPaused;
+            const pauseBtn = document.getElementById('pauseBtn');
+            const chartTitle = document.getElementById('chartTitle');
+
+            if (isPaused) {
+                pauseBtn.textContent = '▶️ 繼續';
+                pauseBtn.classList.remove('btn-warning');
+                pauseBtn.classList.add('btn-success');
+                chartTitle.textContent = '📈 即時圖表（已暫停）';
+            } else {
+                pauseBtn.textContent = '⏸️ 暫停';
+                pauseBtn.classList.remove('btn-success');
+                pauseBtn.classList.add('btn-warning');
+                chartTitle.textContent = '📈 即時圖表';
+
+                if (pendingData.length > 0) {
+                    pendingData.forEach(d => pushDataToChart(d));
+                    pendingData = [];
+                }
+            }
+        }
+
+        function toggleSection(sectionId) {
+            const content = document.getElementById(sectionId + 'Content');
+            const arrow = document.getElementById(sectionId + 'Arrow');
+            content.classList.toggle('collapsed');
+            arrow.classList.toggle('rotate');
+        }
+
+        function clearData() {
+            chartData.labels = [];
+            chartData.movement = [];
+            chartData.threshold = [];
+            pendingData = [];
+
+            document.getElementById('lastUpdate').textContent = '-';
+            document.getElementById('movementValue').textContent = '-';
+            document.getElementById('thresholdValue').textContent = '-';
+            document.getElementById('stateValue').textContent = '-';
+
+            const stateCard = document.getElementById('stateCard');
+            stateCard.classList.remove('motion');
+            stateCard.classList.add('idle');
+
+            chart.update();
+            showNotification('數據已清除', 'info');
+        }
+
+        function toggleDebug() {
+            const panel = document.getElementById('debugPanel');
+            const show = document.getElementById('showDebug').checked;
+            panel.style.display = show ? 'block' : 'none';
+        }
+
+        // =========================================
+        // Utilities
+        // =========================================
+        function formatUptime(seconds) {
+            if (!seconds || isNaN(seconds)) return '-';
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = Math.floor(seconds % 60);
+            if (h > 0) return `${h}小時 ${m}分 ${s}秒`;
+            if (m > 0) return `${m}分 ${s}秒`;
+            return `${s}秒`;
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type || 'info'}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease-out reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        function debugLog(msg) {
+            const panel = document.getElementById('debugPanel');
+            const now = new Date().toLocaleTimeString('zh-TW', { hour12: false });
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<span class="log-time">[${now}]</span> ${escapeHtml(msg)}`;
+            panel.appendChild(entry);
+            // Keep last 100 entries
+            while (panel.children.length > 100) {
+                panel.removeChild(panel.firstChild);
+            }
+            panel.scrollTop = panel.scrollHeight;
+            console.log(`[ESPectre] ${msg}`);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // =========================================
+        // Initialization
+        // =========================================
+        window.addEventListener('load', () => {
+            initChart();
+            debugLog('ESPectre 監控面板已初始化');
+        });
+    </script>
+</body>
+
+</html>
