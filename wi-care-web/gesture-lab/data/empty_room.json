@@ -1,0 +1,1432 @@
+[
+  [
+    {
+      "Raw Score": 0.08,
+      "Smoothed Score": 0.074,
+      "timestamp": 1779027574740
+    },
+    {
+      "Raw Score": 0.09,
+      "Smoothed Score": 0.078,
+      "timestamp": 1779027574943
+    },
+    {
+      "Raw Score": 0.1,
+      "Smoothed Score": 0.084,
+      "timestamp": 1779027575143
+    },
+    {
+      "Raw Score": 0.1,
+      "Smoothed Score": 0.086,
+      "timestamp": 1779027575452
+    },
+    {
+      "Raw Score": 0.12,
+      "Smoothed Score": 0.098,
+      "timestamp": 1779027575766
+    },
+    {
+      "Raw Score": 0.1,
+      "Smoothed Score": 0.102,
+      "timestamp": 1779027575960
+    },
+    {
+      "Raw Score": 0.12,
+      "Smoothed Score": 0.108,
+      "timestamp": 1779027576173
+    },
+    {
+      "Raw Score": 0.1,
+      "Smoothed Score": 0.108,
+      "timestamp": 1779027576378
+    },
+    {
+      "Raw Score": 0.09,
+      "Smoothed Score": 0.106,
+      "timestamp": 1779027576580
+    },
+    {
+      "Raw Score": 0.09,
+      "Smoothed Score": 0.1,
+      "timestamp": 1779027576933
+    },
+    {
+      "Raw Score": 0.07,
+      "Smoothed Score": 0.094,
+      "timestamp": 1779027577300
+    },
+    {
+      "Raw Score": 0.08,
+      "Smoothed Score": 0.086,
+      "timestamp": 1779027577504
+    },
+    {
+      "Raw Score": 0.13,
+      "Smoothed Score": 0.092,
+      "timestamp": 1779027577712
+    }
+  ],
+  [
+    {
+      "Raw Score": 0.07,
+      "Smoothed Score": 0.088,
+      "timestamp": 1779027582128
+    },
+    {
+      "Raw Score": 0.06,
+      "Smoothed Score": 0.076,
+      "timestamp": 1779027582418
+    },
+    {
+      "Raw Score": 0.07,
+      "Smoothed Score": 0.07,
+      "timestamp": 1779027582623
+    },
+    {
+      "Raw Score": 0.06,
+      "Smoothed Score": 0.066,
+      "timestamp": 1779027582823
+    },
+    {
+      "Raw Score": 0.06,
+      "Smoothed Score": 0.064,
+      "timestamp": 1779027583028
+    },
+    {
+      "Raw Score": 0.07,
+      "Smoothed Score": 0.064,
+      "timestamp": 1779027583230
+    },
+    {
+      "Raw Score": 0.1,
+      "Smoothed Score": 0.072,
+      "timestamp": 1779027583547
+    },
+    {
+      "Raw Score": 0.1,
+      "Smoothed Score": 0.078,
+      "timestamp": 1779027583850
+    },
+    {
+      "Raw Score": 0.1,
+      "Smoothed Score": 0.086,
+      "timestamp": 1779027584057
+    },
+    {
+      "Raw Score": 0.1,
+      "Smoothed Score": 0.094,
+      "timestamp": 1779027584260
+    },
+    {
+      "Raw Score": 0.09,
+      "Smoothed Score": 0.098,
+      "timestamp": 1779027584467
+    },
+    {
+      "Raw Score": 0.07,
+      "Smoothed Score": 0.092,
+      "timestamp": 1779027584844
+    },
+    {
+      "Raw Score": 0.09,
+      "Smoothed Score": 0.09,
+      "timestamp": 1779027585206
+    },
+    {
+      "Raw Score": 0.08,
+      "Smoothed Score": 0.086,
+      "timestamp": 1779027585586
+    },
+    {
+      "Raw Score": 0.08,
+      "Smoothed Score": 0.082,
+      "timestamp": 1779027585792
+    },
+    {
+      "Raw Score": 0.08,
+      "Smoothed Score": 0.08,
+      "timestamp": 1779027585999
+    },
+    {
+      "Raw Score": 0.08,
+      "Smoothed Score": 0.082,
+      "timestamp": 1779027586408
+    },
+    {
+      "Raw Score": 0.08,
+      "Smoothed Score": 0.08,
+      "timestamp": 1779027586611
+    },
+    {
+      "Raw Score": 0.08,
+      "Smoothed Score": 0.08,
+      "timestamp": 1779027586814
+    },
+    {
+      "Raw Score": 0.11,
+      "Smoothed Score": 0.086,
+      "timestamp": 1779027587024
+    },
+    {
+      "Raw Score": 0.12,
+      "Smoothed Score": 0.094,
+      "timestamp": 1779027587327
+    },
+    {
+      "Raw Score": 0.11,
+      "Smoothed Score": 0.1,
+      "timestamp": 1779027587742
+    },
+    {
+      "Raw Score": 0.09,
+      "Smoothed Score": 0.102,
+      "timestamp": 1779027588160
+    }
+  ],
+  [
+    {
+      "Raw Score": 0.14,
+      "Smoothed Score": 0.114,
+      "timestamp": 1779027596757
+    },
+    {
+      "Raw Score": 0.14,
+      "Smoothed Score": 0.122,
+      "timestamp": 1779027596958
+    },
+    {
+      "Raw Score": 0.14,
+      "Smoothed Score": 0.126,
+      "timestamp": 1779027597157
+    },
+    {
+      "Raw Score": 0.16,
+      "Smoothed Score": 0.134,
+      "timestamp": 1779027597369
+    },
+    {
+      "Raw Score": 0.16,
+      "Smoothed Score": 0.148,
+      "timestamp": 1779027597571
+    },
+    {
+      "Raw Score": 0.14,
+      "Smoothed Score": 0.148,
+      "timestamp": 1779027597779
+    },
+    {
+      "Raw Score": 0.13,
+      "Smoothed Score": 0.146,
+      "timestamp": 1779027597976
+    },
+    {
+      "Raw Score": 0.15,
+      "Smoothed Score": 0.148,
+      "timestamp": 1779027598180
+    },
+    {
+      "Raw Score": 0.13,
+      "Smoothed Score": 0.142,
+      "timestamp": 1779027598385
+    },
+    {
+      "Raw Score": 0.14,
+      "Smoothed Score": 0.138,
+      "timestamp": 1779027598594
+    },
+    {
+      "Raw Score": 0.12,
+      "Smoothed Score": 0.134,
+      "timestamp": 1779027598797
+    },
+    {
+      "Raw Score": 0.1,
+      "Smoothed Score": 0.128,
+      "timestamp": 1779027599015
+    },
+    {
+      "Raw Score": 0.12,
+      "Smoothed Score": 0.122,
+      "timestamp": 1779027599212
+    },
+    {
+      "Raw Score": 0.13,
+      "Smoothed Score": 0.122,
+      "timestamp": 1779027599413
+    },
+    {
+      "Raw Score": 0.12,
+      "Smoothed Score": 0.118,
+      "timestamp": 1779027599622
+    },
+    {
+      "Raw Score": 0.14,
+      "Smoothed Score": 0.122,
+      "timestamp": 1779027599822
+    },
+    {
+      "Raw Score": 0.15,
+      "Smoothed Score": 0.132,
+      "timestamp": 1779027600029
+    },
+    {
+      "Raw Score": 0.13,
+      "Smoothed Score": 0.134,
+      "timestamp": 1779027600233
+    },
+    {
+      "Raw Score": 0.12,
+      "Smoothed Score": 0.132,
+      "timestamp": 1779027600433
+    },
+    {
+      "Raw Score": 0.13,
+      "Smoothed Score": 0.134,
+      "timestamp": 1779027600638
+    },
+    {
+      "Raw Score": 0.12,
+      "Smoothed Score": 0.13,
+      "timestamp": 1779027600852
+    },
+    {
+      "Raw Score": 0.11,
+      "Smoothed Score": 0.122,
+      "timestamp": 1779027601055
+    },
+    {
+      "Raw Score": 0.11,
+      "Smoothed Score": 0.118,
+      "timestamp": 1779027601257
+    },
+    {
+      "Raw Score": 0.12,
+      "Smoothed Score": 0.118,
+      "timestamp": 1779027601459
+    },
+    {
+      "Raw Score": 0.11,
+      "Smoothed Score": 0.114,
+      "timestamp": 1779027601662
+    },
+    {
+      "Raw Score": 0.16,
+      "Smoothed Score": 0.122,
+      "timestamp": 1779027601871
+    },
+    {
+      "Raw Score": 0.15,
+      "Smoothed Score": 0.13,
+      "timestamp": 1779027602078
+    },
+    {
+      "Raw Score": 0.15,
+      "Smoothed Score": 0.138,
+      "timestamp": 1779027602281
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.152,
+      "timestamp": 1779027602694
+    },
+    {
+      "Raw Score": 0.18,
+      "Smoothed Score": 0.166,
+      "timestamp": 1779027602998
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.176,
+      "timestamp": 1779027603204
+    },
+    {
+      "Raw Score": 0.2,
+      "Smoothed Score": 0.186,
+      "timestamp": 1779027603417
+    },
+    {
+      "Raw Score": 0.22,
+      "Smoothed Score": 0.2,
+      "timestamp": 1779027603612
+    },
+    {
+      "Raw Score": 0.15,
+      "Smoothed Score": 0.192,
+      "timestamp": 1779027603832
+    },
+    {
+      "Raw Score": 0.13,
+      "Smoothed Score": 0.182,
+      "timestamp": 1779027604017
+    }
+  ],
+  [
+    {
+      "Raw Score": 0.06,
+      "Smoothed Score": 0.114,
+      "timestamp": 1779027609147
+    },
+    {
+      "Raw Score": 0.13,
+      "Smoothed Score": 0.1,
+      "timestamp": 1779027609342
+    },
+    {
+      "Raw Score": 0.13,
+      "Smoothed Score": 0.102,
+      "timestamp": 1779027609550
+    },
+    {
+      "Raw Score": 0.16,
+      "Smoothed Score": 0.112,
+      "timestamp": 1779027609754
+    },
+    {
+      "Raw Score": 0.18,
+      "Smoothed Score": 0.132,
+      "timestamp": 1779027609974
+    },
+    {
+      "Raw Score": 0.18,
+      "Smoothed Score": 0.156,
+      "timestamp": 1779027610162
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.168,
+      "timestamp": 1779027610369
+    },
+    {
+      "Raw Score": 0.17,
+      "Smoothed Score": 0.176,
+      "timestamp": 1779027610578
+    },
+    {
+      "Raw Score": 0.17,
+      "Smoothed Score": 0.178,
+      "timestamp": 1779027610775
+    },
+    {
+      "Raw Score": 0.16,
+      "Smoothed Score": 0.174,
+      "timestamp": 1779027610980
+    },
+    {
+      "Raw Score": 0.15,
+      "Smoothed Score": 0.168,
+      "timestamp": 1779027611189
+    },
+    {
+      "Raw Score": 0.16,
+      "Smoothed Score": 0.162,
+      "timestamp": 1779027611394
+    }
+  ],
+  [
+    {
+      "Raw Score": 0.09,
+      "Smoothed Score": 0.102,
+      "timestamp": 1779027630749
+    },
+    {
+      "Raw Score": 0.15,
+      "Smoothed Score": 0.096,
+      "timestamp": 1779027630950
+    },
+    {
+      "Raw Score": 0.15,
+      "Smoothed Score": 0.108,
+      "timestamp": 1779027631154
+    },
+    {
+      "Raw Score": 0.17,
+      "Smoothed Score": 0.128,
+      "timestamp": 1779027631360
+    },
+    {
+      "Raw Score": 0.18,
+      "Smoothed Score": 0.148,
+      "timestamp": 1779027631565
+    },
+    {
+      "Raw Score": 0.15,
+      "Smoothed Score": 0.16,
+      "timestamp": 1779027631768
+    },
+    {
+      "Raw Score": 0.1,
+      "Smoothed Score": 0.15,
+      "timestamp": 1779027631973
+    },
+    {
+      "Raw Score": 0.13,
+      "Smoothed Score": 0.146,
+      "timestamp": 1779027632184
+    },
+    {
+      "Raw Score": 0.08,
+      "Smoothed Score": 0.128,
+      "timestamp": 1779027632383
+    },
+    {
+      "Raw Score": 0.07,
+      "Smoothed Score": 0.106,
+      "timestamp": 1779027632600
+    },
+    {
+      "Raw Score": 0.09,
+      "Smoothed Score": 0.094,
+      "timestamp": 1779027632801
+    },
+    {
+      "Raw Score": 0.09,
+      "Smoothed Score": 0.092,
+      "timestamp": 1779027633001
+    },
+    {
+      "Raw Score": 0.06,
+      "Smoothed Score": 0.078,
+      "timestamp": 1779027633206
+    },
+    {
+      "Raw Score": 0.07,
+      "Smoothed Score": 0.076,
+      "timestamp": 1779027633411
+    },
+    {
+      "Raw Score": 0.07,
+      "Smoothed Score": 0.076,
+      "timestamp": 1779027633614
+    },
+    {
+      "Raw Score": 0.06,
+      "Smoothed Score": 0.07,
+      "timestamp": 1779027633816
+    },
+    {
+      "Raw Score": 0.04,
+      "Smoothed Score": 0.06,
+      "timestamp": 1779027634023
+    },
+    {
+      "Raw Score": 0.04,
+      "Smoothed Score": 0.056,
+      "timestamp": 1779027634234
+    },
+    {
+      "Raw Score": 0.06,
+      "Smoothed Score": 0.054,
+      "timestamp": 1779027634441
+    },
+    {
+      "Raw Score": 0.06,
+      "Smoothed Score": 0.052,
+      "timestamp": 1779027634641
+    },
+    {
+      "Raw Score": 0.07,
+      "Smoothed Score": 0.054,
+      "timestamp": 1779027634847
+    },
+    {
+      "Raw Score": 0.07,
+      "Smoothed Score": 0.06,
+      "timestamp": 1779027635068
+    },
+    {
+      "Raw Score": 0.08,
+      "Smoothed Score": 0.068,
+      "timestamp": 1779027635465
+    },
+    {
+      "Raw Score": 0.08,
+      "Smoothed Score": 0.072,
+      "timestamp": 1779027635660
+    },
+    {
+      "Raw Score": 0.1,
+      "Smoothed Score": 0.08,
+      "timestamp": 1779027635762
+    },
+    {
+      "Raw Score": 0.11,
+      "Smoothed Score": 0.088,
+      "timestamp": 1779027636080
+    },
+    {
+      "Raw Score": 0.11,
+      "Smoothed Score": 0.096,
+      "timestamp": 1779027636274
+    },
+    {
+      "Raw Score": 0.11,
+      "Smoothed Score": 0.102,
+      "timestamp": 1779027636483
+    },
+    {
+      "Raw Score": 0.13,
+      "Smoothed Score": 0.112,
+      "timestamp": 1779027636687
+    },
+    {
+      "Raw Score": 0.12,
+      "Smoothed Score": 0.116,
+      "timestamp": 1779027636897
+    },
+    {
+      "Raw Score": 0.12,
+      "Smoothed Score": 0.118,
+      "timestamp": 1779027637101
+    },
+    {
+      "Raw Score": 0.12,
+      "Smoothed Score": 0.12,
+      "timestamp": 1779027637301
+    }
+  ],
+  [
+    {
+      "Raw Score": 0.12,
+      "Smoothed Score": 0.12,
+      "timestamp": 1779027642112
+    },
+    {
+      "Raw Score": 0.15,
+      "Smoothed Score": 0.126,
+      "timestamp": 1779027642421
+    },
+    {
+      "Raw Score": 0.17,
+      "Smoothed Score": 0.136,
+      "timestamp": 1779027642751
+    },
+    {
+      "Raw Score": 0.2,
+      "Smoothed Score": 0.152,
+      "timestamp": 1779027642941
+    },
+    {
+      "Raw Score": 0.2,
+      "Smoothed Score": 0.168,
+      "timestamp": 1779027643140
+    },
+    {
+      "Raw Score": 0.2,
+      "Smoothed Score": 0.184,
+      "timestamp": 1779027643344
+    },
+    {
+      "Raw Score": 0.15,
+      "Smoothed Score": 0.184,
+      "timestamp": 1779027643649
+    },
+    {
+      "Raw Score": 0.16,
+      "Smoothed Score": 0.182,
+      "timestamp": 1779027643959
+    },
+    {
+      "Raw Score": 0.15,
+      "Smoothed Score": 0.172,
+      "timestamp": 1779027644160
+    },
+    {
+      "Raw Score": 0.16,
+      "Smoothed Score": 0.164,
+      "timestamp": 1779027644364
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.162,
+      "timestamp": 1779027644569
+    },
+    {
+      "Raw Score": 0.2,
+      "Smoothed Score": 0.172,
+      "timestamp": 1779027644776
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.182,
+      "timestamp": 1779027645080
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.194,
+      "timestamp": 1779027645386
+    },
+    {
+      "Raw Score": 0.23,
+      "Smoothed Score": 0.208,
+      "timestamp": 1779027645593
+    },
+    {
+      "Raw Score": 0.22,
+      "Smoothed Score": 0.214,
+      "timestamp": 1779027645798
+    },
+    {
+      "Raw Score": 0.26,
+      "Smoothed Score": 0.226,
+      "timestamp": 1779027646001
+    },
+    {
+      "Raw Score": 0.24,
+      "Smoothed Score": 0.232,
+      "timestamp": 1779027646206
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.232,
+      "timestamp": 1779027646410
+    },
+    {
+      "Raw Score": 0.23,
+      "Smoothed Score": 0.232,
+      "timestamp": 1779027646621
+    },
+    {
+      "Raw Score": 0.22,
+      "Smoothed Score": 0.232,
+      "timestamp": 1779027646820
+    },
+    {
+      "Raw Score": 0.2,
+      "Smoothed Score": 0.22,
+      "timestamp": 1779027647027
+    },
+    {
+      "Raw Score": 0.2,
+      "Smoothed Score": 0.212,
+      "timestamp": 1779027647232
+    },
+    {
+      "Raw Score": 0.23,
+      "Smoothed Score": 0.216,
+      "timestamp": 1779027647434
+    },
+    {
+      "Raw Score": 0.25,
+      "Smoothed Score": 0.22,
+      "timestamp": 1779027647641
+    },
+    {
+      "Raw Score": 0.29,
+      "Smoothed Score": 0.234,
+      "timestamp": 1779027647847
+    },
+    {
+      "Raw Score": 0.31,
+      "Smoothed Score": 0.256,
+      "timestamp": 1779027648052
+    },
+    {
+      "Raw Score": 0.32,
+      "Smoothed Score": 0.28,
+      "timestamp": 1779027648253
+    },
+    {
+      "Raw Score": 0.26,
+      "Smoothed Score": 0.286,
+      "timestamp": 1779027648460
+    },
+    {
+      "Raw Score": 0.2,
+      "Smoothed Score": 0.276,
+      "timestamp": 1779027648663
+    },
+    {
+      "Raw Score": 0.18,
+      "Smoothed Score": 0.254,
+      "timestamp": 1779027648868
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.234,
+      "timestamp": 1779027649083
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.212,
+      "timestamp": 1779027649278
+    },
+    {
+      "Raw Score": 0.3,
+      "Smoothed Score": 0.22,
+      "timestamp": 1779027649490
+    },
+    {
+      "Raw Score": 0.31,
+      "Smoothed Score": 0.242,
+      "timestamp": 1779027649690
+    },
+    {
+      "Raw Score": 0.28,
+      "Smoothed Score": 0.262,
+      "timestamp": 1779027649930
+    }
+  ],
+  [
+    {
+      "Raw Score": 0.09,
+      "Smoothed Score": 0.132,
+      "timestamp": 1779027659826
+    },
+    {
+      "Raw Score": 0.04,
+      "Smoothed Score": 0.094,
+      "timestamp": 1779027660243
+    },
+    {
+      "Raw Score": 0.04,
+      "Smoothed Score": 0.072,
+      "timestamp": 1779027660563
+    },
+    {
+      "Raw Score": 0.04,
+      "Smoothed Score": 0.058,
+      "timestamp": 1779027660751
+    },
+    {
+      "Raw Score": 0.05,
+      "Smoothed Score": 0.052,
+      "timestamp": 1779027660981
+    },
+    {
+      "Raw Score": 0.06,
+      "Smoothed Score": 0.046,
+      "timestamp": 1779027661163
+    },
+    {
+      "Raw Score": 0.07,
+      "Smoothed Score": 0.052,
+      "timestamp": 1779027661369
+    },
+    {
+      "Raw Score": 0.08,
+      "Smoothed Score": 0.06,
+      "timestamp": 1779027661567
+    },
+    {
+      "Raw Score": 0.12,
+      "Smoothed Score": 0.076,
+      "timestamp": 1779027661779
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.104,
+      "timestamp": 1779027661979
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.13,
+      "timestamp": 1779027662187
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.154,
+      "timestamp": 1779027662389
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.176,
+      "timestamp": 1779027662593
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.19,
+      "timestamp": 1779027662811
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.194,
+      "timestamp": 1779027663206
+    },
+    {
+      "Raw Score": 0.22,
+      "Smoothed Score": 0.2,
+      "timestamp": 1779027663410
+    },
+    {
+      "Raw Score": 0.23,
+      "Smoothed Score": 0.208,
+      "timestamp": 1779027663622
+    },
+    {
+      "Raw Score": 0.27,
+      "Smoothed Score": 0.224,
+      "timestamp": 1779027663825
+    },
+    {
+      "Raw Score": 0.2,
+      "Smoothed Score": 0.226,
+      "timestamp": 1779027664023
+    },
+    {
+      "Raw Score": 0.24,
+      "Smoothed Score": 0.232,
+      "timestamp": 1779027664228
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.23,
+      "timestamp": 1779027664444
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.222,
+      "timestamp": 1779027664742
+    },
+    {
+      "Raw Score": 0.18,
+      "Smoothed Score": 0.204,
+      "timestamp": 1779027664949
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.202,
+      "timestamp": 1779027665155
+    },
+    {
+      "Raw Score": 0.23,
+      "Smoothed Score": 0.2,
+      "timestamp": 1779027665356
+    },
+    {
+      "Raw Score": 0.23,
+      "Smoothed Score": 0.204,
+      "timestamp": 1779027665561
+    },
+    {
+      "Raw Score": 0.26,
+      "Smoothed Score": 0.218,
+      "timestamp": 1779027665769
+    },
+    {
+      "Raw Score": 0.34,
+      "Smoothed Score": 0.25,
+      "timestamp": 1779027665970
+    },
+    {
+      "Raw Score": 0.25,
+      "Smoothed Score": 0.262,
+      "timestamp": 1779027666179
+    },
+    {
+      "Raw Score": 0.25,
+      "Smoothed Score": 0.266,
+      "timestamp": 1779027666379
+    },
+    {
+      "Raw Score": 0.18,
+      "Smoothed Score": 0.256,
+      "timestamp": 1779027666592
+    },
+    {
+      "Raw Score": 0.18,
+      "Smoothed Score": 0.24,
+      "timestamp": 1779027666791
+    },
+    {
+      "Raw Score": 0.1,
+      "Smoothed Score": 0.192,
+      "timestamp": 1779027666994
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.18,
+      "timestamp": 1779027667205
+    }
+  ],
+  [
+    {
+      "Raw Score": 0.37,
+      "Smoothed Score": 0.392,
+      "timestamp": 1779027682052
+    },
+    {
+      "Raw Score": 0.34,
+      "Smoothed Score": 0.376,
+      "timestamp": 1779027682262
+    },
+    {
+      "Raw Score": 0.44,
+      "Smoothed Score": 0.388,
+      "timestamp": 1779027682459
+    },
+    {
+      "Raw Score": 0.44,
+      "Smoothed Score": 0.394,
+      "timestamp": 1779027682662
+    },
+    {
+      "Raw Score": 0.51,
+      "Smoothed Score": 0.42,
+      "timestamp": 1779027682873
+    },
+    {
+      "Raw Score": 0.55,
+      "Smoothed Score": 0.456,
+      "timestamp": 1779027683082
+    },
+    {
+      "Raw Score": 0.55,
+      "Smoothed Score": 0.498,
+      "timestamp": 1779027683377
+    },
+    {
+      "Raw Score": 0.54,
+      "Smoothed Score": 0.518,
+      "timestamp": 1779027683684
+    },
+    {
+      "Raw Score": 0.49,
+      "Smoothed Score": 0.528,
+      "timestamp": 1779027683893
+    },
+    {
+      "Raw Score": 0.49,
+      "Smoothed Score": 0.524,
+      "timestamp": 1779027684096
+    },
+    {
+      "Raw Score": 0.42,
+      "Smoothed Score": 0.498,
+      "timestamp": 1779027684300
+    },
+    {
+      "Raw Score": 0.43,
+      "Smoothed Score": 0.474,
+      "timestamp": 1779027684504
+    },
+    {
+      "Raw Score": 0.39,
+      "Smoothed Score": 0.444,
+      "timestamp": 1779027684713
+    },
+    {
+      "Raw Score": 0.34,
+      "Smoothed Score": 0.414,
+      "timestamp": 1779027684923
+    },
+    {
+      "Raw Score": 0.31,
+      "Smoothed Score": 0.378,
+      "timestamp": 1779027685118
+    },
+    {
+      "Raw Score": 0.36,
+      "Smoothed Score": 0.366,
+      "timestamp": 1779027685326
+    },
+    {
+      "Raw Score": 0.36,
+      "Smoothed Score": 0.352,
+      "timestamp": 1779027685545
+    },
+    {
+      "Raw Score": 0.37,
+      "Smoothed Score": 0.348,
+      "timestamp": 1779027685769
+    }
+  ],
+  [
+    {
+      "Raw Score": 0.26,
+      "Smoothed Score": 0.306,
+      "timestamp": 1779027690045
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.28,
+      "timestamp": 1779027690246
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.26,
+      "timestamp": 1779027690464
+    },
+    {
+      "Raw Score": 0.22,
+      "Smoothed Score": 0.242,
+      "timestamp": 1779027690672
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.218,
+      "timestamp": 1779027690852
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.204,
+      "timestamp": 1779027691058
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.204,
+      "timestamp": 1779027691266
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.204,
+      "timestamp": 1779027691469
+    },
+    {
+      "Raw Score": 0.24,
+      "Smoothed Score": 0.208,
+      "timestamp": 1779027691673
+    },
+    {
+      "Raw Score": 0.26,
+      "Smoothed Score": 0.222,
+      "timestamp": 1779027691879
+    },
+    {
+      "Raw Score": 0.29,
+      "Smoothed Score": 0.242,
+      "timestamp": 1779027692115
+    },
+    {
+      "Raw Score": 0.26,
+      "Smoothed Score": 0.252,
+      "timestamp": 1779027692287
+    },
+    {
+      "Raw Score": 0.27,
+      "Smoothed Score": 0.264,
+      "timestamp": 1779027692494
+    },
+    {
+      "Raw Score": 0.23,
+      "Smoothed Score": 0.262,
+      "timestamp": 1779027692701
+    },
+    {
+      "Raw Score": 0.23,
+      "Smoothed Score": 0.256,
+      "timestamp": 1779027692907
+    },
+    {
+      "Raw Score": 0.2,
+      "Smoothed Score": 0.238,
+      "timestamp": 1779027693112
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.228,
+      "timestamp": 1779027693316
+    },
+    {
+      "Raw Score": 0.3,
+      "Smoothed Score": 0.234,
+      "timestamp": 1779027693520
+    },
+    {
+      "Raw Score": 0.26,
+      "Smoothed Score": 0.24,
+      "timestamp": 1779027693719
+    },
+    {
+      "Raw Score": 0.3,
+      "Smoothed Score": 0.254,
+      "timestamp": 1779027693924
+    },
+    {
+      "Raw Score": 0.3,
+      "Smoothed Score": 0.274,
+      "timestamp": 1779027694128
+    },
+    {
+      "Raw Score": 0.28,
+      "Smoothed Score": 0.288,
+      "timestamp": 1779027694334
+    },
+    {
+      "Raw Score": 0.33,
+      "Smoothed Score": 0.294,
+      "timestamp": 1779027694540
+    },
+    {
+      "Raw Score": 0.32,
+      "Smoothed Score": 0.306,
+      "timestamp": 1779027694745
+    },
+    {
+      "Raw Score": 0.29,
+      "Smoothed Score": 0.304,
+      "timestamp": 1779027694952
+    },
+    {
+      "Raw Score": 0.28,
+      "Smoothed Score": 0.3,
+      "timestamp": 1779027695155
+    },
+    {
+      "Raw Score": 0.29,
+      "Smoothed Score": 0.302,
+      "timestamp": 1779027695359
+    },
+    {
+      "Raw Score": 0.2,
+      "Smoothed Score": 0.276,
+      "timestamp": 1779027695566
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.25,
+      "timestamp": 1779027695771
+    },
+    {
+      "Raw Score": 0.18,
+      "Smoothed Score": 0.228,
+      "timestamp": 1779027696068
+    },
+    {
+      "Raw Score": 0.23,
+      "Smoothed Score": 0.218,
+      "timestamp": 1779027696382
+    },
+    {
+      "Raw Score": 0.25,
+      "Smoothed Score": 0.21,
+      "timestamp": 1779027696592
+    },
+    {
+      "Raw Score": 0.22,
+      "Smoothed Score": 0.214,
+      "timestamp": 1779027696795
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.218,
+      "timestamp": 1779027697003
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.224,
+      "timestamp": 1779027697202
+    },
+    {
+      "Raw Score": 0.23,
+      "Smoothed Score": 0.224,
+      "timestamp": 1779027697406
+    },
+    {
+      "Raw Score": 0.2,
+      "Smoothed Score": 0.214,
+      "timestamp": 1779027697612
+    },
+    {
+      "Raw Score": 0.22,
+      "Smoothed Score": 0.214,
+      "timestamp": 1779027697833
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.214,
+      "timestamp": 1779027698023
+    },
+    {
+      "Raw Score": 0.2,
+      "Smoothed Score": 0.212,
+      "timestamp": 1779027698241
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.208,
+      "timestamp": 1779027698435
+    },
+    {
+      "Raw Score": 0.23,
+      "Smoothed Score": 0.214,
+      "timestamp": 1779027698739
+    },
+    {
+      "Raw Score": 0.26,
+      "Smoothed Score": 0.222,
+      "timestamp": 1779027699062
+    }
+  ],
+  [
+    {
+      "Raw Score": 0.31,
+      "Smoothed Score": 0.246,
+      "timestamp": 1779027721476
+    },
+    {
+      "Raw Score": 0.35,
+      "Smoothed Score": 0.27,
+      "timestamp": 1779027721688
+    },
+    {
+      "Raw Score": 0.33,
+      "Smoothed Score": 0.292,
+      "timestamp": 1779027721894
+    },
+    {
+      "Raw Score": 0.35,
+      "Smoothed Score": 0.318,
+      "timestamp": 1779027722191
+    },
+    {
+      "Raw Score": 0.37,
+      "Smoothed Score": 0.342,
+      "timestamp": 1779027722497
+    },
+    {
+      "Raw Score": 0.41,
+      "Smoothed Score": 0.362,
+      "timestamp": 1779027722711
+    },
+    {
+      "Raw Score": 0.48,
+      "Smoothed Score": 0.388,
+      "timestamp": 1779027723009
+    },
+    {
+      "Raw Score": 0.45,
+      "Smoothed Score": 0.412,
+      "timestamp": 1779027723210
+    },
+    {
+      "Raw Score": 0.45,
+      "Smoothed Score": 0.432,
+      "timestamp": 1779027723419
+    },
+    {
+      "Raw Score": 0.5,
+      "Smoothed Score": 0.458,
+      "timestamp": 1779027723623
+    },
+    {
+      "Raw Score": 0.42,
+      "Smoothed Score": 0.46,
+      "timestamp": 1779027723827
+    },
+    {
+      "Raw Score": 0.45,
+      "Smoothed Score": 0.454,
+      "timestamp": 1779027724034
+    },
+    {
+      "Raw Score": 0.47,
+      "Smoothed Score": 0.458,
+      "timestamp": 1779027724234
+    },
+    {
+      "Raw Score": 0.47,
+      "Smoothed Score": 0.462,
+      "timestamp": 1779027724345
+    },
+    {
+      "Raw Score": 0.45,
+      "Smoothed Score": 0.452,
+      "timestamp": 1779027724545
+    },
+    {
+      "Raw Score": 0.4,
+      "Smoothed Score": 0.448,
+      "timestamp": 1779027724769
+    },
+    {
+      "Raw Score": 0.36,
+      "Smoothed Score": 0.43,
+      "timestamp": 1779027724958
+    },
+    {
+      "Raw Score": 0.3,
+      "Smoothed Score": 0.396,
+      "timestamp": 1779027725260
+    },
+    {
+      "Raw Score": 0.37,
+      "Smoothed Score": 0.376,
+      "timestamp": 1779027725567
+    },
+    {
+      "Raw Score": 0.38,
+      "Smoothed Score": 0.362,
+      "timestamp": 1779027725879
+    },
+    {
+      "Raw Score": 0.42,
+      "Smoothed Score": 0.366,
+      "timestamp": 1779027726078
+    },
+    {
+      "Raw Score": 0.39,
+      "Smoothed Score": 0.372,
+      "timestamp": 1779027726288
+    },
+    {
+      "Raw Score": 0.32,
+      "Smoothed Score": 0.376,
+      "timestamp": 1779027726487
+    },
+    {
+      "Raw Score": 0.22,
+      "Smoothed Score": 0.346,
+      "timestamp": 1779027726704
+    },
+    {
+      "Raw Score": 0.17,
+      "Smoothed Score": 0.304,
+      "timestamp": 1779027726897
+    },
+    {
+      "Raw Score": 0.16,
+      "Smoothed Score": 0.252,
+      "timestamp": 1779027727105
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.212,
+      "timestamp": 1779027727326
+    },
+    {
+      "Raw Score": 0.15,
+      "Smoothed Score": 0.178,
+      "timestamp": 1779027727532
+    },
+    {
+      "Raw Score": 0.16,
+      "Smoothed Score": 0.166,
+      "timestamp": 1779027727715
+    },
+    {
+      "Raw Score": 0.16,
+      "Smoothed Score": 0.164,
+      "timestamp": 1779027727922
+    },
+    {
+      "Raw Score": 0.16,
+      "Smoothed Score": 0.164,
+      "timestamp": 1779027728132
+    },
+    {
+      "Raw Score": 0.19,
+      "Smoothed Score": 0.164,
+      "timestamp": 1779027728352
+    },
+    {
+      "Raw Score": 0.16,
+      "Smoothed Score": 0.166,
+      "timestamp": 1779027728540
+    },
+    {
+      "Raw Score": 0.2,
+      "Smoothed Score": 0.174,
+      "timestamp": 1779027728742
+    },
+    {
+      "Raw Score": 0.21,
+      "Smoothed Score": 0.184,
+      "timestamp": 1779027728945
+    },
+    {
+      "Raw Score": 0.2,
+      "Smoothed Score": 0.192,
+      "timestamp": 1779027729153
+    }
+  ]
+]
