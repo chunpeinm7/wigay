@@ -38,13 +38,23 @@ LR             = 0.001
 # ═══════════════════════════════════════════════
 #  1. 資料載入
 # ═══════════════════════════════════════════════
+def extract_base_features(frame):
+    if "Raw Score" in frame and "Smoothed Score" in frame:
+        return [frame["Raw Score"], frame["Smoothed Score"]]
+
+    if "deviceA" in frame and "deviceB" in frame:
+        return [frame["deviceA"], frame["deviceB"]]
+
+    raise KeyError(f"Unknown frame format: {list(frame.keys())}")
+
+
 def load_raw_data():
     X_raw, y = [], []
     for label, cls in enumerate(CLASSES):
         path = os.path.join(DATA_DIR, f"{cls}.json")
         recordings = json.load(open(path, encoding="utf-8"))
         for rec in recordings:
-            seq = [[frame[f] for f in BASE_FEATURES] for frame in rec]
+            seq = [extract_base_features(frame) for frame in rec]
             X_raw.append(seq)
             y.append(label)
     print(f"[載入] {len(X_raw)} 筆原始錄製  "
@@ -69,13 +79,49 @@ def add_delta(seq_2d):
     raw_minus_smooth = raw - smooth
 
     return np.hstack([arr, delta_raw, delta_smooth, abs_delta_raw, raw_minus_smooth])
+
+
+class SimpleStandardScaler:
+    def __init__(self):
+        self.mean_ = None
+        self.scale_ = None
+
+    def fit(self, values):
+        self.mean_ = values.mean(axis=0)
+        scale = values.std(axis=0)
+        scale[scale < 1e-6] = 1.0
+        self.scale_ = scale
+        return self
+
+    def transform(self, values):
+        return (values - self.mean_) / self.scale_
+
+
+def stratified_split_indices(labels, test_size=0.25, random_state=42):
+    rng = np.random.default_rng(random_state)
+    by_label = {}
+    for index, label in enumerate(labels):
+        by_label.setdefault(label, []).append(index)
+
+    train_indices = []
+    val_indices = []
+    for label in sorted(by_label):
+        label_indices = np.array(by_label[label], dtype=np.int64)
+        rng.shuffle(label_indices)
+        val_count = max(1, int(round(len(label_indices) * test_size)))
+        val_count = min(val_count, len(label_indices) - 1) if len(label_indices) > 1 else 1
+        val_indices.extend(label_indices[:val_count].tolist())
+        train_indices.extend(label_indices[val_count:].tolist())
+
+    rng.shuffle(train_indices)
+    rng.shuffle(val_indices)
+    return train_indices, val_indices
 # ═══════════════════════════════════════════════
 #  3. 前處理
 # ═══════════════════════════════════════════════
 def fit_scaler(X_3d_list):
-    from sklearn.preprocessing import StandardScaler
     all_frames = np.vstack(X_3d_list)
-    scaler = StandardScaler()
+    scaler = SimpleStandardScaler()
     scaler.fit(all_frames)
     return scaler
 def apply_scaler(X_3d_list, scaler):
@@ -170,18 +216,14 @@ def build_model(input_size=INPUT_SIZE):
 # ═══════════════════════════════════════════════
 #  7. 訓練主流程
 # ═══════════════════════════════════════════════
-def train():
+def train(epochs=EPOCHS, resume=False):
     import torch
     import torch.nn as nn
-    from sklearn.model_selection import train_test_split
     # ── 載入 & 特徵工程 ──
     X_raw, y = load_raw_data()
     X_3d     = [add_delta(seq) for seq in X_raw]
     # ── 先分割原始錄製（防資料洩漏）──
-    idx = list(range(len(X_3d)))
-    trn_idx, val_idx = train_test_split(
-        idx, test_size=0.25, stratify=y, random_state=42
-    )
+    trn_idx, val_idx = stratified_split_indices(y, test_size=0.25, random_state=42)
     print(f"[分割] 訓練原始:{len(trn_idx)}筆  驗證原始:{len(val_idx)}筆")
     X_trn_raw = [X_3d[i] for i in trn_idx];  y_trn = [y[i] for i in trn_idx]
     X_val_raw = [X_3d[i] for i in val_idx];  y_val = [y[i] for i in val_idx]
@@ -216,10 +258,19 @@ def train():
     optimizer = torch.optim.Adam(model.parameters(), lr=LR, weight_decay=1e-4)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=20, factor=0.5)
     criterion = nn.CrossEntropyLoss()
-    print(f"[訓練] 裝置:{device}  開始訓練 {EPOCHS} epochs ...\n")
     best_val_acc = 0.0
+
+    if resume and os.path.exists(MODEL_PATH):
+        ckpt = torch.load(MODEL_PATH, map_location=device, weights_only=False)
+        model.load_state_dict(ckpt["model_state_dict"])
+        if "optimizer_state_dict" in ckpt:
+            optimizer.load_state_dict(ckpt["optimizer_state_dict"])
+        best_val_acc = float(ckpt.get("best_val_acc", 0.0))
+        print(f"[續訓] 已載入既有模型：{MODEL_PATH} (best_val_acc={best_val_acc:.1%})")
+
+    print(f"[訓練] 裝置:{device}  開始訓練 {epochs} epochs ...\n")
     n_trn, n_val = len(X_trn), len(X_val)
-    for epoch in range(1, EPOCHS + 1):
+    for epoch in range(1, epochs + 1):
         model.train()
         trn_loss = trn_correct = 0
         for xb, yb in trn_loader:
@@ -242,14 +293,16 @@ def train():
         trn_acc = trn_correct / n_trn
         val_acc = val_correct / n_val
         scheduler.step(val_loss / n_val)
-        if epoch % 20 == 0:
-            print(f"Epoch {epoch:3d}/{EPOCHS} | "
+        if epoch % 20 == 0 or epoch == epochs:
+            print(f"Epoch {epoch:3d}/{epochs} | "
                   f"Train {trn_loss/n_trn:.4f} {trn_acc:.1%} | "
                   f"Val {val_loss/n_val:.4f} {val_acc:.1%}")
         if val_acc >= best_val_acc:
             best_val_acc = val_acc
             torch.save({
                 "model_state_dict": model.state_dict(),
+                "optimizer_state_dict": optimizer.state_dict(),
+                "best_val_acc": best_val_acc,
                 "config": {
                     "input_size"    : INPUT_SIZE,
                     "hidden_size"   : HIDDEN_SIZE,
@@ -278,7 +331,7 @@ def predict(recording: list) -> tuple:
     model = build_model(cfg["input_size"])
     model.load_state_dict(ckpt["model_state_dict"])
     model.eval()
-    seq_2d   = [[frame[f] for f in cfg["base_features"]] for frame in recording]
+    seq_2d   = [extract_base_features(frame) for frame in recording]
     seq_3d   = add_delta(seq_2d)
     seq_norm = scaler.transform(seq_3d).astype(np.float32)
     seq_pad  = pad_or_truncate(seq_norm, cfg["seq_len"])
@@ -300,9 +353,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--predict", action="store_true",
                         help="用第一筆 wave 資料測試推論")
+    parser.add_argument("--epochs", type=int, default=EPOCHS,
+                        help="訓練 epoch 數，預設 200")
+    parser.add_argument("--resume", action="store_true",
+                        help="從既有 lstm_model.pth 繼續訓練")
     args = parser.parse_args()
     if args.predict:
         wave_data = json.load(open(os.path.join(DATA_DIR, "wave.json"), encoding="utf-8"))
         predict(wave_data[0])
     else:
-        train()
+        train(epochs=args.epochs, resume=args.resume)

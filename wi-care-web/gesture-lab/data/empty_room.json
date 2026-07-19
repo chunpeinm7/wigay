@@ -1,1432 +1,885 @@
 [
   [
     {
-      "Raw Score": 0.08,
-      "Smoothed Score": 0.074,
-      "timestamp": 1779027574740
+      "deviceA": 0.003,
+      "deviceB": 0.002,
+      "timestamp": 1784441653662
     },
     {
-      "Raw Score": 0.09,
-      "Smoothed Score": 0.078,
-      "timestamp": 1779027574943
+      "deviceA": 0.003,
+      "deviceB": 0.002,
+      "timestamp": 1784441654373
     },
     {
-      "Raw Score": 0.1,
-      "Smoothed Score": 0.084,
-      "timestamp": 1779027575143
+      "deviceA": 0.003,
+      "deviceB": 0.003,
+      "timestamp": 1784441654696
     },
     {
-      "Raw Score": 0.1,
-      "Smoothed Score": 0.086,
-      "timestamp": 1779027575452
+      "deviceA": 0.003,
+      "deviceB": 0.003,
+      "timestamp": 1784441654800
     },
     {
-      "Raw Score": 0.12,
-      "Smoothed Score": 0.098,
-      "timestamp": 1779027575766
+      "deviceA": 0.008,
+      "deviceB": 0.004,
+      "timestamp": 1784441655239
     },
     {
-      "Raw Score": 0.1,
-      "Smoothed Score": 0.102,
-      "timestamp": 1779027575960
+      "deviceA": 0.008,
+      "deviceB": 0.005,
+      "timestamp": 1784441655467
     },
     {
-      "Raw Score": 0.12,
-      "Smoothed Score": 0.108,
-      "timestamp": 1779027576173
+      "deviceA": 0.008,
+      "deviceB": 0.006,
+      "timestamp": 1784441655559
     },
     {
-      "Raw Score": 0.1,
-      "Smoothed Score": 0.108,
-      "timestamp": 1779027576378
+      "deviceA": 0.008,
+      "deviceB": 0.007,
+      "timestamp": 1784441656155
     },
     {
-      "Raw Score": 0.09,
-      "Smoothed Score": 0.106,
-      "timestamp": 1779027576580
+      "deviceA": 0.008,
+      "deviceB": 0.008,
+      "timestamp": 1784441656358
     },
     {
-      "Raw Score": 0.09,
-      "Smoothed Score": 0.1,
-      "timestamp": 1779027576933
+      "deviceA": 0.02,
+      "deviceB": 0.01,
+      "timestamp": 1784441656825
     },
     {
-      "Raw Score": 0.07,
-      "Smoothed Score": 0.094,
-      "timestamp": 1779027577300
+      "deviceA": 0.02,
+      "deviceB": 0.013,
+      "timestamp": 1784441657497
     },
     {
-      "Raw Score": 0.08,
-      "Smoothed Score": 0.086,
-      "timestamp": 1779027577504
+      "deviceA": 0.02,
+      "deviceB": 0.015,
+      "timestamp": 1784441657961
     },
     {
-      "Raw Score": 0.13,
-      "Smoothed Score": 0.092,
-      "timestamp": 1779027577712
+      "deviceA": 0.02,
+      "deviceB": 0.018,
+      "timestamp": 1784441658165
     }
   ],
   [
     {
-      "Raw Score": 0.07,
-      "Smoothed Score": 0.088,
-      "timestamp": 1779027582128
+      "deviceA": 0.021,
+      "deviceB": 0.021,
+      "timestamp": 1784441670346
     },
     {
-      "Raw Score": 0.06,
-      "Smoothed Score": 0.076,
-      "timestamp": 1779027582418
+      "deviceA": 0.033,
+      "deviceB": 0.023,
+      "timestamp": 1784441670998
     },
     {
-      "Raw Score": 0.07,
-      "Smoothed Score": 0.07,
-      "timestamp": 1779027582623
+      "deviceA": 0.033,
+      "deviceB": 0.026,
+      "timestamp": 1784441671219
     },
     {
-      "Raw Score": 0.06,
-      "Smoothed Score": 0.066,
-      "timestamp": 1779027582823
+      "deviceA": 0.033,
+      "deviceB": 0.028,
+      "timestamp": 1784441671768
     },
     {
-      "Raw Score": 0.06,
-      "Smoothed Score": 0.064,
-      "timestamp": 1779027583028
+      "deviceA": 0.033,
+      "deviceB": 0.031,
+      "timestamp": 1784441672109
     },
     {
-      "Raw Score": 0.07,
-      "Smoothed Score": 0.064,
-      "timestamp": 1779027583230
+      "deviceA": 0.033,
+      "deviceB": 0.033,
+      "timestamp": 1784441672561
     },
     {
-      "Raw Score": 0.1,
-      "Smoothed Score": 0.072,
-      "timestamp": 1779027583547
+      "deviceA": 0.033,
+      "deviceB": 0.033,
+      "timestamp": 1784441673082
     },
     {
-      "Raw Score": 0.1,
-      "Smoothed Score": 0.078,
-      "timestamp": 1779027583850
+      "deviceA": 0.033,
+      "deviceB": 0.033,
+      "timestamp": 1784441673718
     },
     {
-      "Raw Score": 0.1,
-      "Smoothed Score": 0.086,
-      "timestamp": 1779027584057
+      "deviceA": 0.026,
+      "deviceB": 0.032,
+      "timestamp": 1784441674157
     },
     {
-      "Raw Score": 0.1,
-      "Smoothed Score": 0.094,
-      "timestamp": 1779027584260
+      "deviceA": 0.026,
+      "deviceB": 0.03,
+      "timestamp": 1784441674826
     },
     {
-      "Raw Score": 0.09,
-      "Smoothed Score": 0.098,
-      "timestamp": 1779027584467
+      "deviceA": 0.026,
+      "deviceB": 0.029,
+      "timestamp": 1784441675263
     },
     {
-      "Raw Score": 0.07,
-      "Smoothed Score": 0.092,
-      "timestamp": 1779027584844
+      "deviceA": 0.026,
+      "deviceB": 0.027,
+      "timestamp": 1784441675735
     },
     {
-      "Raw Score": 0.09,
-      "Smoothed Score": 0.09,
-      "timestamp": 1779027585206
+      "deviceA": 0.026,
+      "deviceB": 0.026,
+      "timestamp": 1784441675762
     },
     {
-      "Raw Score": 0.08,
-      "Smoothed Score": 0.086,
-      "timestamp": 1779027585586
+      "deviceA": 0.026,
+      "deviceB": 0.026,
+      "timestamp": 1784441676176
     },
     {
-      "Raw Score": 0.08,
-      "Smoothed Score": 0.082,
-      "timestamp": 1779027585792
+      "deviceA": 0.026,
+      "deviceB": 0.026,
+      "timestamp": 1784441676630
     },
     {
-      "Raw Score": 0.08,
-      "Smoothed Score": 0.08,
-      "timestamp": 1779027585999
+      "deviceA": 0.026,
+      "deviceB": 0.026,
+      "timestamp": 1784441677065
     },
     {
-      "Raw Score": 0.08,
-      "Smoothed Score": 0.082,
-      "timestamp": 1779027586408
+      "deviceA": 0.015,
+      "deviceB": 0.023,
+      "timestamp": 1784441677759
     },
     {
-      "Raw Score": 0.08,
-      "Smoothed Score": 0.08,
-      "timestamp": 1779027586611
+      "deviceA": 0.015,
+      "deviceB": 0.021,
+      "timestamp": 1784441677959
     },
     {
-      "Raw Score": 0.08,
-      "Smoothed Score": 0.08,
-      "timestamp": 1779027586814
-    },
-    {
-      "Raw Score": 0.11,
-      "Smoothed Score": 0.086,
-      "timestamp": 1779027587024
-    },
-    {
-      "Raw Score": 0.12,
-      "Smoothed Score": 0.094,
-      "timestamp": 1779027587327
-    },
-    {
-      "Raw Score": 0.11,
-      "Smoothed Score": 0.1,
-      "timestamp": 1779027587742
-    },
-    {
-      "Raw Score": 0.09,
-      "Smoothed Score": 0.102,
-      "timestamp": 1779027588160
+      "deviceA": 0.015,
+      "deviceB": 0.019,
+      "timestamp": 1784441678417
     }
   ],
   [
     {
-      "Raw Score": 0.14,
-      "Smoothed Score": 0.114,
-      "timestamp": 1779027596757
+      "deviceA": 0.006,
+      "deviceB": 0.01,
+      "timestamp": 1784441681583
     },
     {
-      "Raw Score": 0.14,
-      "Smoothed Score": 0.122,
-      "timestamp": 1779027596958
+      "deviceA": 0.006,
+      "deviceB": 0.008,
+      "timestamp": 1784441682025
     },
     {
-      "Raw Score": 0.14,
-      "Smoothed Score": 0.126,
-      "timestamp": 1779027597157
+      "deviceA": 0.006,
+      "deviceB": 0.006,
+      "timestamp": 1784441682472
     },
     {
-      "Raw Score": 0.16,
-      "Smoothed Score": 0.134,
-      "timestamp": 1779027597369
+      "deviceA": 0.006,
+      "deviceB": 0.006,
+      "timestamp": 1784441682930
     },
     {
-      "Raw Score": 0.16,
-      "Smoothed Score": 0.148,
-      "timestamp": 1779027597571
+      "deviceA": 0.006,
+      "deviceB": 0.006,
+      "timestamp": 1784441683366
     },
     {
-      "Raw Score": 0.14,
-      "Smoothed Score": 0.148,
-      "timestamp": 1779027597779
+      "deviceA": 0.012,
+      "deviceB": 0.007,
+      "timestamp": 1784441683835
     },
     {
-      "Raw Score": 0.13,
-      "Smoothed Score": 0.146,
-      "timestamp": 1779027597976
+      "deviceA": 0.012,
+      "deviceB": 0.008,
+      "timestamp": 1784441684279
     },
     {
-      "Raw Score": 0.15,
-      "Smoothed Score": 0.148,
-      "timestamp": 1779027598180
+      "deviceA": 0.012,
+      "deviceB": 0.01,
+      "timestamp": 1784441684725
     },
     {
-      "Raw Score": 0.13,
-      "Smoothed Score": 0.142,
-      "timestamp": 1779027598385
+      "deviceA": 0.012,
+      "deviceB": 0.011,
+      "timestamp": 1784441685213
     },
     {
-      "Raw Score": 0.14,
-      "Smoothed Score": 0.138,
-      "timestamp": 1779027598594
+      "deviceA": 0.012,
+      "deviceB": 0.012,
+      "timestamp": 1784441685642
     },
     {
-      "Raw Score": 0.12,
-      "Smoothed Score": 0.134,
-      "timestamp": 1779027598797
+      "deviceA": 0.012,
+      "deviceB": 0.012,
+      "timestamp": 1784441686076
     },
     {
-      "Raw Score": 0.1,
-      "Smoothed Score": 0.128,
-      "timestamp": 1779027599015
+      "deviceA": 0.012,
+      "deviceB": 0.012,
+      "timestamp": 1784441686527
     },
     {
-      "Raw Score": 0.12,
-      "Smoothed Score": 0.122,
-      "timestamp": 1779027599212
+      "deviceA": 0.012,
+      "deviceB": 0.012,
+      "timestamp": 1784441687000
     },
     {
-      "Raw Score": 0.13,
-      "Smoothed Score": 0.122,
-      "timestamp": 1779027599413
+      "deviceA": 0.005,
+      "deviceB": 0.01,
+      "timestamp": 1784441687419
     },
     {
-      "Raw Score": 0.12,
-      "Smoothed Score": 0.118,
-      "timestamp": 1779027599622
+      "deviceA": 0.005,
+      "deviceB": 0.009,
+      "timestamp": 1784441687879
     },
     {
-      "Raw Score": 0.14,
-      "Smoothed Score": 0.122,
-      "timestamp": 1779027599822
+      "deviceA": 0.005,
+      "deviceB": 0.008,
+      "timestamp": 1784441688331
     },
     {
-      "Raw Score": 0.15,
-      "Smoothed Score": 0.132,
-      "timestamp": 1779027600029
+      "deviceA": 0.005,
+      "deviceB": 0.006,
+      "timestamp": 1784441688769
     },
     {
-      "Raw Score": 0.13,
-      "Smoothed Score": 0.134,
-      "timestamp": 1779027600233
+      "deviceA": 0.005,
+      "deviceB": 0.005,
+      "timestamp": 1784441689234
     },
     {
-      "Raw Score": 0.12,
-      "Smoothed Score": 0.132,
-      "timestamp": 1779027600433
+      "deviceA": 0.005,
+      "deviceB": 0.005,
+      "timestamp": 1784441689909
     },
     {
-      "Raw Score": 0.13,
-      "Smoothed Score": 0.134,
-      "timestamp": 1779027600638
+      "deviceA": 0.005,
+      "deviceB": 0.005,
+      "timestamp": 1784441690120
     },
     {
-      "Raw Score": 0.12,
-      "Smoothed Score": 0.13,
-      "timestamp": 1779027600852
+      "deviceA": 0.014,
+      "deviceB": 0.007,
+      "timestamp": 1784441690566
     },
     {
-      "Raw Score": 0.11,
-      "Smoothed Score": 0.122,
-      "timestamp": 1779027601055
-    },
-    {
-      "Raw Score": 0.11,
-      "Smoothed Score": 0.118,
-      "timestamp": 1779027601257
-    },
-    {
-      "Raw Score": 0.12,
-      "Smoothed Score": 0.118,
-      "timestamp": 1779027601459
-    },
-    {
-      "Raw Score": 0.11,
-      "Smoothed Score": 0.114,
-      "timestamp": 1779027601662
-    },
-    {
-      "Raw Score": 0.16,
-      "Smoothed Score": 0.122,
-      "timestamp": 1779027601871
-    },
-    {
-      "Raw Score": 0.15,
-      "Smoothed Score": 0.13,
-      "timestamp": 1779027602078
-    },
-    {
-      "Raw Score": 0.15,
-      "Smoothed Score": 0.138,
-      "timestamp": 1779027602281
-    },
-    {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.152,
-      "timestamp": 1779027602694
-    },
-    {
-      "Raw Score": 0.18,
-      "Smoothed Score": 0.166,
-      "timestamp": 1779027602998
-    },
-    {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.176,
-      "timestamp": 1779027603204
-    },
-    {
-      "Raw Score": 0.2,
-      "Smoothed Score": 0.186,
-      "timestamp": 1779027603417
-    },
-    {
-      "Raw Score": 0.22,
-      "Smoothed Score": 0.2,
-      "timestamp": 1779027603612
-    },
-    {
-      "Raw Score": 0.15,
-      "Smoothed Score": 0.192,
-      "timestamp": 1779027603832
-    },
-    {
-      "Raw Score": 0.13,
-      "Smoothed Score": 0.182,
-      "timestamp": 1779027604017
+      "deviceA": 0.014,
+      "deviceB": 0.008,
+      "timestamp": 1784441691025
     }
   ],
   [
     {
-      "Raw Score": 0.06,
-      "Smoothed Score": 0.114,
-      "timestamp": 1779027609147
+      "deviceA": 0.014,
+      "deviceB": 0.014,
+      "timestamp": 1784441695903
     },
     {
-      "Raw Score": 0.13,
-      "Smoothed Score": 0.1,
-      "timestamp": 1779027609342
+      "deviceA": 0.014,
+      "deviceB": 0.014,
+      "timestamp": 1784441696000
     },
     {
-      "Raw Score": 0.13,
-      "Smoothed Score": 0.102,
-      "timestamp": 1779027609550
+      "deviceA": 0.014,
+      "deviceB": 0.014,
+      "timestamp": 1784441696423
     },
     {
-      "Raw Score": 0.16,
-      "Smoothed Score": 0.112,
-      "timestamp": 1779027609754
+      "deviceA": 0.008,
+      "deviceB": 0.013,
+      "timestamp": 1784441696849
     },
     {
-      "Raw Score": 0.18,
-      "Smoothed Score": 0.132,
-      "timestamp": 1779027609974
+      "deviceA": 0.008,
+      "deviceB": 0.012,
+      "timestamp": 1784441697556
     },
     {
-      "Raw Score": 0.18,
-      "Smoothed Score": 0.156,
-      "timestamp": 1779027610162
+      "deviceA": 0.008,
+      "deviceB": 0.011,
+      "timestamp": 1784441697785
     },
     {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.168,
-      "timestamp": 1779027610369
+      "deviceA": 0.008,
+      "deviceB": 0.009,
+      "timestamp": 1784441698221
     },
     {
-      "Raw Score": 0.17,
-      "Smoothed Score": 0.176,
-      "timestamp": 1779027610578
+      "deviceA": 0.009,
+      "deviceB": 0.009,
+      "timestamp": 1784441699213
     },
     {
-      "Raw Score": 0.17,
-      "Smoothed Score": 0.178,
-      "timestamp": 1779027610775
+      "deviceA": 0.009,
+      "deviceB": 0.009,
+      "timestamp": 1784441699360
     },
     {
-      "Raw Score": 0.16,
-      "Smoothed Score": 0.174,
-      "timestamp": 1779027610980
+      "deviceA": 0.009,
+      "deviceB": 0.009,
+      "timestamp": 1784441700010
     },
     {
-      "Raw Score": 0.15,
-      "Smoothed Score": 0.168,
-      "timestamp": 1779027611189
+      "deviceA": 0.009,
+      "deviceB": 0.009,
+      "timestamp": 1784441700132
     },
     {
-      "Raw Score": 0.16,
-      "Smoothed Score": 0.162,
-      "timestamp": 1779027611394
+      "deviceA": 0.009,
+      "deviceB": 0.009,
+      "timestamp": 1784441700454
+    },
+    {
+      "deviceA": 0.005,
+      "deviceB": 0.008,
+      "timestamp": 1784441701139
+    },
+    {
+      "deviceA": 0.005,
+      "deviceB": 0.007,
+      "timestamp": 1784441701363
+    },
+    {
+      "deviceA": 0.005,
+      "deviceB": 0.007,
+      "timestamp": 1784441702367
+    },
+    {
+      "deviceA": 0.004,
+      "deviceB": 0.006,
+      "timestamp": 1784441702716
+    },
+    {
+      "deviceA": 0.004,
+      "deviceB": 0.005,
+      "timestamp": 1784441702810
+    },
+    {
+      "deviceA": 0.004,
+      "deviceB": 0.004,
+      "timestamp": 1784441703393
+    },
+    {
+      "deviceA": 0.004,
+      "deviceB": 0.004,
+      "timestamp": 1784441703675
+    },
+    {
+      "deviceA": 0.004,
+      "deviceB": 0.004,
+      "timestamp": 1784441704077
+    },
+    {
+      "deviceA": 0.014,
+      "deviceB": 0.006,
+      "timestamp": 1784441704520
+    },
+    {
+      "deviceA": 0.014,
+      "deviceB": 0.008,
+      "timestamp": 1784441704980
+    },
+    {
+      "deviceA": 0.014,
+      "deviceB": 0.01,
+      "timestamp": 1784441705649
     }
   ],
   [
     {
-      "Raw Score": 0.09,
-      "Smoothed Score": 0.102,
-      "timestamp": 1779027630749
+      "deviceA": 0.01,
+      "deviceB": 0.011,
+      "timestamp": 1784441712202
     },
     {
-      "Raw Score": 0.15,
-      "Smoothed Score": 0.096,
-      "timestamp": 1779027630950
+      "deviceA": 0.01,
+      "deviceB": 0.01,
+      "timestamp": 1784441712614
     },
     {
-      "Raw Score": 0.15,
-      "Smoothed Score": 0.108,
-      "timestamp": 1779027631154
+      "deviceA": 0.01,
+      "deviceB": 0.01,
+      "timestamp": 1784441713312
     },
     {
-      "Raw Score": 0.17,
-      "Smoothed Score": 0.128,
-      "timestamp": 1779027631360
+      "deviceA": 0.01,
+      "deviceB": 0.01,
+      "timestamp": 1784441713513
     },
     {
-      "Raw Score": 0.18,
-      "Smoothed Score": 0.148,
-      "timestamp": 1779027631565
+      "deviceA": 0.01,
+      "deviceB": 0.01,
+      "timestamp": 1784441713982
     },
     {
-      "Raw Score": 0.15,
-      "Smoothed Score": 0.16,
-      "timestamp": 1779027631768
+      "deviceA": 0.01,
+      "deviceB": 0.01,
+      "timestamp": 1784441714424
     },
     {
-      "Raw Score": 0.1,
-      "Smoothed Score": 0.15,
-      "timestamp": 1779027631973
+      "deviceA": 0.014,
+      "deviceB": 0.011,
+      "timestamp": 1784441715117
     },
     {
-      "Raw Score": 0.13,
-      "Smoothed Score": 0.146,
-      "timestamp": 1779027632184
+      "deviceA": 0.014,
+      "deviceB": 0.012,
+      "timestamp": 1784441715324
     },
     {
-      "Raw Score": 0.08,
-      "Smoothed Score": 0.128,
-      "timestamp": 1779027632383
+      "deviceA": 0.014,
+      "deviceB": 0.012,
+      "timestamp": 1784441716988
     },
     {
-      "Raw Score": 0.07,
-      "Smoothed Score": 0.106,
-      "timestamp": 1779027632600
+      "deviceA": 0.014,
+      "deviceB": 0.013,
+      "timestamp": 1784441717230
     },
     {
-      "Raw Score": 0.09,
-      "Smoothed Score": 0.094,
-      "timestamp": 1779027632801
+      "deviceA": 0.014,
+      "deviceB": 0.014,
+      "timestamp": 1784441717373
     },
     {
-      "Raw Score": 0.09,
-      "Smoothed Score": 0.092,
-      "timestamp": 1779027633001
+      "deviceA": 0.014,
+      "deviceB": 0.014,
+      "timestamp": 1784441717571
     },
     {
-      "Raw Score": 0.06,
-      "Smoothed Score": 0.078,
-      "timestamp": 1779027633206
+      "deviceA": 0.003,
+      "deviceB": 0.012,
+      "timestamp": 1784441718261
     },
     {
-      "Raw Score": 0.07,
-      "Smoothed Score": 0.076,
-      "timestamp": 1779027633411
+      "deviceA": 0.003,
+      "deviceB": 0.01,
+      "timestamp": 1784441718463
     },
     {
-      "Raw Score": 0.07,
-      "Smoothed Score": 0.076,
-      "timestamp": 1779027633614
-    },
-    {
-      "Raw Score": 0.06,
-      "Smoothed Score": 0.07,
-      "timestamp": 1779027633816
-    },
-    {
-      "Raw Score": 0.04,
-      "Smoothed Score": 0.06,
-      "timestamp": 1779027634023
-    },
-    {
-      "Raw Score": 0.04,
-      "Smoothed Score": 0.056,
-      "timestamp": 1779027634234
-    },
-    {
-      "Raw Score": 0.06,
-      "Smoothed Score": 0.054,
-      "timestamp": 1779027634441
-    },
-    {
-      "Raw Score": 0.06,
-      "Smoothed Score": 0.052,
-      "timestamp": 1779027634641
-    },
-    {
-      "Raw Score": 0.07,
-      "Smoothed Score": 0.054,
-      "timestamp": 1779027634847
-    },
-    {
-      "Raw Score": 0.07,
-      "Smoothed Score": 0.06,
-      "timestamp": 1779027635068
-    },
-    {
-      "Raw Score": 0.08,
-      "Smoothed Score": 0.068,
-      "timestamp": 1779027635465
-    },
-    {
-      "Raw Score": 0.08,
-      "Smoothed Score": 0.072,
-      "timestamp": 1779027635660
-    },
-    {
-      "Raw Score": 0.1,
-      "Smoothed Score": 0.08,
-      "timestamp": 1779027635762
-    },
-    {
-      "Raw Score": 0.11,
-      "Smoothed Score": 0.088,
-      "timestamp": 1779027636080
-    },
-    {
-      "Raw Score": 0.11,
-      "Smoothed Score": 0.096,
-      "timestamp": 1779027636274
-    },
-    {
-      "Raw Score": 0.11,
-      "Smoothed Score": 0.102,
-      "timestamp": 1779027636483
-    },
-    {
-      "Raw Score": 0.13,
-      "Smoothed Score": 0.112,
-      "timestamp": 1779027636687
-    },
-    {
-      "Raw Score": 0.12,
-      "Smoothed Score": 0.116,
-      "timestamp": 1779027636897
-    },
-    {
-      "Raw Score": 0.12,
-      "Smoothed Score": 0.118,
-      "timestamp": 1779027637101
-    },
-    {
-      "Raw Score": 0.12,
-      "Smoothed Score": 0.12,
-      "timestamp": 1779027637301
+      "deviceA": 0.003,
+      "deviceB": 0.008,
+      "timestamp": 1784441718589
     }
   ],
   [
     {
-      "Raw Score": 0.12,
-      "Smoothed Score": 0.12,
-      "timestamp": 1779027642112
+      "deviceA": 0.013,
+      "deviceB": 0.012,
+      "timestamp": 1784441725653
     },
     {
-      "Raw Score": 0.15,
-      "Smoothed Score": 0.126,
-      "timestamp": 1779027642421
+      "deviceA": 0.013,
+      "deviceB": 0.014,
+      "timestamp": 1784441726110
     },
     {
-      "Raw Score": 0.17,
-      "Smoothed Score": 0.136,
-      "timestamp": 1779027642751
+      "deviceA": 0.013,
+      "deviceB": 0.013,
+      "timestamp": 1784441726576
     },
     {
-      "Raw Score": 0.2,
-      "Smoothed Score": 0.152,
-      "timestamp": 1779027642941
+      "deviceA": 0.013,
+      "deviceB": 0.013,
+      "timestamp": 1784441727256
     },
     {
-      "Raw Score": 0.2,
-      "Smoothed Score": 0.168,
-      "timestamp": 1779027643140
+      "deviceA": 0.013,
+      "deviceB": 0.013,
+      "timestamp": 1784441727503
     },
     {
-      "Raw Score": 0.2,
-      "Smoothed Score": 0.184,
-      "timestamp": 1779027643344
+      "deviceA": 0.013,
+      "deviceB": 0.013,
+      "timestamp": 1784441727916
     },
     {
-      "Raw Score": 0.15,
-      "Smoothed Score": 0.184,
-      "timestamp": 1779027643649
+      "deviceA": 0.018,
+      "deviceB": 0.014,
+      "timestamp": 1784441728607
     },
     {
-      "Raw Score": 0.16,
-      "Smoothed Score": 0.182,
-      "timestamp": 1779027643959
+      "deviceA": 0.018,
+      "deviceB": 0.015,
+      "timestamp": 1784441728824
     },
     {
-      "Raw Score": 0.15,
-      "Smoothed Score": 0.172,
-      "timestamp": 1779027644160
+      "deviceA": 0.018,
+      "deviceB": 0.016,
+      "timestamp": 1784441729298
     },
     {
-      "Raw Score": 0.16,
-      "Smoothed Score": 0.164,
-      "timestamp": 1779027644364
+      "deviceA": 0.018,
+      "deviceB": 0.017,
+      "timestamp": 1784441729730
     },
     {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.162,
-      "timestamp": 1779027644569
+      "deviceA": 0.018,
+      "deviceB": 0.018,
+      "timestamp": 1784441730169
     },
     {
-      "Raw Score": 0.2,
-      "Smoothed Score": 0.172,
-      "timestamp": 1779027644776
+      "deviceA": 0.018,
+      "deviceB": 0.018,
+      "timestamp": 1784441730627
     },
     {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.182,
-      "timestamp": 1779027645080
+      "deviceA": 0.018,
+      "deviceB": 0.018,
+      "timestamp": 1784441731075
     },
     {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.194,
-      "timestamp": 1779027645386
+      "deviceA": 0.007,
+      "deviceB": 0.016,
+      "timestamp": 1784441732426
     },
     {
-      "Raw Score": 0.23,
-      "Smoothed Score": 0.208,
-      "timestamp": 1779027645593
+      "deviceA": 0.007,
+      "deviceB": 0.013,
+      "timestamp": 1784441733132
     },
     {
-      "Raw Score": 0.22,
-      "Smoothed Score": 0.214,
-      "timestamp": 1779027645798
+      "deviceA": 0.007,
+      "deviceB": 0.011,
+      "timestamp": 1784441733165
     },
     {
-      "Raw Score": 0.26,
-      "Smoothed Score": 0.226,
-      "timestamp": 1779027646001
+      "deviceA": 0.007,
+      "deviceB": 0.009,
+      "timestamp": 1784441733281
     },
     {
-      "Raw Score": 0.24,
-      "Smoothed Score": 0.232,
-      "timestamp": 1779027646206
+      "deviceA": 0.007,
+      "deviceB": 0.007,
+      "timestamp": 1784441733327
     },
     {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.232,
-      "timestamp": 1779027646410
+      "deviceA": 0.007,
+      "deviceB": 0.007,
+      "timestamp": 1784441733773
     },
     {
-      "Raw Score": 0.23,
-      "Smoothed Score": 0.232,
-      "timestamp": 1779027646621
+      "deviceA": 0.005,
+      "deviceB": 0.006,
+      "timestamp": 1784441734217
     },
     {
-      "Raw Score": 0.22,
-      "Smoothed Score": 0.232,
-      "timestamp": 1779027646820
+      "deviceA": 0.005,
+      "deviceB": 0.006,
+      "timestamp": 1784441734739
     },
     {
-      "Raw Score": 0.2,
-      "Smoothed Score": 0.22,
-      "timestamp": 1779027647027
+      "deviceA": 0.005,
+      "deviceB": 0.006,
+      "timestamp": 1784441735109
     },
     {
-      "Raw Score": 0.2,
-      "Smoothed Score": 0.212,
-      "timestamp": 1779027647232
-    },
-    {
-      "Raw Score": 0.23,
-      "Smoothed Score": 0.216,
-      "timestamp": 1779027647434
-    },
-    {
-      "Raw Score": 0.25,
-      "Smoothed Score": 0.22,
-      "timestamp": 1779027647641
-    },
-    {
-      "Raw Score": 0.29,
-      "Smoothed Score": 0.234,
-      "timestamp": 1779027647847
-    },
-    {
-      "Raw Score": 0.31,
-      "Smoothed Score": 0.256,
-      "timestamp": 1779027648052
-    },
-    {
-      "Raw Score": 0.32,
-      "Smoothed Score": 0.28,
-      "timestamp": 1779027648253
-    },
-    {
-      "Raw Score": 0.26,
-      "Smoothed Score": 0.286,
-      "timestamp": 1779027648460
-    },
-    {
-      "Raw Score": 0.2,
-      "Smoothed Score": 0.276,
-      "timestamp": 1779027648663
-    },
-    {
-      "Raw Score": 0.18,
-      "Smoothed Score": 0.254,
-      "timestamp": 1779027648868
-    },
-    {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.234,
-      "timestamp": 1779027649083
-    },
-    {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.212,
-      "timestamp": 1779027649278
-    },
-    {
-      "Raw Score": 0.3,
-      "Smoothed Score": 0.22,
-      "timestamp": 1779027649490
-    },
-    {
-      "Raw Score": 0.31,
-      "Smoothed Score": 0.242,
-      "timestamp": 1779027649690
-    },
-    {
-      "Raw Score": 0.28,
-      "Smoothed Score": 0.262,
-      "timestamp": 1779027649930
+      "deviceA": 0.005,
+      "deviceB": 0.005,
+      "timestamp": 1784441735575
     }
   ],
   [
     {
-      "Raw Score": 0.09,
-      "Smoothed Score": 0.132,
-      "timestamp": 1779027659826
+      "deviceA": 0.008,
+      "deviceB": 0.009,
+      "timestamp": 1784441749828
     },
     {
-      "Raw Score": 0.04,
-      "Smoothed Score": 0.094,
-      "timestamp": 1779027660243
+      "deviceA": 0.009,
+      "deviceB": 0.008,
+      "timestamp": 1784441750231
     },
     {
-      "Raw Score": 0.04,
-      "Smoothed Score": 0.072,
-      "timestamp": 1779027660563
+      "deviceA": 0.009,
+      "deviceB": 0.008,
+      "timestamp": 1784441750415
     },
     {
-      "Raw Score": 0.04,
-      "Smoothed Score": 0.058,
-      "timestamp": 1779027660751
+      "deviceA": 0.009,
+      "deviceB": 0.009,
+      "timestamp": 1784441751440
     },
     {
-      "Raw Score": 0.05,
-      "Smoothed Score": 0.052,
-      "timestamp": 1779027660981
+      "deviceA": 0.009,
+      "deviceB": 0.009,
+      "timestamp": 1784441751570
     },
     {
-      "Raw Score": 0.06,
-      "Smoothed Score": 0.046,
-      "timestamp": 1779027661163
+      "deviceA": 0.005,
+      "deviceB": 0.008,
+      "timestamp": 1784441752668
     },
     {
-      "Raw Score": 0.07,
-      "Smoothed Score": 0.052,
-      "timestamp": 1779027661369
+      "deviceA": 0.005,
+      "deviceB": 0.007,
+      "timestamp": 1784441752953
     },
     {
-      "Raw Score": 0.08,
-      "Smoothed Score": 0.06,
-      "timestamp": 1779027661567
+      "deviceA": 0.005,
+      "deviceB": 0.006,
+      "timestamp": 1784441753151
     },
     {
-      "Raw Score": 0.12,
-      "Smoothed Score": 0.076,
-      "timestamp": 1779027661779
+      "deviceA": 0.005,
+      "deviceB": 0.005,
+      "timestamp": 1784441753264
     },
     {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.104,
-      "timestamp": 1779027661979
+      "deviceA": 0.005,
+      "deviceB": 0.005,
+      "timestamp": 1784441754742
     },
     {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.13,
-      "timestamp": 1779027662187
+      "deviceA": 0.008,
+      "deviceB": 0.005,
+      "timestamp": 1784441756126
     },
     {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.154,
-      "timestamp": 1779027662389
+      "deviceA": 0.008,
+      "deviceB": 0.006,
+      "timestamp": 1784441756137
     },
     {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.176,
-      "timestamp": 1779027662593
+      "deviceA": 0.008,
+      "deviceB": 0.006,
+      "timestamp": 1784441756322
     },
     {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.19,
-      "timestamp": 1779027662811
+      "deviceA": 0.008,
+      "deviceB": 0.007,
+      "timestamp": 1784441756728
     },
     {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.194,
-      "timestamp": 1779027663206
+      "deviceA": 0.008,
+      "deviceB": 0.008,
+      "timestamp": 1784441756845
     },
     {
-      "Raw Score": 0.22,
-      "Smoothed Score": 0.2,
-      "timestamp": 1779027663410
+      "deviceA": 0.008,
+      "deviceB": 0.008,
+      "timestamp": 1784441757181
     },
     {
-      "Raw Score": 0.23,
-      "Smoothed Score": 0.208,
-      "timestamp": 1779027663622
+      "deviceA": 0.006,
+      "deviceB": 0.007,
+      "timestamp": 1784441757721
     },
     {
-      "Raw Score": 0.27,
-      "Smoothed Score": 0.224,
-      "timestamp": 1779027663825
+      "deviceA": 0.006,
+      "deviceB": 0.007,
+      "timestamp": 1784441757880
     },
     {
-      "Raw Score": 0.2,
-      "Smoothed Score": 0.226,
-      "timestamp": 1779027664023
+      "deviceA": 0.006,
+      "deviceB": 0.007,
+      "timestamp": 1784441758080
     },
     {
-      "Raw Score": 0.24,
-      "Smoothed Score": 0.232,
-      "timestamp": 1779027664228
+      "deviceA": 0.006,
+      "deviceB": 0.007,
+      "timestamp": 1784441758762
     },
     {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.23,
-      "timestamp": 1779027664444
+      "deviceA": 0.017,
+      "deviceB": 0.009,
+      "timestamp": 1784441759489
     },
     {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.222,
-      "timestamp": 1779027664742
+      "deviceA": 0.017,
+      "deviceB": 0.011,
+      "timestamp": 1784441760626
     },
     {
-      "Raw Score": 0.18,
-      "Smoothed Score": 0.204,
-      "timestamp": 1779027664949
+      "deviceA": 0.017,
+      "deviceB": 0.013,
+      "timestamp": 1784441761460
     },
     {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.202,
-      "timestamp": 1779027665155
+      "deviceA": 0.017,
+      "deviceB": 0.015,
+      "timestamp": 1784441762156
     },
     {
-      "Raw Score": 0.23,
-      "Smoothed Score": 0.2,
-      "timestamp": 1779027665356
+      "deviceA": 0.017,
+      "deviceB": 0.017,
+      "timestamp": 1784441762224
     },
     {
-      "Raw Score": 0.23,
-      "Smoothed Score": 0.204,
-      "timestamp": 1779027665561
-    },
-    {
-      "Raw Score": 0.26,
-      "Smoothed Score": 0.218,
-      "timestamp": 1779027665769
-    },
-    {
-      "Raw Score": 0.34,
-      "Smoothed Score": 0.25,
-      "timestamp": 1779027665970
-    },
-    {
-      "Raw Score": 0.25,
-      "Smoothed Score": 0.262,
-      "timestamp": 1779027666179
-    },
-    {
-      "Raw Score": 0.25,
-      "Smoothed Score": 0.266,
-      "timestamp": 1779027666379
-    },
-    {
-      "Raw Score": 0.18,
-      "Smoothed Score": 0.256,
-      "timestamp": 1779027666592
-    },
-    {
-      "Raw Score": 0.18,
-      "Smoothed Score": 0.24,
-      "timestamp": 1779027666791
-    },
-    {
-      "Raw Score": 0.1,
-      "Smoothed Score": 0.192,
-      "timestamp": 1779027666994
-    },
-    {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.18,
-      "timestamp": 1779027667205
+      "deviceA": 0.017,
+      "deviceB": 0.017,
+      "timestamp": 1784441762243
     }
   ],
   [
     {
-      "Raw Score": 0.37,
-      "Smoothed Score": 0.392,
-      "timestamp": 1779027682052
+      "deviceA": 0.012,
+      "deviceB": 0.012,
+      "timestamp": 1784441767058
     },
     {
-      "Raw Score": 0.34,
-      "Smoothed Score": 0.376,
-      "timestamp": 1779027682262
+      "deviceA": 0.012,
+      "deviceB": 0.012,
+      "timestamp": 1784441767757
     },
     {
-      "Raw Score": 0.44,
-      "Smoothed Score": 0.388,
-      "timestamp": 1779027682459
+      "deviceA": 0.012,
+      "deviceB": 0.012,
+      "timestamp": 1784441767967
     },
     {
-      "Raw Score": 0.44,
-      "Smoothed Score": 0.394,
-      "timestamp": 1779027682662
+      "deviceA": 0.012,
+      "deviceB": 0.012,
+      "timestamp": 1784441768442
     },
     {
-      "Raw Score": 0.51,
-      "Smoothed Score": 0.42,
-      "timestamp": 1779027682873
+      "deviceA": 0.012,
+      "deviceB": 0.012,
+      "timestamp": 1784441768861
     },
     {
-      "Raw Score": 0.55,
-      "Smoothed Score": 0.456,
-      "timestamp": 1779027683082
+      "deviceA": 0.036,
+      "deviceB": 0.017,
+      "timestamp": 1784441769769
     },
     {
-      "Raw Score": 0.55,
-      "Smoothed Score": 0.498,
-      "timestamp": 1779027683377
+      "deviceA": 0.036,
+      "deviceB": 0.022,
+      "timestamp": 1784441770256
     },
     {
-      "Raw Score": 0.54,
-      "Smoothed Score": 0.518,
-      "timestamp": 1779027683684
+      "deviceA": 0.036,
+      "deviceB": 0.027,
+      "timestamp": 1784441770672
     },
     {
-      "Raw Score": 0.49,
-      "Smoothed Score": 0.528,
-      "timestamp": 1779027683893
+      "deviceA": 0.036,
+      "deviceB": 0.031,
+      "timestamp": 1784441770758
     },
     {
-      "Raw Score": 0.49,
-      "Smoothed Score": 0.524,
-      "timestamp": 1779027684096
+      "deviceA": 0.036,
+      "deviceB": 0.036,
+      "timestamp": 1784441771153
     },
     {
-      "Raw Score": 0.42,
-      "Smoothed Score": 0.498,
-      "timestamp": 1779027684300
+      "deviceA": 0.036,
+      "deviceB": 0.036,
+      "timestamp": 1784441771805
     },
     {
-      "Raw Score": 0.43,
-      "Smoothed Score": 0.474,
-      "timestamp": 1779027684504
+      "deviceA": 0.036,
+      "deviceB": 0.036,
+      "timestamp": 1784441772023
     },
     {
-      "Raw Score": 0.39,
-      "Smoothed Score": 0.444,
-      "timestamp": 1779027684713
+      "deviceA": 0.009,
+      "deviceB": 0.031,
+      "timestamp": 1784441772464
     },
     {
-      "Raw Score": 0.34,
-      "Smoothed Score": 0.414,
-      "timestamp": 1779027684923
+      "deviceA": 0.009,
+      "deviceB": 0.025,
+      "timestamp": 1784441772934
     },
     {
-      "Raw Score": 0.31,
-      "Smoothed Score": 0.378,
-      "timestamp": 1779027685118
+      "deviceA": 0.009,
+      "deviceB": 0.02,
+      "timestamp": 1784441773368
     },
     {
-      "Raw Score": 0.36,
-      "Smoothed Score": 0.366,
-      "timestamp": 1779027685326
-    },
-    {
-      "Raw Score": 0.36,
-      "Smoothed Score": 0.352,
-      "timestamp": 1779027685545
-    },
-    {
-      "Raw Score": 0.37,
-      "Smoothed Score": 0.348,
-      "timestamp": 1779027685769
+      "deviceA": 0.009,
+      "deviceB": 0.014,
+      "timestamp": 1784441774262
     }
   ],
   [
     {
-      "Raw Score": 0.26,
-      "Smoothed Score": 0.306,
-      "timestamp": 1779027690045
+      "deviceA": 0.009,
+      "deviceB": 0.009,
+      "timestamp": 1784441776979
     },
     {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.28,
-      "timestamp": 1779027690246
+      "deviceA": 0.009,
+      "deviceB": 0.009,
+      "timestamp": 1784441777416
     },
     {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.26,
-      "timestamp": 1779027690464
+      "deviceA": 0.009,
+      "deviceB": 0.009,
+      "timestamp": 1784441778136
     },
     {
-      "Raw Score": 0.22,
-      "Smoothed Score": 0.242,
-      "timestamp": 1779027690672
+      "deviceA": 0.009,
+      "deviceB": 0.009,
+      "timestamp": 1784441778300
     },
     {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.218,
-      "timestamp": 1779027690852
+      "deviceA": 0.018,
+      "deviceB": 0.011,
+      "timestamp": 1784441778771
     },
     {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.204,
-      "timestamp": 1779027691058
+      "deviceA": 0.018,
+      "deviceB": 0.013,
+      "timestamp": 1784441779223
     },
     {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.204,
-      "timestamp": 1779027691266
+      "deviceA": 0.018,
+      "deviceB": 0.014,
+      "timestamp": 1784441779894
     },
     {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.204,
-      "timestamp": 1779027691469
+      "deviceA": 0.018,
+      "deviceB": 0.016,
+      "timestamp": 1784441780115
     },
     {
-      "Raw Score": 0.24,
-      "Smoothed Score": 0.208,
-      "timestamp": 1779027691673
+      "deviceA": 0.018,
+      "deviceB": 0.018,
+      "timestamp": 1784441780580
     },
     {
-      "Raw Score": 0.26,
-      "Smoothed Score": 0.222,
-      "timestamp": 1779027691879
+      "deviceA": 0.018,
+      "deviceB": 0.018,
+      "timestamp": 1784441781063
     },
     {
-      "Raw Score": 0.29,
-      "Smoothed Score": 0.242,
-      "timestamp": 1779027692115
+      "deviceA": 0.018,
+      "deviceB": 0.018,
+      "timestamp": 1784441781741
     },
     {
-      "Raw Score": 0.26,
-      "Smoothed Score": 0.252,
-      "timestamp": 1779027692287
+      "deviceA": 0.018,
+      "deviceB": 0.018,
+      "timestamp": 1784441781921
     },
     {
-      "Raw Score": 0.27,
-      "Smoothed Score": 0.264,
-      "timestamp": 1779027692494
+      "deviceA": 0.008,
+      "deviceB": 0.016,
+      "timestamp": 1784441782619
     },
     {
-      "Raw Score": 0.23,
-      "Smoothed Score": 0.262,
-      "timestamp": 1779027692701
+      "deviceA": 0.008,
+      "deviceB": 0.014,
+      "timestamp": 1784441783146
     },
     {
-      "Raw Score": 0.23,
-      "Smoothed Score": 0.256,
-      "timestamp": 1779027692907
+      "deviceA": 0.008,
+      "deviceB": 0.012,
+      "timestamp": 1784441783280
     },
     {
-      "Raw Score": 0.2,
-      "Smoothed Score": 0.238,
-      "timestamp": 1779027693112
-    },
-    {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.228,
-      "timestamp": 1779027693316
-    },
-    {
-      "Raw Score": 0.3,
-      "Smoothed Score": 0.234,
-      "timestamp": 1779027693520
-    },
-    {
-      "Raw Score": 0.26,
-      "Smoothed Score": 0.24,
-      "timestamp": 1779027693719
-    },
-    {
-      "Raw Score": 0.3,
-      "Smoothed Score": 0.254,
-      "timestamp": 1779027693924
-    },
-    {
-      "Raw Score": 0.3,
-      "Smoothed Score": 0.274,
-      "timestamp": 1779027694128
-    },
-    {
-      "Raw Score": 0.28,
-      "Smoothed Score": 0.288,
-      "timestamp": 1779027694334
-    },
-    {
-      "Raw Score": 0.33,
-      "Smoothed Score": 0.294,
-      "timestamp": 1779027694540
-    },
-    {
-      "Raw Score": 0.32,
-      "Smoothed Score": 0.306,
-      "timestamp": 1779027694745
-    },
-    {
-      "Raw Score": 0.29,
-      "Smoothed Score": 0.304,
-      "timestamp": 1779027694952
-    },
-    {
-      "Raw Score": 0.28,
-      "Smoothed Score": 0.3,
-      "timestamp": 1779027695155
-    },
-    {
-      "Raw Score": 0.29,
-      "Smoothed Score": 0.302,
-      "timestamp": 1779027695359
-    },
-    {
-      "Raw Score": 0.2,
-      "Smoothed Score": 0.276,
-      "timestamp": 1779027695566
-    },
-    {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.25,
-      "timestamp": 1779027695771
-    },
-    {
-      "Raw Score": 0.18,
-      "Smoothed Score": 0.228,
-      "timestamp": 1779027696068
-    },
-    {
-      "Raw Score": 0.23,
-      "Smoothed Score": 0.218,
-      "timestamp": 1779027696382
-    },
-    {
-      "Raw Score": 0.25,
-      "Smoothed Score": 0.21,
-      "timestamp": 1779027696592
-    },
-    {
-      "Raw Score": 0.22,
-      "Smoothed Score": 0.214,
-      "timestamp": 1779027696795
-    },
-    {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.218,
-      "timestamp": 1779027697003
-    },
-    {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.224,
-      "timestamp": 1779027697202
-    },
-    {
-      "Raw Score": 0.23,
-      "Smoothed Score": 0.224,
-      "timestamp": 1779027697406
-    },
-    {
-      "Raw Score": 0.2,
-      "Smoothed Score": 0.214,
-      "timestamp": 1779027697612
-    },
-    {
-      "Raw Score": 0.22,
-      "Smoothed Score": 0.214,
-      "timestamp": 1779027697833
-    },
-    {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.214,
-      "timestamp": 1779027698023
-    },
-    {
-      "Raw Score": 0.2,
-      "Smoothed Score": 0.212,
-      "timestamp": 1779027698241
-    },
-    {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.208,
-      "timestamp": 1779027698435
-    },
-    {
-      "Raw Score": 0.23,
-      "Smoothed Score": 0.214,
-      "timestamp": 1779027698739
-    },
-    {
-      "Raw Score": 0.26,
-      "Smoothed Score": 0.222,
-      "timestamp": 1779027699062
-    }
-  ],
-  [
-    {
-      "Raw Score": 0.31,
-      "Smoothed Score": 0.246,
-      "timestamp": 1779027721476
-    },
-    {
-      "Raw Score": 0.35,
-      "Smoothed Score": 0.27,
-      "timestamp": 1779027721688
-    },
-    {
-      "Raw Score": 0.33,
-      "Smoothed Score": 0.292,
-      "timestamp": 1779027721894
-    },
-    {
-      "Raw Score": 0.35,
-      "Smoothed Score": 0.318,
-      "timestamp": 1779027722191
-    },
-    {
-      "Raw Score": 0.37,
-      "Smoothed Score": 0.342,
-      "timestamp": 1779027722497
-    },
-    {
-      "Raw Score": 0.41,
-      "Smoothed Score": 0.362,
-      "timestamp": 1779027722711
-    },
-    {
-      "Raw Score": 0.48,
-      "Smoothed Score": 0.388,
-      "timestamp": 1779027723009
-    },
-    {
-      "Raw Score": 0.45,
-      "Smoothed Score": 0.412,
-      "timestamp": 1779027723210
-    },
-    {
-      "Raw Score": 0.45,
-      "Smoothed Score": 0.432,
-      "timestamp": 1779027723419
-    },
-    {
-      "Raw Score": 0.5,
-      "Smoothed Score": 0.458,
-      "timestamp": 1779027723623
-    },
-    {
-      "Raw Score": 0.42,
-      "Smoothed Score": 0.46,
-      "timestamp": 1779027723827
-    },
-    {
-      "Raw Score": 0.45,
-      "Smoothed Score": 0.454,
-      "timestamp": 1779027724034
-    },
-    {
-      "Raw Score": 0.47,
-      "Smoothed Score": 0.458,
-      "timestamp": 1779027724234
-    },
-    {
-      "Raw Score": 0.47,
-      "Smoothed Score": 0.462,
-      "timestamp": 1779027724345
-    },
-    {
-      "Raw Score": 0.45,
-      "Smoothed Score": 0.452,
-      "timestamp": 1779027724545
-    },
-    {
-      "Raw Score": 0.4,
-      "Smoothed Score": 0.448,
-      "timestamp": 1779027724769
-    },
-    {
-      "Raw Score": 0.36,
-      "Smoothed Score": 0.43,
-      "timestamp": 1779027724958
-    },
-    {
-      "Raw Score": 0.3,
-      "Smoothed Score": 0.396,
-      "timestamp": 1779027725260
-    },
-    {
-      "Raw Score": 0.37,
-      "Smoothed Score": 0.376,
-      "timestamp": 1779027725567
-    },
-    {
-      "Raw Score": 0.38,
-      "Smoothed Score": 0.362,
-      "timestamp": 1779027725879
-    },
-    {
-      "Raw Score": 0.42,
-      "Smoothed Score": 0.366,
-      "timestamp": 1779027726078
-    },
-    {
-      "Raw Score": 0.39,
-      "Smoothed Score": 0.372,
-      "timestamp": 1779027726288
-    },
-    {
-      "Raw Score": 0.32,
-      "Smoothed Score": 0.376,
-      "timestamp": 1779027726487
-    },
-    {
-      "Raw Score": 0.22,
-      "Smoothed Score": 0.346,
-      "timestamp": 1779027726704
-    },
-    {
-      "Raw Score": 0.17,
-      "Smoothed Score": 0.304,
-      "timestamp": 1779027726897
-    },
-    {
-      "Raw Score": 0.16,
-      "Smoothed Score": 0.252,
-      "timestamp": 1779027727105
-    },
-    {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.212,
-      "timestamp": 1779027727326
-    },
-    {
-      "Raw Score": 0.15,
-      "Smoothed Score": 0.178,
-      "timestamp": 1779027727532
-    },
-    {
-      "Raw Score": 0.16,
-      "Smoothed Score": 0.166,
-      "timestamp": 1779027727715
-    },
-    {
-      "Raw Score": 0.16,
-      "Smoothed Score": 0.164,
-      "timestamp": 1779027727922
-    },
-    {
-      "Raw Score": 0.16,
-      "Smoothed Score": 0.164,
-      "timestamp": 1779027728132
-    },
-    {
-      "Raw Score": 0.19,
-      "Smoothed Score": 0.164,
-      "timestamp": 1779027728352
-    },
-    {
-      "Raw Score": 0.16,
-      "Smoothed Score": 0.166,
-      "timestamp": 1779027728540
-    },
-    {
-      "Raw Score": 0.2,
-      "Smoothed Score": 0.174,
-      "timestamp": 1779027728742
-    },
-    {
-      "Raw Score": 0.21,
-      "Smoothed Score": 0.184,
-      "timestamp": 1779027728945
-    },
-    {
-      "Raw Score": 0.2,
-      "Smoothed Score": 0.192,
-      "timestamp": 1779027729153
+      "deviceA": 0.008,
+      "deviceB": 0.01,
+      "timestamp": 1784441783719
     }
   ]
 ]

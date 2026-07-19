@@ -306,7 +306,10 @@
 
   <script>
     const socket = io();
-    const MAX_POINTS = 120;
+    const MAX_POINTS = 90;
+    const MAX_RECENT_POINTS = 420;
+    const EVALUATE_INTERVAL_MS = 220;
+    const SOCKET_SOURCE_GRACE_MS = 2500;
     const MATCH_THRESHOLD = 65;
     const MIN_CONFIDENCE_GAP = 6;
     const MIN_TEMPLATE_POINTS = 8;
@@ -315,16 +318,21 @@
     const RESAMPLE_POINTS = 24;
     const TOP_MATCHES_PER_GESTURE = 3;
     const DETECTION_COOLDOWN_MS = 2500;
-    const DEFAULT_ESP_HOST = 'espectre.local';
-    const BRIDGE_PATH = '/binary_sensor/Motion%20Detected';
+    const DEFAULT_ESP_HOST = '172.20.10.2';
+    const BRIDGE_PATH = '/sensor/movement_score';
     const queryHost = new URLSearchParams(window.location.search).get('espHost');
-    const persistedHost = localStorage.getItem('gestureLabEspHost');
+    const persistedHostRaw = localStorage.getItem('gestureLabEspHost');
+    const persistedHost = persistedHostRaw && persistedHostRaw.trim().toLowerCase() === 'espectre.local'
+      ? DEFAULT_ESP_HOST
+      : persistedHostRaw;
     const activeEspHost = (queryHost || persistedHost || DEFAULT_ESP_HOST).trim();
     const BROWSER_BRIDGE_URL = `http://${activeEspHost}${BRIDGE_PATH}`;
-    const BROWSER_BRIDGE_INTERVAL_MS = 280;
+    const BROWSER_BRIDGE_INTERVAL_MS = 450;
 
     if (queryHost && queryHost.trim()) {
       localStorage.setItem('gestureLabEspHost', queryHost.trim());
+    } else if (persistedHostRaw && persistedHostRaw.trim().toLowerCase() === 'espectre.local') {
+      localStorage.setItem('gestureLabEspHost', DEFAULT_ESP_HOST);
     }
 
     let gestureTemplate = [];
@@ -335,6 +343,10 @@
     let latestDetectionAt = { wave: 0, squat: 0, clap: 0, idle: 0 };
     let browserBridgeTimer = null;
     let browserBridgeFailures = 0;
+    const browserSmoothingWindow = [];
+    let sourceWatchdogTimer = null;
+    let activeSource = 'unknown';
+    let lastSocketSampleAt = 0;
 
     const templates = { wave: [], squat: [], clap: [], idle: [], updatedAt: null };
 
@@ -369,7 +381,7 @@
         labels: [],
         datasets: [
           {
-            label: '設備 A',
+            label: '原始數據',
             data: [],
             borderColor: getComputedStyle(document.documentElement).getPropertyValue('--line-a').trim(),
             borderWidth: 2,
@@ -377,7 +389,7 @@
             tension: 0.18
           },
           {
-            label: '設備 B',
+            label: '平滑數據',
             data: [],
             borderColor: getComputedStyle(document.documentElement).getPropertyValue('--line-b').trim(),
             borderWidth: 2,
@@ -704,6 +716,10 @@
       while (recentSamples.length > 0 && now - recentSamples[0].timestamp > dynamicWindowMs) {
         recentSamples.shift();
       }
+
+      while (recentSamples.length > MAX_RECENT_POINTS) {
+        recentSamples.shift();
+      }
     }
 
     function updateRecording(sample) {
@@ -871,7 +887,7 @@
       }
     }
 
-    function parseMotionDetectedPayload(payload) {
+    function parseMovementScorePayload(payload) {
       const raw = payload?.value ?? payload?.state;
 
       if (typeof raw === 'boolean') {
@@ -895,13 +911,40 @@
       return Number.isFinite(numeric) ? numeric : null;
     }
 
+    function pushBrowserSmoothingValue(value) {
+      browserSmoothingWindow.push(value);
+      while (browserSmoothingWindow.length > 5) {
+        browserSmoothingWindow.shift();
+      }
+
+      const total = browserSmoothingWindow.reduce((sum, current) => sum + current, 0);
+      return total / browserSmoothingWindow.length;
+    }
+
+    function setActiveSource(source) {
+      if (activeSource === source) {
+        return;
+      }
+
+      activeSource = source;
+      if (source === 'socket') {
+        dom.dataSourceStatus.textContent = '伺服器橋接 Movement Score';
+      } else if (source === 'browser') {
+        dom.dataSourceStatus.textContent = `${activeEspHost} Movement Score`;
+      }
+    }
+
     let lastEvalTime = 0;
-    function processIncomingSample(sample) {
+    function processIncomingSample(sample, source = 'unknown') {
       const normalizedSample = {
         deviceA: Number(sample.deviceA),
         deviceB: Number(sample.deviceB),
         timestamp: Number(sample.timestamp || Date.now())
       };
+
+      if (source === 'socket' || source === 'browser') {
+        setActiveSource(source);
+      }
 
       dom.lastSampleAt.textContent = new Date(normalizedSample.timestamp).toLocaleTimeString();
       recentSamples.push(normalizedSample);
@@ -910,13 +953,13 @@
       updateRecording(normalizedSample);
 
       const now = Date.now();
-      if (now - lastEvalTime > 100) {
+      if (now - lastEvalTime > EVALUATE_INTERVAL_MS) {
         evaluateCurrentWindow();
         lastEvalTime = now;
       }
     }
 
-    async function pollMotionDetectedFromBrowser() {
+    async function pollMovementScoreFromBrowser() {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 4500);
 
@@ -956,26 +999,27 @@
         } catch {
           const matched = rawText.match(/\{[\s\S]*\}/);
           if (!matched) {
-            throw new Error('Motion Detected 回應不是 JSON');
+            throw new Error('Movement Score 回應不是 JSON');
           }
           payload = JSON.parse(matched[0]);
         }
 
-        const value = parseMotionDetectedPayload(payload);
+        const value = parseMovementScorePayload(payload);
         if (!Number.isFinite(value)) {
-          throw new Error('無法解析 Motion Detected 值');
+          throw new Error('無法解析 Movement Score 值');
         }
 
         browserBridgeFailures = 0;
-        dom.dataSourceStatus.textContent = `${activeEspHost} Motion Detected`;
+        setActiveSource('browser');
 
+        const smoothedValue = pushBrowserSmoothingValue(value);
         const bridgedSample = {
-          deviceA: value,
-          deviceB: value,
+          deviceA: Math.round(value * 1000) / 1000,
+          deviceB: Math.round(smoothedValue * 1000) / 1000,
           timestamp: Date.now()
         };
 
-        processIncomingSample(bridgedSample);
+        processIncomingSample(bridgedSample, 'browser');
       } catch (error) {
         browserBridgeFailures += 1;
         if (browserBridgeFailures === 1 || browserBridgeFailures % 10 === 0) {
@@ -992,12 +1036,34 @@
 
     function startBrowserBridge() {
       if (browserBridgeTimer) {
-        clearInterval(browserBridgeTimer);
+        return;
       }
 
       dom.dataSourceStatus.textContent = `連線 ${activeEspHost}...`;
-      pollMotionDetectedFromBrowser();
-      browserBridgeTimer = setInterval(pollMotionDetectedFromBrowser, BROWSER_BRIDGE_INTERVAL_MS);
+      pollMovementScoreFromBrowser();
+      browserBridgeTimer = setInterval(pollMovementScoreFromBrowser, BROWSER_BRIDGE_INTERVAL_MS);
+    }
+
+    function stopBrowserBridge() {
+      if (!browserBridgeTimer) {
+        return;
+      }
+
+      clearInterval(browserBridgeTimer);
+      browserBridgeTimer = null;
+    }
+
+    function ensureDataSourceWatchdog() {
+      if (sourceWatchdogTimer) {
+        return;
+      }
+
+      sourceWatchdogTimer = setInterval(() => {
+        if (activeSource === 'socket' && Date.now() - lastSocketSampleAt > SOCKET_SOURCE_GRACE_MS) {
+          addLog('Socket 資料更新變慢，切換為瀏覽器直連備援');
+          startBrowserBridge();
+        }
+      }, 1000);
     }
 
     function updateSimilarityPanel(gesture, similarity, distance) {
@@ -1103,11 +1169,13 @@
     socket.on('connect', () => {
       dom.socketStatus.textContent = '已連線';
       addLog('Socket.IO 已連線');
+      ensureDataSourceWatchdog();
     });
 
     socket.on('disconnect', () => {
       dom.socketStatus.textContent = '已斷線';
       addLog('Socket.IO 已斷線');
+      startBrowserBridge();
     });
 
     socket.on('sensor:error', (payload) => {
@@ -1115,7 +1183,9 @@
     });
 
     socket.on('sensor:update', ({ sample }) => {
-      processIncomingSample(sample);
+      lastSocketSampleAt = Date.now();
+      stopBrowserBridge();
+      processIncomingSample(sample, 'socket');
     });
 
     dom.recordButton.addEventListener('click', startRecording);
@@ -1129,11 +1199,13 @@
         renderTemplates();
         addLog('測試站已就緒，多樣本模型已從 JSON 載入');
         startBrowserBridge();
+        ensureDataSourceWatchdog();
       })
       .catch((error) => {
         renderTemplates();
         addLog(`樣板初始化失敗：${error.message}`);
         startBrowserBridge();
+        ensureDataSourceWatchdog();
       });
   </script>
 </body>
