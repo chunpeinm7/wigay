@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32-S3 動作模型測試站</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- 其餘內容與原 index.html 相同，請參考原始檔案 -->
+<style>
+    :root {
+      --bg: #f4efe7;
+      --panel: #fffdf9;
+      --panel-alt: #f8f1e7;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --accent: #c2410c;
+      --accent-soft: #fed7aa;
+      --line-a: #2563eb;
+      --line-b: #dc2626;
+      --ok: #15803d;
+      --warn: #b45309;
+      --border: #e5d7c4;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, #fff7ed, transparent 32%),
+        radial-gradient(circle at bottom right, #dbeafe, transparent 30%),
+        var(--bg);
+    }
+
+    .page {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .panel {
+      background: rgba(255, 253, 249, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(31, 41, 55, 0.08);
+      padding: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    .title {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .status-strip {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.92rem;
+      background: var(--panel-alt);
+      border: 1px solid var(--border);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 0.9fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .chart-wrap {
+      height: 360px;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      margin-bottom: 14px;
+    }
+
+    .controls {
+      display: grid;
+      gap: 12px;
+    }
+
+    .row {
+      display: grid;
+      gap: 10px;
+    }
+
+    .row.two {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .field-label {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    select, button, input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 0.96rem;
+    }
+
+    button {
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+      border: none;
+      font-weight: 600;
+      transition: transform 0.18s ease, opacity 0.18s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button.secondary { background: #374151; }
+    button.warning { background: #b45309; }
+    button.ghost { background: #fff; color: var(--ink); border: 1px solid var(--border); }
+    button:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    .template-card,
+    .metric-card,
+    .log-item {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,241,231,0.86));
+    }
+
+    .template-list,
+    .metric-list,
+    .log-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .metric-score {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .metric-score.ok { color: var(--ok); }
+    .metric-score.warn { color: var(--warn); }
+
+    .small {
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    .recording {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .log-list {
+      max-height: 480px;
+      overflow: auto;
+    }
+
+    .hint {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 1100px) {
+      .hero,
+      .grid,
+      .row.two {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="panel">
+        <h1 class="title">ESP32-S3 動作模型開發者測試站</h1>
+        <p class="subtitle">
+          接收 ESP32-S3 傳來的雙通道即時數據，錄製揮手與蹲下樣板，並用 DTW 驗證目前訊號和樣板的相似度。
+        </p>
+        <div class="status-strip">
+          <div class="badge">Socket 狀態：<span id="socketStatus">連線中...</span></div>
+          <div class="badge">資料來源：<span id="dataSourceStatus">伺服器橋接</span></div>
+          <div class="badge">最近資料時間：<span id="lastSampleAt">尚未收到</span></div>
+          <div class="badge">錄製狀態：<span id="recordingStatus">待命</span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2 class="section-title">ESP32-S3 傳輸格式</h2>
+        <p class="small">Socket.IO 事件名稱：<strong>sensor:data</strong></p>
+        <p class="small">JSON 範例：</p>
+        <pre class="small">{
+  "deviceA": 0.42,
+  "deviceB": 0.38,
+  "timestamp": 1710000000000
+}</pre>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-bottom: 20px;">
+      <h2 class="section-title">即時波形</h2>
+      <div class="chart-wrap">
+        <canvas id="waveChart"></canvas>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <h2 class="section-title">訓練區</h2>
+        <div class="controls">
+          <div class="row">
+            <label class="field-label" for="gestureType">樣板類型</label>
+            <select id="gestureType">
+              <option value="wave">揮手</option>
+              <option value="squat">蹲下</option>
+              <option value="clap">拍手</option>
+              <option value="idle">靜止</option>
+            </select>
+          </div>
+          <div class="row two">
+            <button id="recordButton">開始錄製訓練樣本</button>
+            <button id="stopButton" class="warning" disabled>結束錄製</button>
+          </div>
+          <div class="row two">
+            <button id="clearButton" class="ghost">清除所選訓練集</button>
+            <div></div>
+          </div>
+          <div class="row two">
+            <button id="saveAllButton" class="secondary">儲存全部訓練集到 JSON</button>
+            <button id="exportButton" class="ghost">匯出 JSON 檔</button>
+          </div>
+          <div class="hint">
+            按下開始後，系統會持續收集資料到 <strong>gesture_template</strong>。按下「結束錄製」後，系統會詢問你是否將本次資料加入目前動作的訓練集。每個動作建議至少收集 6 筆樣本。
+          </div>
+          <div class="hint" id="storageHint">
+            儲存位置：伺服器端 JSON 檔
+          </div>
+        </div>
+        <div class="template-list" id="templateList" style="margin-top: 18px;"></div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title">測試區</h2>
+        <div class="metric-list">
+          <div class="metric-card">
+            <div class="small">目前判定動作</div>
+            <div id="currentGesture" class="metric-score">等待資料</div>
+          </div>
+          <div class="metric-card">
+            <div class="small">揮手訓練集相似度</div>
+            <div id="waveSimilarity" class="metric-score warn">0%</div>
+            <div class="small">DTW 距離：<span id="waveDistance">-</span></div>
+          </div>
+          <div class="metric-card">
+            <div class="small">蹲下訓練集相似度</div>
+            <div id="squatSimilarity" class="metric-score warn">0%</div>
+            <div class="small">DTW 距離：<span id="squatDistance">-</span></div>
+          </div>
+          <div class="metric-card">
+            <div class="small">拍手訓練集相似度</div>
+            <div id="clapSimilarity" class="metric-score warn">0%</div>
+            <div class="small">DTW 距離：<span id="clapDistance">-</span></div>
+          </div>
+          <div class="metric-card">
+            <div class="small">靜止訓練集相似度</div>
+            <div id="idleSimilarity" class="metric-score warn">0%</div>
+            <div class="small">DTW 距離：<span id="idleDistance">-</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title">日誌區</h2>
+        <div class="log-list" id="logList"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const socket = io();
+    const MAX_POINTS = 120;
+    const MATCH_THRESHOLD = 65;
+    const MIN_CONFIDENCE_GAP = 6;
+    const MIN_TEMPLATE_POINTS = 8;
+    const RECOMMENDED_SAMPLES_PER_GESTURE = 6;
+    const RECENT_BUFFER_MS = 12000;
+    const RESAMPLE_POINTS = 24;
+    const TOP_MATCHES_PER_GESTURE = 3;
+    const DETECTION_COOLDOWN_MS = 2500;
+    const DEFAULT_ESP_HOST = 'espectre.local';
+    const BRIDGE_PATH = '/binary_sensor/motion_detected';
+    const queryHost = new URLSearchParams(window.location.search).get('espHost');
+    const persistedHost = localStorage.getItem('gestureLabEspHost');
+    const activeEspHost = (queryHost || persistedHost || DEFAULT_ESP_HOST).trim();
+    const BROWSER_BRIDGE_URL = `http://${activeEspHost}${BRIDGE_PATH}`;
+    const BROWSER_BRIDGE_INTERVAL_MS = 280;
+
+    if (queryHost && queryHost.trim()) {
+      localStorage.setItem('gestureLabEspHost', queryHost.trim());
+    }
+
+    let gestureTemplate = [];
+    let isRecording = false;
+    let recordingType = 'wave';
+    let recordingStartTime = 0;
+    let recentSamples = [];
+    let latestDetectionAt = { wave: 0, squat: 0, clap: 0, idle: 0 };
+    let browserBridgeTimer = null;
+    let browserBridgeFailures = 0;
+
+    const templates = { wave: [], squat: [], clap: [], idle: [], updatedAt: null };
+
+    const dom = {
+      socketStatus: document.getElementById('socketStatus'),
+      dataSourceStatus: document.getElementById('dataSourceStatus'),
+      lastSampleAt: document.getElementById('lastSampleAt'),
+      recordingStatus: document.getElementById('recordingStatus'),
+      gestureType: document.getElementById('gestureType'),
+      recordButton: document.getElementById('recordButton'),
+      stopButton: document.getElementById('stopButton'),
+      clearButton: document.getElementById('clearButton'),
+      saveAllButton: document.getElementById('saveAllButton'),
+      exportButton: document.getElementById('exportButton'),
+      storageHint: document.getElementById('storageHint'),
+      templateList: document.getElementById('templateList'),
+      currentGesture: document.getElementById('currentGesture'),
+      waveSimilarity: document.getElementById('waveSimilarity'),
+      squatSimilarity: document.getElementById('squatSimilarity'),
+      clapSimilarity: document.getElementById('clapSimilarity'),
+      idleSimilarity: document.getElementById('idleSimilarity'),
+      waveDistance: document.getElementById('waveDistance'),
+      squatDistance: document.getElementById('squatDistance'),
+      clapDistance: document.getElementById('clapDistance'),
+      idleDistance: document.getElementById('idleDistance'),
+      logList: document.getElementById('logList')
+    };
+
+    const chart = new Chart(document.getElementById('waveChart'), {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: '設備 A',
+            data: [],
+            borderColor: getComputedStyle(document.documentElement).getPropertyValue('--line-a').trim(),
+            borderWidth: 2,
+            pointRadius: 0,
+            tension: 0.18
+          },
+          {
+            label: '設備 B',
+            data: [],
+            borderColor: getComputedStyle(document.documentElement).getPropertyValue('--line-b').trim(),
+            borderWidth: 2,
+            pointRadius: 0,
+            tension: 0.18
+          }
+        ]
+      },
+      options: {
+        maintainAspectRatio: false,
+        animation: false,
+        responsive: true,
+        scales: {
+          x: {
+            ticks: { maxTicksLimit: 8 }
+          },
+          y: {
+            beginAtZero: false
+          }
+        }
+      }
+    });
+
+    function labelForGesture(gesture) {
+      const map = { wave: '揮手', squat: '蹲下', clap: '拍手', idle: '靜止' };
+      return map[gesture] || '未知';
+    }
+
+    function isTemplateSample(sample) {
+      return sample
+        && typeof sample === 'object'
+        && Number.isFinite(Number(sample.deviceA))
+        && Number.isFinite(Number(sample.deviceB))
+        && Number.isFinite(Number(sample.timestamp));
+    }
+
+    function normalizeTemplateEntry(entry) {
+      if (!Array.isArray(entry)) {
+        return [];
+      }
+
+      return entry
+        .filter(isTemplateSample)
+        .map((sample) => ({
+          deviceA: Number(sample.deviceA),
+          deviceB: Number(sample.deviceB),
+          timestamp: Number(sample.timestamp)
+        }));
+    }
+
+    function normalizeTemplateCollection(value) {
+      if (!Array.isArray(value) || !value.length) {
+        return [];
+      }
+
+      if (Array.isArray(value[0])) {
+        return value
+          .map(normalizeTemplateEntry)
+          .filter((entry) => entry.length >= MIN_TEMPLATE_POINTS);
+      }
+
+      if (isTemplateSample(value[0])) {
+        const migratedEntry = normalizeTemplateEntry(value);
+        return migratedEntry.length >= MIN_TEMPLATE_POINTS ? [migratedEntry] : [];
+      }
+
+      return [];
+    }
+
+    function calculateMean(values) {
+      if (!values.length) {
+        return 0;
+      }
+      return values.reduce((sum, value) => sum + value, 0) / values.length;
+    }
+
+    function calculateStdDev(values) {
+      if (!values.length) {
+        return 0;
+      }
+
+      const mean = calculateMean(values);
+      const variance = values.reduce((sum, value) => sum + ((value - mean) ** 2), 0) / values.length;
+      return Math.sqrt(variance);
+    }
+
+    function countDirectionChanges(values) {
+      let changes = 0;
+      let previousDirection = 0;
+
+      for (let index = 1; index < values.length; index += 1) {
+        const delta = values[index] - values[index - 1];
+        const direction = Math.abs(delta) < 0.002 ? 0 : Math.sign(delta);
+
+        if (direction && previousDirection && direction !== previousDirection) {
+          changes += 1;
+        }
+
+        if (direction) {
+          previousDirection = direction;
+        }
+      }
+
+      return changes;
+    }
+
+    function calculateMotionEnergy(values) {
+      if (values.length < 2) {
+        return 0;
+      }
+
+      let total = 0;
+      for (let index = 1; index < values.length; index += 1) {
+        total += Math.abs(values[index] - values[index - 1]);
+      }
+      return total;
+    }
+
+    function calculateTemplateDuration(template) {
+      if (!template.length) {
+        return 0;
+      }
+
+      return Math.max(1, template[template.length - 1].timestamp - template[0].timestamp);
+    }
+
+    function resampleSequence(sequence, targetPoints = RESAMPLE_POINTS) {
+      if (!sequence.length) {
+        return [];
+      }
+
+      if (sequence.length === 1) {
+        return Array.from({ length: targetPoints }, () => ({ ...sequence[0] }));
+      }
+
+      return Array.from({ length: targetPoints }, (_, index) => {
+        const scaledIndex = (index * (sequence.length - 1)) / (targetPoints - 1);
+        const leftIndex = Math.floor(scaledIndex);
+        const rightIndex = Math.min(sequence.length - 1, leftIndex + 1);
+        const fraction = scaledIndex - leftIndex;
+        const left = sequence[leftIndex];
+        const right = sequence[rightIndex];
+
+        return {
+          deviceA: left.deviceA + ((right.deviceA - left.deviceA) * fraction),
+          deviceB: left.deviceB + ((right.deviceB - left.deviceB) * fraction),
+          timestamp: left.timestamp + ((right.timestamp - left.timestamp) * fraction)
+        };
+      });
+    }
+
+    function normalizeValues(values) {
+      const mean = calculateMean(values);
+      const stdDev = calculateStdDev(values);
+      const scale = stdDev > 0.0001 ? stdDev : Math.max(...values.map((value) => Math.abs(value - mean)), 1);
+      return values.map((value) => (value - mean) / scale);
+    }
+
+    function extractTemplateFeatures(sequence) {
+      const valuesA = sequence.map((sample) => sample.deviceA);
+      const valuesB = sequence.map((sample) => sample.deviceB);
+      const meanA = calculateMean(valuesA);
+      const meanB = calculateMean(valuesB);
+
+      return {
+        durationMs: calculateTemplateDuration(sequence),
+        rangeA: Math.max(...valuesA) - Math.min(...valuesA),
+        rangeB: Math.max(...valuesB) - Math.min(...valuesB),
+        stdA: calculateStdDev(valuesA),
+        stdB: calculateStdDev(valuesB),
+        driftA: valuesA[valuesA.length - 1] - valuesA[0],
+        driftB: valuesB[valuesB.length - 1] - valuesB[0],
+        motionA: calculateMotionEnergy(valuesA),
+        motionB: calculateMotionEnergy(valuesB),
+        oscillationA: countDirectionChanges(valuesA.map((value) => value - meanA)),
+        oscillationB: countDirectionChanges(valuesB.map((value) => value - meanB))
+      };
+    }
+
+    function prepareSequence(sequence) {
+      const resampled = resampleSequence(sequence, RESAMPLE_POINTS);
+      const normalizedA = normalizeValues(resampled.map((sample) => sample.deviceA));
+      const normalizedB = normalizeValues(resampled.map((sample) => sample.deviceB));
+
+      return {
+        points: normalizedA.map((deviceA, index) => ({
+          deviceA,
+          deviceB: normalizedB[index]
+        })),
+        features: extractTemplateFeatures(sequence)
+      };
+    }
+
+    function dtwDistance(sequenceA, sequenceB) {
+      const rows = sequenceA.length;
+      const cols = sequenceB.length;
+
+      if (!rows || !cols) {
+        return Number.POSITIVE_INFINITY;
+      }
+
+      const matrix = Array.from({ length: rows + 1 }, () => Array(cols + 1).fill(Number.POSITIVE_INFINITY));
+      matrix[0][0] = 0;
+
+      for (let row = 1; row <= rows; row += 1) {
+        for (let col = 1; col <= cols; col += 1) {
+          const pointA = sequenceA[row - 1];
+          const pointB = sequenceB[col - 1];
+          const cost = Math.abs(pointA.deviceA - pointB.deviceA) + Math.abs(pointA.deviceB - pointB.deviceB);
+          matrix[row][col] = cost + Math.min(
+            matrix[row - 1][col],
+            matrix[row][col - 1],
+            matrix[row - 1][col - 1]
+          );
+        }
+      }
+
+      return matrix[rows][cols] / (rows + cols);
+    }
+
+    function featureDistance(left, right) {
+      const keys = ['rangeA', 'rangeB', 'stdA', 'stdB', 'driftA', 'driftB', 'motionA', 'motionB', 'oscillationA', 'oscillationB'];
+      const total = keys.reduce((sum, key) => {
+        const scale = Math.max(Math.abs(left[key]), Math.abs(right[key]), 0.05);
+        return sum + Math.min(4, Math.abs(left[key] - right[key]) / scale);
+      }, 0);
+
+      return total / keys.length;
+    }
+
+    function similarityFromDistance(distance) {
+      if (!Number.isFinite(distance)) {
+        return 0;
+      }
+
+      return Math.max(0, Math.min(100, Math.round(100 * Math.exp(-distance * 1.35))));
+    }
+
+    function getLongestTemplatePointCount() {
+      return Math.max(
+        MIN_TEMPLATE_POINTS,
+        ...templates.wave.map((entry) => entry.length),
+        ...templates.squat.map((entry) => entry.length),
+...templates.clap.map((entry) => entry.length),
+...templates.idle.map((entry) => entry.length)
+      );
+    }
+
+    async function loadTemplates() {
+      const response = await fetch('/api/templates');
+      if (!response.ok) {
+        throw new Error('無法讀取伺服器端樣板');
+      }
+
+      const payload = await response.json();
+      templates.wave = normalizeTemplateCollection(payload.wave);
+      templates.squat = normalizeTemplateCollection(payload.squat);
+      templates.clap = normalizeTemplateCollection(payload.clap);
+      templates.idle = normalizeTemplateCollection(payload.empty);
+      templates.updatedAt = payload.updatedAt || null;
+      updateStorageHint();
+    }
+
+    async function saveTemplates() {
+      const response = await fetch('/api/templates', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          templates: {
+            wave: templates.wave,
+            squat: templates.squat,
+            clap: templates.clap,
+            empty: templates.idle
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('無法儲存樣板到 JSON 檔');
+      }
+
+      const payload = await response.json();
+      templates.wave = normalizeTemplateCollection(payload.wave);
+      templates.squat = normalizeTemplateCollection(payload.squat);
+      templates.clap = normalizeTemplateCollection(payload.clap);
+      templates.idle = normalizeTemplateCollection(payload.empty);
+      templates.updatedAt = payload.updatedAt || null;
+      updateStorageHint();
+    }
+
+    function updateStorageHint() {
+      const totalSamples = templates.wave.length + templates.squat.length + templates.clap.length + templates.idle.length;
+      const savedAt = templates.updatedAt
+        ? new Date(templates.updatedAt).toLocaleString()
+        : '尚未存檔';
+      dom.storageHint.textContent = `儲存位置：gesture-lab/data/gesture-templates.json，已收集 ${totalSamples} 筆訓練樣本，最後更新：${savedAt}`;
+    }
+
+    let pendingChartUpdate = false;
+    function updateChart(sample) {
+      chart.data.labels.push(new Date(sample.timestamp).toLocaleTimeString());
+      chart.data.datasets[0].data.push(sample.deviceA);
+      chart.data.datasets[1].data.push(sample.deviceB);
+
+      if (chart.data.labels.length > MAX_POINTS) {
+        chart.data.labels.shift();
+        chart.data.datasets[0].data.shift();
+        chart.data.datasets[1].data.shift();
+      }
+
+      if (!pendingChartUpdate) {
+        pendingChartUpdate = true;
+        requestAnimationFrame(() => {
+          chart.update('none');
+          pendingChartUpdate = false;
+        });
+      }
+    }
+
+    function trimRecentSamples(now) {
+      const dynamicWindowMs = Math.max(RECENT_BUFFER_MS, getLongestTemplatePointCount() * 350);
+      while (recentSamples.length > 0 && now - recentSamples[0].timestamp > dynamicWindowMs) {
+        recentSamples.shift();
+      }
+    }
+
+    function updateRecording(sample) {
+      if (!isRecording) {
+        return;
+      }
+
+      gestureTemplate.push(sample);
+      const elapsed = sample.timestamp - recordingStartTime;
+      dom.recordingStatus.textContent = `錄製中 ${(elapsed / 1000).toFixed(1)} 秒，已收集 ${gestureTemplate.length} 筆`;
+      dom.recordingStatus.className = 'recording';
+    }
+
+    function startRecording() {
+      if (isRecording) {
+        return;
+      }
+
+      recordingType = dom.gestureType.value;
+      isRecording = true;
+      recordingStartTime = Date.now();
+      gestureTemplate = [];
+      dom.recordingStatus.textContent = '錄製中 0.0 秒，已收集 0 筆';
+      dom.recordButton.disabled = true;
+      dom.stopButton.disabled = false;
+      dom.gestureType.disabled = true;
+      addLog(`開始錄製${labelForGesture(recordingType)}訓練樣本`);
+    }
+
+    async function stopRecording() {
+      if (!isRecording) {
+        return;
+      }
+
+      isRecording = false;
+      dom.recordButton.disabled = false;
+      dom.stopButton.disabled = true;
+      dom.gestureType.disabled = false;
+
+      const captured = normalizeTemplateEntry(
+        gestureTemplate.filter((sample) => sample.timestamp >= recordingStartTime)
+      );
+
+      if (captured.length < MIN_TEMPLATE_POINTS) {
+        dom.recordingStatus.textContent = `錄製失敗，至少需要 ${MIN_TEMPLATE_POINTS} 筆資料`;
+        dom.recordingStatus.className = 'recording';
+        addLog(`${labelForGesture(recordingType)}樣本過短，未儲存`);
+        gestureTemplate = [];
+        return;
+      }
+
+      const shouldSave = window.confirm(
+        `${labelForGesture(recordingType)}樣本錄製完成，共 ${captured.length} 筆資料。\n是否加入訓練集？`
+      );
+
+      if (!shouldSave) {
+        dom.recordingStatus.textContent = `${labelForGesture(recordingType)}樣本錄製已結束，未加入訓練集`;
+        dom.recordingStatus.className = '';
+        addLog(`${labelForGesture(recordingType)}樣本已放棄`);
+        gestureTemplate = [];
+        return;
+      }
+
+      templates[recordingType] = [...templates[recordingType], captured];
+      try {
+        await saveTemplates();
+        renderTemplates();
+        dom.recordingStatus.textContent = `${labelForGesture(recordingType)}訓練集已新增 1 筆樣本，目前共 ${templates[recordingType].length} 筆`;
+        dom.recordingStatus.className = '';
+        addLog(`${labelForGesture(recordingType)}訓練集新增成功，目前共 ${templates[recordingType].length} 筆`);
+      } catch (error) {
+        dom.recordingStatus.textContent = `儲存失敗：${error.message}`;
+        dom.recordingStatus.className = 'recording';
+        addLog(`儲存樣板失敗：${error.message}`);
+      }
+
+      gestureTemplate = [];
+    }
+
+    async function clearSelectedTemplate() {
+      const selected = dom.gestureType.value;
+
+      if (!templates[selected].length) {
+        addLog(`${labelForGesture(selected)}目前沒有可清除的訓練樣本`);
+        return;
+      }
+
+      const shouldClear = window.confirm(`確認清除 ${labelForGesture(selected)} 的全部 ${templates[selected].length} 筆訓練樣本？`);
+      if (!shouldClear) {
+        return;
+      }
+
+      try {
+        const gestureKey = selected === 'idle' ? 'empty' : selected;
+        const response = await fetch(`/api/templates/${gestureKey}`, {
+          method: 'DELETE'
+        });
+        if (!response.ok) {
+          throw new Error('清除樣板失敗');
+        }
+
+        const payload = await response.json();
+        templates.wave = normalizeTemplateCollection(payload.wave);
+        templates.squat = normalizeTemplateCollection(payload.squat);
+        templates.clap = normalizeTemplateCollection(payload.clap);
+        templates.idle = normalizeTemplateCollection(payload.empty);
+        templates.updatedAt = payload.updatedAt || null;
+        updateStorageHint();
+        renderTemplates();
+        addLog(`${labelForGesture(selected)}訓練集已清空`);
+      } catch (error) {
+        addLog(error.message);
+      }
+    }
+
+    async function saveAllTemplates() {
+      try {
+        await saveTemplates();
+        renderTemplates();
+        addLog('所有訓練樣本已寫入 JSON 檔');
+      } catch (error) {
+        addLog(`批次儲存失敗：${error.message}`);
+      }
+    }
+
+    function exportTemplates() {
+      window.open('/api/templates/export', '_blank');
+      addLog('已觸發 JSON 匯出下載');
+    }
+
+    function renderTemplates() {
+      dom.templateList.innerHTML = ['wave', 'squat', 'clap', 'idle'].map((key) => {
+        const entries = templates[key];
+        const sampleCount = entries.length;
+        const totalPoints = entries.reduce((sum, entry) => sum + entry.length, 0);
+        const averagePoints = sampleCount ? Math.round(totalPoints / sampleCount) : 0;
+        const lastSaved = sampleCount
+          ? new Date(entries[entries.length - 1][entries[entries.length - 1].length - 1].timestamp).toLocaleString()
+          : '尚未錄製';
+        const recommendation = sampleCount >= RECOMMENDED_SAMPLES_PER_GESTURE
+          ? '訓練量已達建議值'
+          : `建議至少收集 ${RECOMMENDED_SAMPLES_PER_GESTURE} 筆`;
+
+        return `
+          <div class="template-card">
+            <div><strong>${labelForGesture(key)}</strong></div>
+            <div class="small">訓練樣本數：${sampleCount} 筆</div>
+            <div class="small">總資料點：${totalPoints}，平均每筆 ${averagePoints} 點</div>
+            <div class="small">最後更新：${lastSaved}</div>
+            <div class="small">${recommendation}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function addLog(message) {
+      const time = new Date().toLocaleTimeString();
+      const item = document.createElement('div');
+      item.className = 'log-item';
+      item.innerHTML = `<div><strong>${time}</strong></div><div class="small">${message}</div>`;
+      dom.logList.prepend(item);
+
+      while (dom.logList.children.length > 30) {
+        dom.logList.removeChild(dom.logList.lastChild);
+      }
+    }
+
+    function parseMotionDetectedPayload(payload) {
+      const raw = payload?.value ?? payload?.state;
+
+      if (typeof raw === 'boolean') {
+        return raw ? 1 : 0;
+      }
+
+      const text = String(raw ?? '').trim().toLowerCase();
+      if (!text) {
+        return null;
+      }
+
+      if (['on', 'true', 'motion', 'detected'].includes(text)) {
+        return 1;
+      }
+
+      if (['off', 'false', 'idle', 'clear', 'none'].includes(text)) {
+        return 0;
+      }
+
+      const numeric = Number(text);
+      return Number.isFinite(numeric) ? numeric : null;
+    }
+
+    let lastEvalTime = 0;
+    function processIncomingSample(sample) {
+      const normalizedSample = {
+        deviceA: Number(sample.deviceA),
+        deviceB: Number(sample.deviceB),
+        timestamp: Number(sample.timestamp || Date.now())
+      };
+
+      dom.lastSampleAt.textContent = new Date(normalizedSample.timestamp).toLocaleTimeString();
+      recentSamples.push(normalizedSample);
+      trimRecentSamples(normalizedSample.timestamp);
+      updateChart(normalizedSample);
+      updateRecording(normalizedSample);
+
+      const now = Date.now();
+      if (now - lastEvalTime > 100) {
+        evaluateCurrentWindow();
+        lastEvalTime = now;
+      }
+    }
+
+    async function pollMotionDetectedFromBrowser() {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 4500);
+
+      try {
+        const response = await fetch(BROWSER_BRIDGE_URL, {
+          cache: 'no-store',
+          signal: controller.signal
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const reader = response.body && response.body.getReader ? response.body.getReader() : null;
+        let rawText = '';
+
+        if (reader) {
+          const firstChunk = await Promise.race([
+            reader.read(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('讀取資料逾時')), 2200))
+          ]);
+
+          if (firstChunk && !firstChunk.done && firstChunk.value) {
+            rawText = new TextDecoder().decode(firstChunk.value);
+          }
+
+          await reader.cancel().catch(() => {});
+        }
+
+        if (!rawText) {
+          throw new Error('裝置未回傳可解析資料');
+        }
+
+        let payload;
+        try {
+          payload = JSON.parse(rawText);
+        } catch {
+          const matched = rawText.match(/\{[\s\S]*\}/);
+          if (!matched) {
+            throw new Error('Motion Detected 回應不是 JSON');
+          }
+          payload = JSON.parse(matched[0]);
+        }
+
+        const value = parseMotionDetectedPayload(payload);
+        if (!Number.isFinite(value)) {
+          throw new Error('無法解析 Motion Detected 值');
+        }
+
+        browserBridgeFailures = 0;
+        dom.dataSourceStatus.textContent = `${activeEspHost} Motion Detected`;
+
+        const bridgedSample = {
+          deviceA: value,
+          deviceB: value,
+          timestamp: Date.now()
+        };
+
+        processIncomingSample(bridgedSample);
+      } catch (error) {
+        browserBridgeFailures += 1;
+        if (browserBridgeFailures === 1 || browserBridgeFailures % 10 === 0) {
+          addLog(`瀏覽器橋接暫時失敗：${error.message}`);
+        }
+
+        if (browserBridgeFailures >= 3) {
+          dom.dataSourceStatus.textContent = `等待 ${activeEspHost}`;
+        }
+      } finally {
+        clearTimeout(timeout);
+      }
+    }
+
+    function startBrowserBridge() {
+      if (browserBridgeTimer) {
+        clearInterval(browserBridgeTimer);
+      }
+
+      dom.dataSourceStatus.textContent = `連線 ${activeEspHost}...`;
+      pollMotionDetectedFromBrowser();
+      browserBridgeTimer = setInterval(pollMotionDetectedFromBrowser, BROWSER_BRIDGE_INTERVAL_MS);
+    }
+
+    function updateSimilarityPanel(gesture, similarity, distance) {
+      const isWave = gesture === 'wave';
+      const similarityNode = isWave ? dom.waveSimilarity : dom.squatSimilarity;
+      const distanceNode = isWave ? dom.waveDistance : dom.squatDistance;
+      similarityNode.textContent = `${similarity}%`;
+      similarityNode.className = `metric-score ${similarity >= MATCH_THRESHOLD ? 'ok' : 'warn'}`;
+      distanceNode.textContent = Number.isFinite(distance) ? distance.toFixed(4) : '-';
+    }
+
+    function scoreWindowAgainstTemplate(windowSamples, templateSamples) {
+      if (templateSamples.length < MIN_TEMPLATE_POINTS || windowSamples.length < templateSamples.length) {
+        return null;
+      }
+
+      const liveSlice = windowSamples.slice(-templateSamples.length);
+      const livePrepared = prepareSequence(liveSlice);
+      const templatePrepared = prepareSequence(templateSamples);
+      const sequenceDistance = dtwDistance(livePrepared.points, templatePrepared.points);
+      const engineeredPenalty = featureDistance(livePrepared.features, templatePrepared.features);
+      const totalDistance = (sequenceDistance * 0.72) + (engineeredPenalty * 0.28);
+
+      return {
+        distance: totalDistance,
+        similarity: similarityFromDistance(totalDistance)
+      };
+    }
+
+    function evaluateGesture(gesture) {
+      const gestureEntries = templates[gesture];
+      const matches = gestureEntries
+        .map((entry) => scoreWindowAgainstTemplate(recentSamples, entry))
+        .filter(Boolean)
+        .sort((left, right) => left.distance - right.distance);
+
+      if (!matches.length) {
+        return null;
+      }
+
+      const topMatches = matches.slice(0, Math.min(TOP_MATCHES_PER_GESTURE, matches.length));
+      const distance = topMatches.reduce((sum, item) => sum + item.distance, 0) / topMatches.length;
+      const similarity = Math.round(topMatches.reduce((sum, item) => sum + item.similarity, 0) / topMatches.length);
+
+      return {
+        gesture,
+        distance,
+        similarity,
+        support: topMatches.length
+      };
+    }
+
+    function evaluateCurrentWindow() {
+      if (!recentSamples.length) {
+        return;
+      }
+
+      const hasAnyTraining = templates.wave.length || templates.squat.length || templates.clap.length || templates.idle.length;
+      if (!hasAnyTraining) {
+        dom.currentGesture.textContent = '缺少訓練樣本';
+        updateSimilarityPanel('wave', 0, Number.POSITIVE_INFINITY);
+        updateSimilarityPanel('squat', 0, Number.POSITIVE_INFINITY);
+        return;
+      }
+
+      const results = ['wave', 'squat', 'clap', 'idle']
+        .map((gesture) => evaluateGesture(gesture))
+        .filter(Boolean);
+
+      updateSimilarityPanel('wave', 0, Number.POSITIVE_INFINITY);
+      updateSimilarityPanel('squat', 0, Number.POSITIVE_INFINITY);
+      results.forEach((result) => updateSimilarityPanel(result.gesture, result.similarity, result.distance));
+
+      if (!results.length) {
+        dom.currentGesture.textContent = '等待更多資料';
+        return;
+      }
+
+      results.sort((left, right) => right.similarity - left.similarity);
+      const best = results[0];
+      const runnerUp = results[1] || { similarity: 0 };
+      const similarityGap = best.similarity - runnerUp.similarity;
+
+      if (best.similarity >= MATCH_THRESHOLD && similarityGap >= MIN_CONFIDENCE_GAP) {
+        dom.currentGesture.textContent = `${labelForGesture(best.gesture)} (${best.similarity}%)`;
+
+        const now = Date.now();
+        if (now - latestDetectionAt[best.gesture] > DETECTION_COOLDOWN_MS) {
+          latestDetectionAt[best.gesture] = now;
+          addLog(`偵測成功：${labelForGesture(best.gesture)}，相似度 ${best.similarity}%，領先 ${similarityGap}%`);
+        }
+        return;
+      }
+
+      if (best.similarity >= MATCH_THRESHOLD && similarityGap < MIN_CONFIDENCE_GAP) {
+        dom.currentGesture.textContent = `結果不明確 (${best.similarity}% / 差距 ${similarityGap}%)`;
+        return;
+      }
+
+      dom.currentGesture.textContent = `未命中 (${best.similarity}%)`;
+    }
+
+    socket.on('connect', () => {
+      dom.socketStatus.textContent = '已連線';
+      addLog('Socket.IO 已連線');
+    });
+
+    socket.on('disconnect', () => {
+      dom.socketStatus.textContent = '已斷線';
+      addLog('Socket.IO 已斷線');
+    });
+
+    socket.on('sensor:error', (payload) => {
+      addLog(`資料格式錯誤：${payload.message}`);
+    });
+
+    socket.on('sensor:update', ({ sample }) => {
+      processIncomingSample(sample);
+    });
+
+    dom.recordButton.addEventListener('click', startRecording);
+    dom.stopButton.addEventListener('click', stopRecording);
+    dom.clearButton.addEventListener('click', clearSelectedTemplate);
+    dom.saveAllButton.addEventListener('click', saveAllTemplates);
+    dom.exportButton.addEventListener('click', exportTemplates);
+
+    loadTemplates()
+      .then(() => {
+        renderTemplates();
+        addLog('測試站已就緒，多樣本模型已從 JSON 載入');
+        startBrowserBridge();
+      })
+      .catch((error) => {
+        renderTemplates();
+        addLog(`樣板初始化失敗：${error.message}`);
+        startBrowserBridge();
+      });
+  </script>
+</body>
+</html>

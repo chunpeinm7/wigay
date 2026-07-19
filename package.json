@@ -1,0 +1,14 @@
+{
+  "name": "wigay-main",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WIGAY - Wi-Care 智能感測與家居自動化整合專案",
+  "scripts": {
+    "web:install": "cd wi-care-web && npm install",
+    "web:start": "cd wi-care-web && node server-v2.js",
+    "web:start:v1": "cd wi-care-web && node server.js",
+    "web:dev": "cd wi-care-web && npx nodemon server-v2.js",
+    "proxy": "python proxy_server.py"
+  },
+  "license": "MIT"
+}
