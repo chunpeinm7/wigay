@@ -14,38 +14,36 @@
 namespace esphome {
 namespace espectre {
 
-void SensorPublisher::publish_all(const csi_processor_context_t *processor,
-                                  csi_motion_state_t motion_state) {
-  if (!processor) {
-    return;
-  }
-  
-  // Get current values
-  float moving_variance = csi_processor_get_moving_variance(processor);
-  bool is_motion = (motion_state == CSI_STATE_MOTION);
-  
-  // Publish motion sensors
+void SensorPublisher::publish_motion_binary(MotionState motion_state) {
+  bool is_motion = (motion_state == MotionState::MOTION);
   if (motion_binary_sensor_) {
     motion_binary_sensor_->publish_state(is_motion);
   }
-  
+}
+
+void SensorPublisher::publish_movement_metric(const BaseDetector *detector) {
+  if (!detector) {
+    return;
+  }
+
+  float motion_metric = detector->get_motion_metric();
   if (movement_sensor_) {
-    movement_sensor_->publish_state(moving_variance);
+    movement_sensor_->publish_state(motion_metric);
   }
 }
 
 void SensorPublisher::log_status(const char *tag,
-                                 const csi_processor_context_t *processor,
-                                 csi_motion_state_t motion_state,
+                                 const BaseDetector *detector,
+                                 MotionState motion_state,
                                  uint32_t packets_per_publish) {
-  if (!processor || !tag) {
+  if (!detector || !tag) {
     return;
   }
   
   // Get current values
-  float moving_variance = csi_processor_get_moving_variance(processor);
-  float threshold = csi_processor_get_threshold(processor);
-  bool is_motion = (motion_state == CSI_STATE_MOTION);
+  float motion_metric = detector->get_motion_metric();
+  float threshold = detector->get_threshold();
+  bool is_motion = (motion_state == MotionState::MOTION);
   
   // Calculate CSI rate (packets per second)
   uint32_t now_ms = esp_timer_get_time() / 1000;
@@ -68,13 +66,13 @@ void SensorPublisher::log_status(const char *tag,
   }
   
   // Calculate progress
-  float progress = (threshold > 0) ? (moving_variance / threshold) : 0.0f;
+  float progress = (threshold > 0) ? (motion_metric / threshold) : 0.0f;
   int percent = (int)(progress * 100);
   
   // Log with progress bar, rate, and WiFi diagnostics
   log_progress_bar(tag, progress, 20, 15,
                    "%d%% | mvmt:%.4f thr:%.4f | %s | %u pkt/s | ch:%d rssi:%d",
-                   percent, moving_variance, threshold,
+                   percent, motion_metric, threshold,
                    is_motion ? "MOTION" : "IDLE",
                    rate_pps, channel, rssi);
 }

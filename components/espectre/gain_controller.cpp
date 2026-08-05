@@ -2,12 +2,14 @@
  * ESPectre - Gain Controller Implementation
  * 
  * Manages AGC/FFT gain locking for stable CSI measurements.
+ * Uses median calculation for robust baseline (matches Espressif implementation).
  * 
  * Author: Francesco Pace <francesco.pace@gmail.com>
  * License: GPLv3
  */
 
 #include "gain_controller.h"
+#include "utils.h"
 #include "esphome/core/log.h"
 
 namespace esphome {
@@ -15,20 +17,30 @@ namespace espectre {
 
 static const char *TAG = "GainController";
 
-void GainController::init(uint16_t calibration_packets) {
-  calibration_packets_ = calibration_packets;
+void GainController::init(GainLockMode mode) {
+  mode_ = mode;
   packet_count_ = 0;
-  agc_gain_sum_ = 0;
-  fft_gain_sum_ = 0;
   agc_gain_locked_ = 0;
   fft_gain_locked_ = 0;
+  skipped_strong_signal_ = false;
   
 #if ESPECTRE_GAIN_LOCK_SUPPORTED
+  // All modes need calibration phase to establish baseline
   locked_ = false;
-  ESP_LOGD(TAG, "Gain controller initialized (calibration packets: %d)", calibration_packets);
+  skip_gain_lock_ = false;
+  
+  const char* mode_str;
+  switch (mode) {
+    case GainLockMode::AUTO: mode_str = "auto"; break;
+    case GainLockMode::ENABLED: mode_str = "enabled"; break;
+    case GainLockMode::DISABLED: mode_str = "disabled"; break;
+  }
+  ESP_LOGD(TAG, "Gain controller initialized (mode: %s, %d packets, using median)", 
+           mode_str, CALIBRATION_PACKETS);
 #else
   // On unsupported platforms, mark as locked immediately (no calibration phase)
   locked_ = true;
+  skip_gain_lock_ = true;
   ESP_LOGD(TAG, "Gain lock not supported on this platform (skipping)");
 #endif
 }
@@ -42,36 +54,51 @@ void GainController::process_packet(const wifi_csi_info_t* info) {
   // Cast to PHY structure to access hidden gain fields
   const wifi_pkt_rx_ctrl_phy_t* phy_info = reinterpret_cast<const wifi_pkt_rx_ctrl_phy_t*>(info);
   
-  if (packet_count_ < calibration_packets_) {
-    // Accumulate gain values
-    agc_gain_sum_ += phy_info->agc_gain;
-    fft_gain_sum_ += phy_info->fft_gain;
+  if (packet_count_ < CALIBRATION_PACKETS) {
+    // Store gain values for median calculation
+    agc_samples_[packet_count_] = phy_info->agc_gain;
+    fft_samples_[packet_count_] = phy_info->fft_gain;
     packet_count_++;
     
-    // Log current average every 25% (useful for debugging)
-    if (packet_count_ == calibration_packets_ / 4 ||
-        packet_count_ == calibration_packets_ / 2 ||
-        packet_count_ == (calibration_packets_ * 3) / 4) {
-      uint8_t avg_agc = static_cast<uint8_t>(agc_gain_sum_ / packet_count_);
-      uint8_t avg_fft = static_cast<uint8_t>(fft_gain_sum_ / packet_count_);
-      ESP_LOGD(TAG, "Gain calibration %d%%: AGC~%d, FFT~%d (%d/%d packets)", 
-               (packet_count_ * 100) / calibration_packets_, avg_agc, avg_fft,
-               packet_count_, calibration_packets_);
+    // Log progress every 25% (useful for debugging)
+    if (packet_count_ == CALIBRATION_PACKETS / 4 ||
+        packet_count_ == CALIBRATION_PACKETS / 2 ||
+        packet_count_ == (CALIBRATION_PACKETS * 3) / 4) {
+      ESP_LOGD(TAG, "Gain calibration %d%% (%d/%d packets)", 
+               (packet_count_ * 100) / CALIBRATION_PACKETS,
+               packet_count_, CALIBRATION_PACKETS);
     }
-  } else if (packet_count_ == calibration_packets_) {
-    // Calculate averages and lock
-    agc_gain_locked_ = static_cast<uint8_t>(agc_gain_sum_ / calibration_packets_);
-    fft_gain_locked_ = static_cast<uint8_t>(fft_gain_sum_ / calibration_packets_);
-    
-    // Force the gain values
-    phy_fft_scale_force(true, fft_gain_locked_);
-    phy_force_rx_gain(1, agc_gain_locked_);
+  } else if (packet_count_ == CALIBRATION_PACKETS) {
+    // Calculate medians (more robust than mean against outliers)
+    agc_gain_locked_ = esphome::espectre::calculate_median_u8(agc_samples_, CALIBRATION_PACKETS);
+    fft_gain_locked_ = esphome::espectre::calculate_median_i8(fft_samples_, CALIBRATION_PACKETS);
     
     locked_ = true;
-    ESP_LOGI(TAG, "Gain locked: AGC=%d, FFT=%d (after %d packets)", 
-             agc_gain_locked_, fft_gain_locked_, calibration_packets_);
+    packet_count_++;  // Prevent re-entry
     
-    // Notify callback that gain is now locked (triggers NBVI calibration)
+    // Handle different modes
+    if (mode_ == GainLockMode::DISABLED) {
+      // DISABLED mode: no gain lock, will use CV normalization
+      ESP_LOGI(TAG, "Gain baseline: AGC=%d, FFT=%d (no lock, CV normalization enabled)", 
+               agc_gain_locked_, fft_gain_locked_);
+    } else if (mode_ == GainLockMode::AUTO && agc_gain_locked_ < MIN_SAFE_AGC) {
+      // AUTO mode with strong signal: skip gain lock to prevent CSI freeze
+      skipped_strong_signal_ = true;
+      ESP_LOGW(TAG, "Signal too strong (AGC=%d < %d) - skipping gain lock, using CV normalization", 
+               agc_gain_locked_, MIN_SAFE_AGC);
+      ESP_LOGW(TAG, "Move sensor 2-3 meters from AP for optimal performance");
+    } else {
+      // AUTO/ENABLED mode: force gain lock
+      phy_fft_scale_force(true, fft_gain_locked_);
+      phy_force_rx_gain(1, agc_gain_locked_);
+      
+      ESP_LOGI(TAG, "Gain locked: AGC=%d, FFT=%d (median of %d packets)", 
+               agc_gain_locked_, fft_gain_locked_, CALIBRATION_PACKETS);
+    }
+    
+    ESP_LOGI(TAG, "HT20 mode: 64 subcarriers");
+    
+    // Notify callback that calibration is complete (triggers band calibration)
     if (lock_complete_callback_) {
       lock_complete_callback_();
     }
@@ -85,4 +112,3 @@ void GainController::process_packet(const wifi_csi_info_t* info) {
 
 }  // namespace espectre
 }  // namespace esphome
-

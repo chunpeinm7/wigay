@@ -15,12 +15,10 @@ namespace espectre {
 static const char *const TAG_THRESHOLD = "espectre.threshold";
 
 void ESpectreThresholdNumber::setup() {
-  // Initialize with current threshold value from parent
-  if (this->parent_ != nullptr) {
-    float current = this->parent_->get_threshold();
-    this->publish_state(current);
-    ESP_LOGI(TAG_THRESHOLD, "Threshold number initialized: %.2f", current);
-  }
+  // Don't publish state here - parent will call republish_state() when ready.
+  // Calling publish_state() too early (before API/WiFi is connected) can cause
+  // crashes or "unknown" state in Home Assistant.
+  // The parent calls republish_state() on first sensor update (after API is connected).
 }
 
 void ESpectreThresholdNumber::dump_config() {
@@ -29,10 +27,9 @@ void ESpectreThresholdNumber::dump_config() {
 
 void ESpectreThresholdNumber::control(float value) {
   // Called when user changes value from HA
+  // set_threshold_runtime handles everything: update, save, and publish
   if (this->parent_ != nullptr) {
     this->parent_->set_threshold_runtime(value);
-    this->publish_state(value);
-    ESP_LOGI(TAG_THRESHOLD, "Threshold changed from HA: %.2f", value);
   }
 }
 
@@ -42,7 +39,7 @@ void ESpectreThresholdNumber::republish_state() {
   if (this->parent_ != nullptr) {
     float current = this->parent_->get_threshold();
     this->publish_state(current);
-    ESP_LOGI(TAG_THRESHOLD, "Threshold re-published to HA: %.2f", current);
+    ESP_LOGD(TAG_THRESHOLD, "Threshold re-published to HA: %.2f", current);
   }
 }
 

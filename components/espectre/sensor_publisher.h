@@ -12,7 +12,8 @@
 
 #include "esphome/components/sensor/sensor.h"
 #include "esphome/components/binary_sensor/binary_sensor.h"
-#include "csi_processor.h"
+#include "utils.h"
+#include "base_detector.h"
 
 namespace esphome {
 namespace espectre {
@@ -30,25 +31,30 @@ class SensorPublisher {
   void set_motion_binary_sensor(binary_sensor::BinarySensor *sensor) { motion_binary_sensor_ = sensor; }
   
   /**
-   * Publish all sensors with current values
+   * Publish the motion binary sensor only.
    * 
-   * @param processor CSI processor context (for motion data)
    * @param motion_state Current motion state
    */
-  void publish_all(const csi_processor_context_t *processor,
-                   csi_motion_state_t motion_state);
+  void publish_motion_binary(MotionState motion_state);
+  
+  /**
+   * Publish the movement metric only.
+   *
+   * @param detector Motion detector (BaseDetector*)
+   */
+  void publish_movement_metric(const BaseDetector *detector);
   
   /**
    * Log status with progress bar
    * 
    * @param tag Log tag
-   * @param processor CSI processor context
+   * @param detector Motion detector
    * @param motion_state Current motion state
    * @param packets_per_publish Number of packets processed per publish cycle
    */
   void log_status(const char *tag,
-                  const csi_processor_context_t *processor,
-                  csi_motion_state_t motion_state,
+                  const BaseDetector *detector,
+                  MotionState motion_state,
                   uint32_t packets_per_publish);
   
   /**
@@ -59,18 +65,12 @@ class SensorPublisher {
   
   /**
    * Reset rate counter
-   * 
-   * Call after calibration to avoid incorrect rate calculation
-   * on first log after resume.
    */
   void reset_rate_counter() { last_log_time_ms_ = 0; }
   
  private:
-  // Motion sensors
   sensor::Sensor *movement_sensor_{nullptr};
   binary_sensor::BinarySensor *motion_binary_sensor_{nullptr};
-  
-  // Rate tracking
   uint32_t last_log_time_ms_{0};
 };
 

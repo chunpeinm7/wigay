@@ -11,12 +11,12 @@
 esphome:
   name: espectre
   friendly_name: ESPectre
-  min_version: 2024.11.0
+  min_version: 2026.5.0
   # Uncomment the next line if you have multiple ESPectre devices (adds MAC suffix to name)
   # name_add_mac_suffix: true
   project:
     name: francescopace.espectre
-    version: "2.2.0"
+    version: "2.8.0"
 
 esp32:
   board: esp32-s3-devkitc-1
@@ -38,16 +38,22 @@ external_components:
     components: [ espectre ]
 
 # ESPectre - WiFi CSI Motion Detection
+# NOTE (2.8.0 update): publish_interval is now in PACKETS, not seconds (was a float
+# number of seconds before). 50 packets @ 100 pps ≈ 0.5s, matching the old cadence.
+# segmentation_window_size default is now 100 (was 50) per upstream hardening; kept
+# at 100 here since window size and publish cadence are now decoupled via
+# evaluation_interval (new, default 25 packets ≈ 0.25s detection evaluation cadence).
 espectre:
   id: espectre_csi
-  traffic_generator_rate: 100      # 100 pps，每 0.5 秒累積 50 封包剛好填滿窗口
-  publish_interval: 0.5            # 每 0.5 秒更新一次（2Hz，流暢連續）
-  segmentation_window_size: 50     # 窗口大小 = 100 × 0.5，無間隙
+  detection_algorithm: mvs         # mvs（原本使用的演算法）或 ml（元件內建的另一套偵測模型）
+  traffic_generator_rate: 100      # 100 pps
+  publish_interval: 50             # 每 50 個封包更新一次（≈0.5s @ 100pps，維持原本節奏）
+  segmentation_window_size: 100    # 偵測窗口大小（官方新預設，原本是 50）
   lowpass_enabled: true            # 低通濾波，去除高頻雜訊
   lowpass_cutoff: 8.0              # 截止頻率 8Hz（人體動作主要在 0~5Hz）
-  hampel_enabled: true             # Hampel 濾波，移除突波尖峰
+  hampel_enabled: true             # Hampel 濾波，移除突波尖峰（官方新版預設已開啟）
   hampel_window: 7
-  hampel_threshold: 3.0
+  hampel_threshold: 3.0            # 官方新預設為 5.0（較不敏感）；沿用原本 3.0 較敏感的設定
 
 # Dashboard import for easy adoption
 dashboard_import:

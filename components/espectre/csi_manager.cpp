@@ -6,70 +6,125 @@
  */
 
 #include "csi_manager.h"
-#include "calibration_manager.h"
+#include "nbvi_calibrator.h"
 #include "gain_controller.h"
 #include "esphome/core/log.h"
 #include "esp_timer.h"
-#include "esp_attr.h"  // For IRAM_ATTR
+#include "esp_attr.h"
+#include <cstring>
 
 namespace esphome {
 namespace espectre {
 
 static const char *TAG = "CSIManager";
 
-void CSIManager::init(csi_processor_context_t* processor,
+static void publish_motion_state_if_changed_(MotionState previous_state,
+                                             MotionState current_state,
+                                             const motion_state_callback_t &callback) {
+  if (callback && previous_state != current_state) {
+    callback(current_state);
+  }
+}
+
+static void log_wrong_sc_packet_(const wifi_csi_info_t* data, size_t csi_len,
+                                 uint32_t packets_filtered) {
+  const auto &rx = data->rx_ctrl;
+#if CONFIG_SOC_WIFI_HE_SUPPORT
+  ESP_LOGW(TAG,
+           "Filtered %lu packets with wrong SC count (got %zu bytes, expected %d) "
+           "[ch=%u bb=%u est_len=%u est_vld=%u]",
+           static_cast<unsigned long>(packets_filtered), csi_len, HT20_CSI_LEN,
+           static_cast<unsigned>(rx.channel),
+           static_cast<unsigned>(rx.cur_bb_format),
+           static_cast<unsigned>(rx.rx_channel_estimate_len),
+           static_cast<unsigned>(rx.rx_channel_estimate_info_vld));
+#else
+  ESP_LOGW(TAG,
+           "Filtered %lu packets with wrong SC count (got %zu bytes, expected %d) "
+           "[ch=%u sig_mode=%u cwb=%u mcs=%u]",
+           static_cast<unsigned long>(packets_filtered), csi_len, HT20_CSI_LEN,
+           static_cast<unsigned>(rx.channel),
+           static_cast<unsigned>(rx.sig_mode),
+           static_cast<unsigned>(rx.cwb),
+           static_cast<unsigned>(rx.mcs));
+#endif
+}
+
+void CSIManager::init(BaseDetector* detector,
                      const uint8_t selected_subcarriers[12],
-                     float segmentation_threshold,
-                     uint16_t segmentation_window_size,
                      uint32_t publish_rate,
-                     float publish_interval,
-                     bool lowpass_enabled,
-                     float lowpass_cutoff,
-                     bool hampel_enabled,
-                     uint8_t hampel_window,
-                     float hampel_threshold,
+                     GainLockMode gain_lock_mode,
                      IWiFiCSI* wifi_csi) {
-  processor_ = processor;
+  detector_ = detector;
   selected_subcarriers_ = selected_subcarriers;
-  publish_rate_ = (uint32_t)std::max(1.0f, (float)publish_rate * publish_interval);
+  publish_rate_ = publish_rate;
   
   // Use injected WiFi CSI interface or default real implementation
   wifi_csi_ = wifi_csi ? wifi_csi : &default_wifi_csi_;
   
-  // Set subcarrier selection
-  csi_set_subcarrier_selection(selected_subcarriers_, NUM_SUBCARRIERS);
+  // Initialize gain controller for AGC/FFT locking (uses median for robustness)
+  gain_controller_.init(gain_lock_mode);
+  reset_motion_state_filter_();
   
-  // Configure low-pass filter
-  lowpass_filter_init(&processor_->lowpass_state, lowpass_cutoff, LOWPASS_SAMPLE_RATE, lowpass_enabled);
-  
-  // Configure Hampel filter
-  hampel_turbulence_init(&processor_->hampel_state, hampel_window, hampel_threshold, hampel_enabled);
-  
-  // Initialize gain controller for AGC/FFT locking
-  // Gain lock happens BEFORE NBVI calibration (300 packets, ~3 seconds)
-  // This ensures NBVI calibration has clean data with stable gain
-  gain_controller_.init(300);
-  
-  ESP_LOGD(TAG, "CSI Manager initialized (threshold: %.2f, window: %d, lowpass: %s@%.1fHz, hampel: %s@%d)",
-           segmentation_threshold, segmentation_window_size, 
-           lowpass_enabled ? "ON" : "OFF", lowpass_cutoff,
-           hampel_enabled ? "ON" : "OFF", hampel_window);
+  ESP_LOGD(TAG, "CSI Manager initialized with %s detector", 
+           detector_ ? detector_->get_name() : "NULL");
 }
 
 void CSIManager::update_subcarrier_selection(const uint8_t subcarriers[12]) {
   selected_subcarriers_ = subcarriers;
-  csi_set_subcarrier_selection(subcarriers, NUM_SUBCARRIERS);
   ESP_LOGD(TAG, "Subcarrier selection updated (%d subcarriers)", NUM_SUBCARRIERS);
 }
 
 void CSIManager::set_threshold(float threshold) {
-  csi_processor_set_threshold(processor_, threshold);
-  ESP_LOGD(TAG, "Threshold updated: %.2f", threshold);
+  if (detector_) {
+    detector_->set_threshold(threshold);
+    ESP_LOGD(TAG, "Threshold updated: %.2f", threshold);
+  }
 }
 
-void CSIManager::process_packet(wifi_csi_info_t* data,
-                                csi_motion_state_t& motion_state) {
-  if (!data || !processor_) {
+void CSIManager::clear_detector_buffer() {
+  if (detector_) {
+    MotionState previous_state = effective_motion_state_;
+    // Cold reset: clear turbulence history and state.
+    // Required after channel switch and post-calibration to avoid stale samples.
+    detector_->clear_buffer();
+    packets_since_evaluation_ = 0;
+    reset_motion_state_filter_();
+    publish_motion_state_if_changed_(previous_state, effective_motion_state_, motion_state_callback_);
+  }
+}
+
+MotionState CSIManager::update_effective_motion_state_(MotionState detector_state) {
+  if (detector_state == effective_motion_state_) {
+    pending_motion_state_ = effective_motion_state_;
+    pending_state_hits_ = 0;
+    return effective_motion_state_;
+  }
+
+  if (detector_state != pending_motion_state_) {
+    pending_motion_state_ = detector_state;
+    pending_state_hits_ = 1;
+  } else if (pending_state_hits_ < UINT8_MAX) {
+    pending_state_hits_++;
+  }
+
+  uint8_t required_hits = (pending_motion_state_ == MotionState::MOTION) ? motion_on_hits_ : motion_off_hits_;
+  if (pending_state_hits_ >= required_hits) {
+    effective_motion_state_ = pending_motion_state_;
+    pending_state_hits_ = 0;
+  }
+
+  return effective_motion_state_;
+}
+
+void CSIManager::reset_motion_state_filter_(MotionState state) {
+  effective_motion_state_ = state;
+  pending_motion_state_ = state;
+  pending_state_hits_ = 0;
+}
+
+void CSIManager::process_packet(wifi_csi_info_t* data) {
+  if (!data || !detector_) {
     return;
   }
   
@@ -81,66 +136,112 @@ void CSIManager::process_packet(wifi_csi_info_t* data,
     return;
   }
   
-  // Process gain calibration (collects packets, then locks AGC/FFT)
-  // During gain lock phase, we DISCARD packets (don't pass to NBVI)
-  // This ensures NBVI calibration only sees data with stable gain
+  // Process gain calibration
   if (!gain_controller_.is_locked()) {
     gain_controller_.process_packet(data);
-    return;  // Discard packet during gain lock phase
+    return;
   }
   
-  // If calibration is in progress, delegate to calibration manager
+  // STBC workaround (GitHub issue #76, #93, espressif/esp-csi#238):
+  // some Multi-antenna routers can expose doubled HT CSI blocks (256->128 for HT20, or 228->114 for short 57-SC).
+  if (csi_len == HT20_CSI_LEN_DOUBLE || csi_len == HT20_CSI_LEN_SHORT_DOUBLE) {
+    // The two LTFs share the same HT20 subcarrier layout, so we keep the first block as a valid channel estimate.
+    csi_len = (csi_len == HT20_CSI_LEN_DOUBLE) ? HT20_CSI_LEN : HT20_CSI_LEN_SHORT;
+
+    static bool double_len_collapse_logged = false;
+    if (!double_len_collapse_logged) {
+      ESP_LOGI(TAG, "CSI double-length collapse active: 256->128 and/or 228->114");
+      double_len_collapse_logged = true;
+    }
+  }
+
+  // Fallback for short HT20 seen on C5 and potentially on other targets/AP combinations: 114 bytes maps to 57 complex samples with DC already present
+  // We pad guards to fit our internal HT20 layout (64 SC, 128 bytes).
+  int8_t csi_remapped[HT20_CSI_LEN];
+  if (csi_len == HT20_CSI_LEN_SHORT) {
+    std::memset(csi_remapped, 0, sizeof(csi_remapped));
+    std::memcpy(&csi_remapped[HT20_CSI_LEN_SHORT_LEFT_PAD], csi_data, HT20_CSI_LEN_SHORT);
+    csi_data = csi_remapped;
+    csi_len = HT20_CSI_LEN;
+
+    static bool remap_logged = false;
+    if (!remap_logged) {
+      ESP_LOGI(TAG, "CSI remap active: 57->64 SC (left_pad=4, right_pad=3)");
+      remap_logged = true;
+    }
+  }
+  
+  // At this point we expect 128 bytes (64 SC) for HT20. Filter packets with unexpected SC count.
+  if (csi_len != HT20_CSI_LEN) {
+    if (++packets_filtered_ % 100 == 1) {
+      log_wrong_sc_packet_(data, csi_len, packets_filtered_);
+    }
+    return;
+  }
+  
+  // If calibration is in progress, delegate to calibrator
   if (calibrator_ != nullptr && calibrator_->is_calibrating()) {
     calibrator_->add_packet(csi_data, csi_len);
     return;
   }
   
-  // Process CSI packet (adds turbulence to buffer, no variance calculation)
-  csi_process_packet(processor_,
-                    csi_data, csi_len,
-                    selected_subcarriers_,
-                    NUM_SUBCARRIERS);
+  // Process CSI packet through detector
+  const bool should_measure = (packets_total_++ % 1000 == 0);
+  int64_t start_us = should_measure ? esp_timer_get_time() : 0;
   
-  // Handle periodic callback
+  detector_->process_packet(csi_data, csi_len, selected_subcarriers_, NUM_SUBCARRIERS);
+  
+  // Evaluate state on the internal cadence, but always refresh before a periodic publish.
   packets_processed_++;
-  if (packets_processed_ >= publish_rate_) {
-    // Calculate variance and update state (lazy evaluation - only at publish time)
-    csi_processor_update_state(processor_);
-    motion_state = csi_processor_get_state(processor_);
+  packets_since_evaluation_++;
+  const bool should_publish = packets_processed_ >= publish_rate_;
+  const bool should_evaluate = should_publish || packets_since_evaluation_ >= evaluation_interval_;
+  
+  if (should_evaluate) {
+    // Update detector state on the internal cadence.
+    MotionState previous_state = effective_motion_state_;
+    detector_->update_state();
+    MotionState current_state = update_effective_motion_state_(detector_->get_state());
+    publish_motion_state_if_changed_(previous_state, current_state, motion_state_callback_);
+    packets_since_evaluation_ = 0;
     
-    // Debug: verify gain values are still locked (check every publish cycle)
-#if ESPECTRE_GAIN_LOCK_SUPPORTED
-    {
-      const wifi_pkt_rx_ctrl_phy_t* phy_info = reinterpret_cast<const wifi_pkt_rx_ctrl_phy_t*>(data);
-      uint8_t current_agc = phy_info->agc_gain;
-      uint8_t current_fft = phy_info->fft_gain;
-      uint8_t locked_agc = gain_controller_.get_agc_gain();
-      uint8_t locked_fft = gain_controller_.get_fft_gain();
-      if (current_agc != locked_agc || current_fft != locked_fft) {
-        ESP_LOGW(TAG, "Gain drift detected! AGC: %d→%d, FFT: %d→%d", 
-                 locked_agc, current_agc, locked_fft, current_fft);
+    // Log detection time periodically (every ~10 seconds at 100 pps)
+    if (should_measure) {
+      int64_t elapsed_us = esp_timer_get_time() - start_us;
+      ESP_LOGD(TAG, "[perf] Detection time: %lld us", (long long)elapsed_us);
+    }
+    
+    // Game mode callback: send data every packet for low-latency gameplay
+    if (game_mode_callback_) {
+      float movement = detector_->get_motion_metric();
+      float threshold = detector_->get_threshold();
+      game_mode_callback_(movement, threshold);
+    }
+  
+    // Periodic publish callback
+    if (should_publish) {
+      // Detect WiFi channel changes
+      uint8_t packet_channel = data->rx_ctrl.channel;
+      if (current_channel_ != 0 && packet_channel != current_channel_) {
+        ESP_LOGW(TAG, "WiFi channel changed: %d -> %d, resetting detection buffer",
+                 current_channel_, packet_channel);
+        clear_detector_buffer();
+        current_state = effective_motion_state_;
       }
+      current_channel_ = packet_channel;
+      
+      if (packet_callback_) {
+        packet_callback_(current_state, packets_processed_);
+      }
+      packets_processed_ = 0;
     }
-#endif
-    
-    if (packet_callback_) {
-      packet_callback_(motion_state);
-    }
-    packets_processed_ = 0;
-  } else {
-    // Between publishes, just return the current state (may be stale)
-    motion_state = csi_processor_get_state(processor_);
   }
 }
 
-// Static wrapper for ESP-IDF C callback
-// IRAM_ATTR: Keep in IRAM for consistent low-latency execution from ISR context
 void IRAM_ATTR CSIManager::csi_rx_callback_wrapper_(void* ctx, wifi_csi_info_t* data) {
   CSIManager* manager = static_cast<CSIManager*>(ctx);
   if (manager && data) {
-    // Process packet directly in the manager
-    csi_motion_state_t dummy_state;
-    manager->process_packet(data, dummy_state);
+    manager->process_packet(data);
   }
 }
 
@@ -152,21 +253,18 @@ esp_err_t CSIManager::enable(csi_processed_callback_t packet_callback) {
   
   packet_callback_ = packet_callback;
     
-  // Configure platform-specific CSI settings
   esp_err_t err = configure_platform_specific_();
   if (err != ESP_OK) {
     ESP_LOGE(TAG, "Failed to configure CSI: %s", esp_err_to_name(err));
     return err;
   }
   
-  // Register internal wrapper callback (using injected interface)
   err = wifi_csi_->set_csi_rx_cb(&CSIManager::csi_rx_callback_wrapper_, this);
   if (err != ESP_OK) {
     ESP_LOGE(TAG, "Failed to set CSI callback: %s", esp_err_to_name(err));
     return err;
   }
   
-  // Enable CSI (using injected interface)
   err = wifi_csi_->set_csi(true);
   if (err != ESP_OK) {
     ESP_LOGE(TAG, "Failed to enable CSI: %s", esp_err_to_name(err));
@@ -184,14 +282,12 @@ esp_err_t CSIManager::disable() {
     return ESP_OK;
   }
   
-  // Disable CSI first to stop new callbacks from being invoked
   esp_err_t err = wifi_csi_->set_csi(false);
   if (err != ESP_OK) {
     ESP_LOGE(TAG, "Failed to disable CSI: %s", esp_err_to_name(err));
     return err;
   }
   
-  // Then unregister callback (safe now that CSI is disabled)
   err = wifi_csi_->set_csi_rx_cb(nullptr, nullptr);
   if (err != ESP_OK) {
     ESP_LOGE(TAG, "Failed to unregister CSI callback: %s", esp_err_to_name(err));
@@ -200,45 +296,60 @@ esp_err_t CSIManager::disable() {
   
   enabled_ = false;
   packet_callback_ = nullptr;
+  motion_state_callback_ = nullptr;
+  packets_since_evaluation_ = 0;
+  reset_motion_state_filter_();
   ESP_LOGI(TAG, "CSI disabled and callback unregistered");
   
   return ESP_OK;
 }
 
 esp_err_t CSIManager::configure_platform_specific_() {
-#if CONFIG_IDF_TARGET_ESP32C6 || CONFIG_IDF_TARGET_ESP32C5
-  // ESP32-C5/C6: Modern CSI API with WiFi 6 support
+#if CONFIG_IDF_TARGET_ESP32C5
+  // ESP32-C5: MAC_VERSION_NUM = 3, WiFi 6 capable
   wifi_csi_config_t csi_config = {
-    .enable = 1,                    // Master enable (REQUIRED)
-    .acquire_csi_legacy = 1,        // L-LTF from 802.11a/g (fallback for legacy routers)
-    .acquire_csi_ht20 = 1,          // HT-LTF from 802.11n HT20 (PRIMARY - best SNR)
-    .acquire_csi_ht40 = 0,          // HT40 disabled (less stable, enable only if router uses HT40)
-    .acquire_csi_su = 1,            // HE-LTF from 802.11ax SU (WiFi 6 - better precision if supported)
-    .acquire_csi_mu = 0,            // MU-MIMO disabled (rarely used in home environments)
-    .acquire_csi_dcm = 0,           // DCM disabled (long-range feature, not needed)
-    .acquire_csi_beamformed = 0,    // Beamformed disabled (alters channel estimation)
-#if CONFIG_IDF_TARGET_ESP32C6
-    .acquire_csi_he_stbc = 0,       // HE-STBC disabled (requires multiple antennas) - C6 only
-#endif
-    .val_scale_cfg = 0,             // Auto-scaling (0 for auto)
-    .dump_ack_en = 0,               // ACK frames disabled (adds noise, not useful)
+    .enable = 1,
+    .acquire_csi_legacy = 0,
+    .acquire_csi_force_lltf = 0,
+    .acquire_csi_ht20 = 1,
+    .acquire_csi_ht40 = 0,
+    .acquire_csi_vht = 0,
+    .acquire_csi_su = 0,
+    .acquire_csi_mu = 0,
+    .acquire_csi_dcm = 0,
+    .acquire_csi_beamformed = 0,
+    .acquire_csi_he_stbc_mode = 0,
+    .val_scale_cfg = 0,
+    .dump_ack_en = 0,
+  };
+#elif CONFIG_IDF_TARGET_ESP32C6
+  // ESP32-C6: MAC_VERSION_NUM = 2, WiFi 6 capable
+  wifi_csi_config_t csi_config = {
+    .enable = 1,
+    .acquire_csi_legacy = 0,
+    .acquire_csi_ht20 = 1,
+    .acquire_csi_ht40 = 0,
+    .acquire_csi_su = 0,
+    .acquire_csi_mu = 0,
+    .acquire_csi_dcm = 0,
+    .acquire_csi_beamformed = 0,
+    .acquire_csi_he_stbc = 0,
+    .val_scale_cfg = 0,
+    .dump_ack_en = 0,
   };
 #else
-  // ESP32, ESP32-S2, ESP32-S3, ESP32-C3: Legacy CSI API
   wifi_csi_config_t csi_config = {
-    .lltf_en = false,               // Disabled - HT-LTF only
-    .htltf_en = true,               // HT-LTF only (PRIMARY - best SNR)
-    .stbc_htltf2_en = false,        // Disabled for consistency
-    .ltf_merge_en = false,          // No merge (only HT-LTF enabled)
-    .channel_filter_en = false,     // Raw subcarriers
-    .manu_scale = true,             // Manual scaling
-    .shift = 4,                     // Shift=4 → values/16
+    .lltf_en = false,
+    .htltf_en = true,
+    .stbc_htltf2_en = false,
+    .ltf_merge_en = false,
+    .channel_filter_en = false,
+    .manu_scale = false,
+    .shift = 0,
   };
 #endif
   
   ESP_LOGI(TAG, "Using %s CSI configuration", CONFIG_IDF_TARGET);
-
-  // Configure CSI (using injected interface)
   return wifi_csi_->set_csi_config(&csi_config);
 }
 
