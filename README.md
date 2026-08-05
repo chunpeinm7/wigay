@@ -1,17 +1,16 @@
-# Wi-Care 智能病房監測系統
+# Wi-Care 手勢辨識系統
 
-基於 **WiFi CSI（信道狀態資訊）** 技術的被動式運動偵測系統，整合 ESP32-S3 韌體、Node.js 後端與 Web 看護面板，並支援 Home Assistant 整合。
+基於 **WiFi CSI（信道狀態資訊）** 技術的被動式手勢/動作辨識系統，整合 ESP32-S3 韌體（[ESPectre](https://github.com/francescopace/espectre)）與 Node.js + LSTM 手勢辨識後端。
+
+> 病房監控 / GPIO 控制等舊有子系統目前未使用，已整批壓縮保存於 [archive/](archive)，需要時可解壓復原。
 
 ---
 
 ## 功能特色
 
-- **被動運動偵測**：利用 WiFi CSI 訊號分析人體動作，無需額外感測器
-- **病房監控面板**：即時顯示多樓層病房（1F 12 間、2F 6 間）的狀態
-- **GPIO 裝置控制**：透過 REST API 控制病房門禁與照明開關
-- **手勢辨識實驗室**：錄製訓練樣本並使用 DTW 演算法識別揮手、蹲下、拍手等動作
-- **Home Assistant 整合**：透過 ESPHome API 與智慧家居生態系統無縫整合
-- **即時資料推送**：WebSocket / SSE 即時傳送感測器數值與事件
+- **被動運動偵測**：利用 WiFi CSI 訊號分析人體動作，無需額外感測器（ESPectre 韌體內建 MVS 演算法）
+- **手勢資料錄製**：[gesture-lab.html](gesture-lab/public/gesture-lab.html) 網頁介面連線 ESP32-S3，錄製 empty_room / squat / wave / clap 等訓練樣本
+- **LSTM 動作辨識**：以錄製樣本訓練 LSTM 模型，即時推論並回報目前動作（[live_test.py](gesture-lab/live_test.py)）
 
 ---
 
@@ -20,26 +19,22 @@
 ```
 ┌──────────────────────────────────────┐
 │         硬體層 (ESP32-S3)            │
-│  ESPHome 2024.11.0 + ESP-IDF        │
+│  ESPHome 2026.5.0+ + ESP-IDF        │
 │  ‧ WiFi CSI 訊號處理 (C++)          │
 │  ‧ MVS 運動偵測演算法               │
-│  ‧ GPIO 輸出控制                    │
 └──────────────┬───────────────────────┘
                │ REST API / EventSource / ESPHome API
                ▼
 ┌──────────────────────────────────────┐
-│         後端層 (Node.js)             │
-│  ‧ server.js   — 主伺服器 :3000     │
-│  ‧ csi-server.js — CSI 分析 :3001  │
-│  ‧ gesture-lab/app.js — 訓練 :3010 │
+│      後端層 (Node.js, gesture-lab)   │
+│  ‧ app.js — 連線 ESP32、錄製資料 :3010│
 └──────────────┬───────────────────────┘
-               │ WebSocket / HTTP
+               │ 錄製樣本 (JSON)
                ▼
 ┌──────────────────────────────────────┐
-│         前端層 (Web UI)              │
-│  ‧ 病房監控儀表板                   │
-│  ‧ 即時日誌與系統資訊               │
-│  ‧ 手勢訓練介面                     │
+│         訓練 / 推論層 (Python)       │
+│  ‧ train_lstm.py — 訓練 LSTM 模型    │
+│  ‧ live_test.py  — 即時推論、回報動作 │
 └──────────────────────────────────────┘
 ```
 
@@ -50,14 +45,11 @@
 | 層級 | 技術 |
 |------|------|
 | 微控制器 | ESP32-S3-DevKitC-1（Xtensa 240 MHz，8MB PSRAM） |
-| 韌體框架 | ESPHome 2024.11.0 + ESP-IDF（C++ 自訂組件） |
-| 後端 | Node.js + Express.js + WebSocket / Socket.IO |
-| 前端 | 原生 HTML / JavaScript |
-| 手勢識別 | DTW（動態時間規整） |
-| 運動偵測 | MVS（移動變異數分割）+ Hampel Filter + Low-pass IIR |
-| 通訊協定 | WiFi CSI、WebSocket、REST API、SSE、MQTT（可選）、mDNS |
-| 智慧家居 | Home Assistant（ESPHome 整合） |
-| 輔助工具 | Python（mDNS 代理伺服器） |
+| 韌體框架 | ESPHome 2026.5.0+ + ESP-IDF（[ESPectre](https://github.com/francescopace/espectre) v2.8.0 自訂組件） |
+| 後端 | Node.js + Express.js + Socket.IO |
+| 手勢識別 | LSTM（PyTorch） |
+| 運動偵測 | MVS（移動變異數分割）+ Hampel Filter + NBVI 自適應校準（韌體端） |
+| 通訊協定 | WiFi CSI、REST API、SSE、mDNS |
 
 ---
 
@@ -67,34 +59,38 @@
 wigay-main/
 ├── espectre-s3.yaml          # ESP32-S3 ESPHome 韌體配置
 ├── secrets.yaml              # WiFi 密碼與 API 金鑰（請勿提交）
-├── proxy_server.py           # Python mDNS 代理（解決 Windows 相容問題）
 ├── FIX_MDNS.md               # mDNS 存取疑難排解指南
 ├── components/
-│   └── espectre/             # ESP32 C++ 自訂組件
-│       ├── espectre.h/cpp        # 主組件入口
-│       ├── csi_manager.h/cpp     # CSI 硬體配置與初始化
-│       ├── csi_processor.h/cpp   # MVS 運動偵測核心演算法
-│       ├── calibration_manager.h/cpp  # 自適應校準系統
+│   └── espectre/             # ESP32 C++ 自訂組件（上游 v2.8.0，2026-08 同步）
+│       ├── espectre.h/cpp             # 主組件入口
+│       ├── csi_manager.h/cpp          # CSI 硬體配置與初始化
+│       ├── base_detector.h/cpp        # 偵測器共用基底類別
+│       ├── mvs_detector.h/cpp         # MVS（移動變異數分割）偵測演算法
+│       ├── ml_detector.h/cpp          # 元件內建 ML 偵測演算法（可選，非本專案的 LSTM）
+│       ├── ml_features.h / ml_weights.h  # 內建 ML 模型特徵與權重
+│       ├── threshold.h / filters.h    # 閾值與濾波共用定義
+│       ├── csi_filters.cpp            # Hampel / 低通濾波實作
+│       ├── nbvi_calibrator.h/cpp      # NBVI 自適應子載波校準
+│       ├── calibration_file_buffer.h/cpp  # 校準資料檔案緩衝（取代舊版 calibration_manager）
+│       ├── calibrate_switch.h/cpp     # HA 端手動觸發校準開關
 │       ├── gain_controller.h/cpp      # AGC / FFT 增益控制
 │       ├── sensor_publisher.h/cpp     # HA 感測器資料發布
-│       ├── config_manager.h/cpp       # NVS 配置持久化
 │       ├── wifi_lifecycle.h/cpp       # WiFi 連線生命週期
-│       ├── traffic_generator_manager.h/cpp  # CSI 流量生成
+│       ├── traffic_generator_manager.h/cpp  # CSI 流量生成（新版預設 ping，取代 DNS）
+│       ├── udp_listener.h/cpp         # UDP 監聽（BLE/除錯用）
 │       └── threshold_number.h/cpp     # 動作閾值動態調整
-└── wi-care-web/
-    ├── server.js             # 主伺服器（:3000）
-    ├── server-v2.js          # 主伺服器 v2（:3001）
-    ├── csi-server.js         # CSI 動作分析伺服器
-    ├── package.json
-    ├── data/
-    │   └── entities.json     # 病房 GPIO 開關設定（18 間病房）
-    ├── gesture-lab/
-    │   ├── app.js            # 手勢訓練伺服器（:3010）
-    │   ├── train_lstm.py     # LSTM 模型訓練腳本
-    │   └── data/             # 手勢訓練樣本（wave / squat / clap）
-    └── public/
-        ├── app.js            # 前端主程式
-        └── index.html        # 病房監控儀表板
+├── gesture-lab/               # 手勢辨識後端（自成一個 Node 專案，獨立 package.json）
+│   ├── app.js                 # 抓取數據伺服器，連線 ESP32-S3（:3010）
+│   ├── ecosystem.config.js    # PM2 啟動設定
+│   ├── train_lstm.py          # LSTM 模型訓練腳本
+│   ├── live_test.py           # 即時推論、回報目前動作
+│   ├── fix_keys.py            # 訓練資料欄位修正腳本
+│   ├── lstm_model.pth / scaler.pkl  # 訓練好的 LSTM 模型
+│   ├── data/                  # 手勢訓練樣本（empty_room / squat / wave / clap）
+│   └── public/
+│       └── gesture-lab.html   # 抓取數據網頁
+└── archive/                   # 目前未使用的舊子系統（壓縮保存，需要時解壓即可）
+    └── wigay-unused-20260801.zip  # 病房監控系統、proxy_server.py 等
 ```
 
 ---
@@ -105,7 +101,6 @@ wigay-main/
   - 雙核 Xtensa LX7 @ 240 MHz
   - 512KB SRAM + 8MB Octal PSRAM
   - 802.11 b/g/n WiFi（支援 CSI 存取）
-  - 46 個 GPIO
 
 > WiFi CSI 技術可透過分析 WiFi 訊號的振幅與相位變化來偵測人體動作，偵測範圍約 10 公尺，可穿透牆壁，無需任何額外感測器。
 
@@ -115,9 +110,9 @@ wigay-main/
 
 ### 環境需求
 
-- [ESPHome](https://esphome.io/) 2024.11.0+
+- [ESPHome](https://esphome.io/) 2026.5.0+
 - Node.js 14+
-- Python 3.8+（僅 Windows 需要代理伺服器）
+- Python 3.8+（訓練/推論 LSTM 模型需要 torch、numpy 等套件）
 
 ### 1. 韌體燒錄
 
@@ -127,50 +122,23 @@ wigay-main/
 esphome run espectre-s3.yaml
 ```
 
-### 2. 啟動 Web 伺服器
+### 2. 啟動手勢辨識後端
 
 ```bash
-cd wi-care-web
+cd gesture-lab
 npm install
-
-npm run web:start     # 主伺服器 :3000
-npm run csi           # CSI 動作分析 :3001
-npm run gesture-lab   # 手勢訓練實驗室 :3010
+npm start              # 抓取數據伺服器 :3010，開啟 gesture-lab.html 錄製樣本
 ```
 
-### 3. Windows mDNS 代理（可選）
-
-若無法透過 `172.20.10.11` 存取裝置，請執行代理伺服器：
+### 3. 訓練 / 即時推論
 
 ```bash
-pip install requests
-python proxy_server.py
+cd gesture-lab
+python train_lstm.py           # 用 data/ 內樣本訓練 LSTM 模型
+python live_test.py            # 即時連線 ESP32 並回報目前動作
 ```
 
-詳細說明請參閱 [FIX_MDNS.md](FIX_MDNS.md)。
-
----
-
-## 主要 API
-
-| 方法 | 路徑 | 說明 |
-|------|------|------|
-| GET | `/api/status` | 系統狀態 |
-| GET | `/api/sensors` | 感測器數值 |
-| GET | `/api/gpio` | GPIO 狀態 |
-| POST | `/api/control` | 控制 GPIO / PWM |
-| WS | `/` | 即時事件推送 |
-| SSE | `/events` | CSI 資料串流 |
-
----
-
-## 病房配置
-
-| 樓層 | 病房 | GPIO |
-|------|------|------|
-| 1F（南側）| 101A – 109A | 2, 4, 5, 12–17 |
-| 1F（北側）| 110A – 112A | 32–34 |
-| 2F（東側）| 201B – 206B | 18, 19, 21–23, 25 |
+若無法透過 mDNS（`espectre.local`）存取裝置，請參閱 [FIX_MDNS.md](FIX_MDNS.md)（內含備用的 mDNS 代理方案，代理腳本已收錄於 [archive/](archive)）。
 
 ---
 

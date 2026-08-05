@@ -35,7 +35,7 @@
 
 ### 方案三：透過代理伺服器
 
-專案已包含 `proxy_server.py`，可以透過它訪問：
+`proxy_server.py` 目前未使用，已封存於 [archive/](archive)，需要時解壓即可透過它訪問：
 
 ```bash
 # 1. 先找到 ESP32 的 IP 位址

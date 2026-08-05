@@ -6,13 +6,11 @@
 __pycache__/
 *.pyc
 
-# Wi-Care Web
-wi-care-web/node_modules/
-wi-care-web/.env
-wi-care-web/.env.local
-wi-care-web/data/*.log
-wi-care-web/dist/
-wi-care-web/build/
+# Gesture Lab (LSTM 手勢辨識後端)
+gesture-lab/node_modules/
+gesture-lab/.env
+gesture-lab/.env.local
+gesture-lab/data/*.log
 
 # OS files
 .DS_Store

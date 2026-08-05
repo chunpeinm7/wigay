@@ -16,6 +16,7 @@ import argparse
 import json
 import os
 import pickle
+import sys
 import numpy as np
 # ─────────────────────────────────────────────
 #  設定區
@@ -216,11 +217,23 @@ def build_model(input_size=INPUT_SIZE):
 # ═══════════════════════════════════════════════
 #  7. 訓練主流程
 # ═══════════════════════════════════════════════
+def compute_baseline_mean(X_raw, y):
+    """empty_room（安靜狀態）原始 Raw Score 的平均值，作為之後現場校準的參考基準。
+    韌體每次開機都會重新做 NBVI 校準，同一個動作量測到的數值尺度會跟著飄動；
+    即時推論時只要重新量一段安靜基準、換算比例縮放回這個值，模型就不用因為
+    裝置重開機而重新訓練。"""
+    empty_idx = CLASSES.index("empty_room")
+    vals = [frame[0] for seq, label in zip(X_raw, y) if label == empty_idx for frame in seq]
+    return float(np.mean(vals)) if vals else 1.0
+
+
 def train(epochs=EPOCHS, resume=False):
     import torch
     import torch.nn as nn
     # ── 載入 & 特徵工程 ──
     X_raw, y = load_raw_data()
+    baseline_mean = compute_baseline_mean(X_raw, y)
+    print(f"[基準] 訓練資料的 empty_room 平均值：{baseline_mean:.6f}（存進模型，供即時校準使用）")
     X_3d     = [add_delta(seq) for seq in X_raw]
     # ── 先分割原始錄製（防資料洩漏）──
     trn_idx, val_idx = stratified_split_indices(y, test_size=0.25, random_state=42)
@@ -312,6 +325,7 @@ def train(epochs=EPOCHS, resume=False):
                     "classes"       : CLASSES,
                     "base_features" : BASE_FEATURES,
                     "num_classes"   : len(CLASSES),
+                    "baseline_mean" : baseline_mean,
                 },
             }, MODEL_PATH)
     print(f"\n[完成] 最佳驗證準確率：{best_val_acc:.1%}")
@@ -319,19 +333,36 @@ def train(epochs=EPOCHS, resume=False):
 # ═══════════════════════════════════════════════
 #  8. 推論
 # ═══════════════════════════════════════════════
-def predict(recording: list) -> tuple:
+def predict(recording: list, live_baseline: float = None) -> tuple:
     """
     recording : list of dict，格式同 JSON
+    live_baseline : 現場量測到的「安靜基準值」（例如最近幾秒 Raw Score 的平均）。
+        韌體每次開機都會重新校準，同一個動作量到的數值尺度會跟著飄動；
+        傳入這個參數，會自動換算成跟訓練資料同一個尺度再餵給模型，
+        不用因為裝置重開機就要重新錄資料訓練。
     回傳 (pred_class:str, probs:np.array)
     """
     import torch
+    # scaler.pkl 是用「python train_lstm.py」直接執行時存的，pickle 把
+    # SimpleStandardScaler 記在 __main__ 模組底下。從其他腳本（live_test.py /
+    # live_web.py）匯入 predict() 時，__main__ 已經是呼叫端腳本，需要補上這個
+    # 別名 unpickler 才找得到類別定義。
+    sys.modules["__main__"].SimpleStandardScaler = SimpleStandardScaler
     ckpt   = torch.load(MODEL_PATH, map_location="cpu", weights_only=True)
     cfg    = ckpt["config"]
     scaler = pickle.load(open(SCALER_PATH, "rb"))
     model = build_model(cfg["input_size"])
     model.load_state_dict(ckpt["model_state_dict"])
     model.eval()
-    seq_2d   = [extract_base_features(frame) for frame in recording]
+
+    scale_factor = 1.0
+    baseline_mean = cfg.get("baseline_mean")
+    if live_baseline is not None and baseline_mean is not None and live_baseline > 1e-6:
+        scale_factor = baseline_mean / live_baseline
+
+    seq_2d = [extract_base_features(frame) for frame in recording]
+    if scale_factor != 1.0:
+        seq_2d = [[v * scale_factor for v in frame] for frame in seq_2d]
     seq_3d   = add_delta(seq_2d)
     seq_norm = scaler.transform(seq_3d).astype(np.float32)
     seq_pad  = pad_or_truncate(seq_norm, cfg["seq_len"])

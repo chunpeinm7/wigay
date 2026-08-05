@@ -1,0 +1,14 @@
+{
+  "name": "gesture-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Wi-Care 手勢辨識後端：連接 ESP32-S3 CSI 資料、錄製訓練樣本、LSTM 動作偵測",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.8.3"
+  }
+}

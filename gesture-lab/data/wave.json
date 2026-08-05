@@ -1,0 +1,887 @@
+[
+  [
+    {
+      "deviceA": 0.1,
+      "deviceB": 1.046,
+      "timestamp": 1785591791093
+    },
+    {
+      "deviceA": 0.07,
+      "deviceB": 0.422,
+      "timestamp": 1785591791537
+    },
+    {
+      "deviceA": 1.11,
+      "deviceB": 0.42,
+      "timestamp": 1785591791967
+    },
+    {
+      "deviceA": 1.88,
+      "deviceB": 0.668,
+      "timestamp": 1785591792387
+    },
+    {
+      "deviceA": 1.36,
+      "deviceB": 0.904,
+      "timestamp": 1785591792827
+    },
+    {
+      "deviceA": 1.17,
+      "deviceB": 1.118,
+      "timestamp": 1785591793197
+    },
+    {
+      "deviceA": 1.17,
+      "deviceB": 1.338,
+      "timestamp": 1785591793598
+    },
+    {
+      "deviceA": 0.81,
+      "deviceB": 1.278,
+      "timestamp": 1785591794011
+    },
+    {
+      "deviceA": 0.43,
+      "deviceB": 0.988,
+      "timestamp": 1785591794396
+    },
+    {
+      "deviceA": 0.55,
+      "deviceB": 0.826,
+      "timestamp": 1785591794804
+    },
+    {
+      "deviceA": 0.3,
+      "deviceB": 0.652,
+      "timestamp": 1785591795216
+    },
+    {
+      "deviceA": 1.25,
+      "deviceB": 0.668,
+      "timestamp": 1785591795617
+    },
+    {
+      "deviceA": 1.34,
+      "deviceB": 0.774,
+      "timestamp": 1785591796036
+    }
+  ],
+  [
+    {
+      "deviceA": 0.25,
+      "deviceB": 0.364,
+      "timestamp": 1785591798072
+    },
+    {
+      "deviceA": 0.13,
+      "deviceB": 0.28,
+      "timestamp": 1785591798481
+    },
+    {
+      "deviceA": 1.47,
+      "deviceB": 0.464,
+      "timestamp": 1785591798885
+    },
+    {
+      "deviceA": 0.62,
+      "deviceB": 0.538,
+      "timestamp": 1785591799292
+    },
+    {
+      "deviceA": 0.43,
+      "deviceB": 0.58,
+      "timestamp": 1785591799712
+    },
+    {
+      "deviceA": 0.43,
+      "deviceB": 0.616,
+      "timestamp": 1785591800123
+    },
+    {
+      "deviceA": 1.41,
+      "deviceB": 0.872,
+      "timestamp": 1785591800509
+    },
+    {
+      "deviceA": 1.29,
+      "deviceB": 0.836,
+      "timestamp": 1785591800927
+    },
+    {
+      "deviceA": 0.3,
+      "deviceB": 0.772,
+      "timestamp": 1785591801359
+    },
+    {
+      "deviceA": 0.25,
+      "deviceB": 0.736,
+      "timestamp": 1785591801755
+    },
+    {
+      "deviceA": 0.69,
+      "deviceB": 0.788,
+      "timestamp": 1785591802157
+    },
+    {
+      "deviceA": 0.73,
+      "deviceB": 0.652,
+      "timestamp": 1785591802565
+    },
+    {
+      "deviceA": 0.13,
+      "deviceB": 0.42,
+      "timestamp": 1785591802982
+    },
+    {
+      "deviceA": 0.12,
+      "deviceB": 0.384,
+      "timestamp": 1785591803378
+    },
+    {
+      "deviceA": 0.66,
+      "deviceB": 0.466,
+      "timestamp": 1785591803786
+    }
+  ],
+  [
+    {
+      "deviceA": 1.91,
+      "deviceB": 1.43,
+      "timestamp": 1785591806324
+    },
+    {
+      "deviceA": 0.03,
+      "deviceB": 1.266,
+      "timestamp": 1785591806684
+    },
+    {
+      "deviceA": 1.54,
+      "deviceB": 1.478,
+      "timestamp": 1785591807166
+    },
+    {
+      "deviceA": 1.54,
+      "deviceB": 1.55,
+      "timestamp": 1785591807520
+    },
+    {
+      "deviceA": 1.54,
+      "deviceB": 1.312,
+      "timestamp": 1785591807986
+    },
+    {
+      "deviceA": 1.54,
+      "deviceB": 1.238,
+      "timestamp": 1785591808338
+    },
+    {
+      "deviceA": 2.31,
+      "deviceB": 1.694,
+      "timestamp": 1785591808775
+    },
+    {
+      "deviceA": 0.36,
+      "deviceB": 1.458,
+      "timestamp": 1785591809126
+    },
+    {
+      "deviceA": 0.36,
+      "deviceB": 1.222,
+      "timestamp": 1785591809558
+    },
+    {
+      "deviceA": 0.36,
+      "deviceB": 0.986,
+      "timestamp": 1785591809976
+    },
+    {
+      "deviceA": 0.64,
+      "deviceB": 0.806,
+      "timestamp": 1785591810403
+    },
+    {
+      "deviceA": 0.88,
+      "deviceB": 0.52,
+      "timestamp": 1785591810828
+    },
+    {
+      "deviceA": 0.88,
+      "deviceB": 0.624,
+      "timestamp": 1785591811235
+    },
+    {
+      "deviceA": 0.88,
+      "deviceB": 0.728,
+      "timestamp": 1785591811576
+    }
+  ],
+  [
+    {
+      "deviceA": 2.19,
+      "deviceB": 1.126,
+      "timestamp": 1785591814244
+    },
+    {
+      "deviceA": 1.79,
+      "deviceB": 1.308,
+      "timestamp": 1785591814446
+    },
+    {
+      "deviceA": 0.65,
+      "deviceB": 1.262,
+      "timestamp": 1785591814847
+    },
+    {
+      "deviceA": 0.51,
+      "deviceB": 1.188,
+      "timestamp": 1785591815247
+    },
+    {
+      "deviceA": 0.54,
+      "deviceB": 1.136,
+      "timestamp": 1785591815667
+    },
+    {
+      "deviceA": 0.31,
+      "deviceB": 0.76,
+      "timestamp": 1785591816075
+    },
+    {
+      "deviceA": 0.31,
+      "deviceB": 0.464,
+      "timestamp": 1785591816638
+    },
+    {
+      "deviceA": 0.33,
+      "deviceB": 0.4,
+      "timestamp": 1785591817029
+    },
+    {
+      "deviceA": 0.39,
+      "deviceB": 0.376,
+      "timestamp": 1785591817433
+    },
+    {
+      "deviceA": 0.25,
+      "deviceB": 0.318,
+      "timestamp": 1785591817978
+    },
+    {
+      "deviceA": 0.38,
+      "deviceB": 0.332,
+      "timestamp": 1785591818342
+    },
+    {
+      "deviceA": 0.53,
+      "deviceB": 0.376,
+      "timestamp": 1785591818771
+    },
+    {
+      "deviceA": 0.82,
+      "deviceB": 0.474,
+      "timestamp": 1785591819165
+    },
+    {
+      "deviceA": 0.56,
+      "deviceB": 0.508,
+      "timestamp": 1785591819571
+    },
+    {
+      "deviceA": 0.51,
+      "deviceB": 0.56,
+      "timestamp": 1785591819985
+    },
+    {
+      "deviceA": 1.32,
+      "deviceB": 0.748,
+      "timestamp": 1785591820402
+    },
+    {
+      "deviceA": 2.44,
+      "deviceB": 1.13,
+      "timestamp": 1785591820795
+    },
+    {
+      "deviceA": 1.88,
+      "deviceB": 1.342,
+      "timestamp": 1785591821240
+    },
+    {
+      "deviceA": 1.51,
+      "deviceB": 1.532,
+      "timestamp": 1785591821611
+    },
+    {
+      "deviceA": 0.67,
+      "deviceB": 1.564,
+      "timestamp": 1785591822015
+    }
+  ],
+  [
+    {
+      "deviceA": 2.02,
+      "deviceB": 1.244,
+      "timestamp": 1785591823758
+    },
+    {
+      "deviceA": 2.49,
+      "deviceB": 1.608,
+      "timestamp": 1785591824195
+    },
+    {
+      "deviceA": 1.79,
+      "deviceB": 1.832,
+      "timestamp": 1785591824580
+    },
+    {
+      "deviceA": 0.73,
+      "deviceB": 1.692,
+      "timestamp": 1785591825007
+    },
+    {
+      "deviceA": 0.65,
+      "deviceB": 1.536,
+      "timestamp": 1785591825402
+    },
+    {
+      "deviceA": 1.03,
+      "deviceB": 1.338,
+      "timestamp": 1785591825809
+    },
+    {
+      "deviceA": 0.75,
+      "deviceB": 0.99,
+      "timestamp": 1785591826225
+    },
+    {
+      "deviceA": 0.75,
+      "deviceB": 0.782,
+      "timestamp": 1785591826629
+    },
+    {
+      "deviceA": 0.86,
+      "deviceB": 0.808,
+      "timestamp": 1785591827094
+    },
+    {
+      "deviceA": 1.14,
+      "deviceB": 0.906,
+      "timestamp": 1785591827519
+    },
+    {
+      "deviceA": 0.93,
+      "deviceB": 0.886,
+      "timestamp": 1785591827891
+    },
+    {
+      "deviceA": 0.46,
+      "deviceB": 0.828,
+      "timestamp": 1785591828314
+    },
+    {
+      "deviceA": 0.33,
+      "deviceB": 0.744,
+      "timestamp": 1785591828729
+    },
+    {
+      "deviceA": 0.8,
+      "deviceB": 0.732,
+      "timestamp": 1785591829140
+    },
+    {
+      "deviceA": 0.78,
+      "deviceB": 0.66,
+      "timestamp": 1785591829524
+    }
+  ],
+  [
+    {
+      "deviceA": 0.34,
+      "deviceB": 1.01,
+      "timestamp": 1785591833197
+    },
+    {
+      "deviceA": 0.34,
+      "deviceB": 0.918,
+      "timestamp": 1785591833590
+    },
+    {
+      "deviceA": 0.99,
+      "deviceB": 0.576,
+      "timestamp": 1785591834009
+    },
+    {
+      "deviceA": 1.27,
+      "deviceB": 0.724,
+      "timestamp": 1785591834411
+    },
+    {
+      "deviceA": 1.08,
+      "deviceB": 0.804,
+      "timestamp": 1785591834824
+    },
+    {
+      "deviceA": 1.95,
+      "deviceB": 1.126,
+      "timestamp": 1785591835249
+    },
+    {
+      "deviceA": 1.22,
+      "deviceB": 1.302,
+      "timestamp": 1785591835651
+    },
+    {
+      "deviceA": 0.54,
+      "deviceB": 1.212,
+      "timestamp": 1785591836071
+    },
+    {
+      "deviceA": 0.54,
+      "deviceB": 1.066,
+      "timestamp": 1785591836464
+    },
+    {
+      "deviceA": 0.87,
+      "deviceB": 1.024,
+      "timestamp": 1785591836862
+    },
+    {
+      "deviceA": 0.95,
+      "deviceB": 0.824,
+      "timestamp": 1785591837467
+    },
+    {
+      "deviceA": 0.99,
+      "deviceB": 0.778,
+      "timestamp": 1785591837892
+    },
+    {
+      "deviceA": 1.25,
+      "deviceB": 0.92,
+      "timestamp": 1785591838296
+    },
+    {
+      "deviceA": 1.51,
+      "deviceB": 1.114,
+      "timestamp": 1785591838705
+    },
+    {
+      "deviceA": 1.51,
+      "deviceB": 1.242,
+      "timestamp": 1785591839119
+    },
+    {
+      "deviceA": 1.61,
+      "deviceB": 1.374,
+      "timestamp": 1785591839526
+    },
+    {
+      "deviceA": 2.51,
+      "deviceB": 1.678,
+      "timestamp": 1785591839934
+    },
+    {
+      "deviceA": 1.7,
+      "deviceB": 1.768,
+      "timestamp": 1785591840346
+    },
+    {
+      "deviceA": 0.89,
+      "deviceB": 1.644,
+      "timestamp": 1785591840753
+    },
+    {
+      "deviceA": 0.83,
+      "deviceB": 1.508,
+      "timestamp": 1785591841179
+    },
+    {
+      "deviceA": 1.68,
+      "deviceB": 1.522,
+      "timestamp": 1785591841580
+    },
+    {
+      "deviceA": 1.93,
+      "deviceB": 1.406,
+      "timestamp": 1785591841957
+    },
+    {
+      "deviceA": 1.93,
+      "deviceB": 1.452,
+      "timestamp": 1785591842365
+    },
+    {
+      "deviceA": 1.41,
+      "deviceB": 1.556,
+      "timestamp": 1785591842787
+    },
+    {
+      "deviceA": 1.59,
+      "deviceB": 1.708,
+      "timestamp": 1785591843207
+    },
+    {
+      "deviceA": 1.16,
+      "deviceB": 1.604,
+      "timestamp": 1785591843630
+    }
+  ],
+  [
+    {
+      "deviceA": 0.64,
+      "deviceB": 0.758,
+      "timestamp": 1785591845660
+    },
+    {
+      "deviceA": 0.64,
+      "deviceB": 0.412,
+      "timestamp": 1785591846047
+    },
+    {
+      "deviceA": 2.07,
+      "deviceB": 0.738,
+      "timestamp": 1785591846451
+    },
+    {
+      "deviceA": 1.58,
+      "deviceB": 1.022,
+      "timestamp": 1785591846859
+    },
+    {
+      "deviceA": 1.73,
+      "deviceB": 1.332,
+      "timestamp": 1785591847279
+    },
+    {
+      "deviceA": 1.08,
+      "deviceB": 1.42,
+      "timestamp": 1785591847922
+    },
+    {
+      "deviceA": 0.65,
+      "deviceB": 1.422,
+      "timestamp": 1785591848341
+    },
+    {
+      "deviceA": 1.86,
+      "deviceB": 1.38,
+      "timestamp": 1785591848745
+    },
+    {
+      "deviceA": 0.43,
+      "deviceB": 1.15,
+      "timestamp": 1785591849153
+    },
+    {
+      "deviceA": 0.39,
+      "deviceB": 0.882,
+      "timestamp": 1785591849566
+    },
+    {
+      "deviceA": 1.3,
+      "deviceB": 0.926,
+      "timestamp": 1785591849995
+    },
+    {
+      "deviceA": 1.3,
+      "deviceB": 1.056,
+      "timestamp": 1785591850389
+    },
+    {
+      "deviceA": 1.07,
+      "deviceB": 0.898,
+      "timestamp": 1785591850794
+    },
+    {
+      "deviceA": 1.07,
+      "deviceB": 1.026,
+      "timestamp": 1785591851215
+    },
+    {
+      "deviceA": 1.09,
+      "deviceB": 1.166,
+      "timestamp": 1785591851629
+    },
+    {
+      "deviceA": 1.14,
+      "deviceB": 1.134,
+      "timestamp": 1785591852030
+    },
+    {
+      "deviceA": 1.35,
+      "deviceB": 1.144,
+      "timestamp": 1785591852419
+    },
+    {
+      "deviceA": 0.77,
+      "deviceB": 1.084,
+      "timestamp": 1785591852857
+    },
+    {
+      "deviceA": 0.94,
+      "deviceB": 1.058,
+      "timestamp": 1785591853274
+    },
+    {
+      "deviceA": 2.39,
+      "deviceB": 1.318,
+      "timestamp": 1785591853657
+    },
+    {
+      "deviceA": 3.24,
+      "deviceB": 1.738,
+      "timestamp": 1785591854084
+    },
+    {
+      "deviceA": 3.24,
+      "deviceB": 2.116,
+      "timestamp": 1785591854476
+    }
+  ],
+  [
+    {
+      "deviceA": 0.19,
+      "deviceB": 0.146,
+      "timestamp": 1785591857727
+    },
+    {
+      "deviceA": 3.63,
+      "deviceB": 0.842,
+      "timestamp": 1785591858377
+    },
+    {
+      "deviceA": 3.63,
+      "deviceB": 1.546,
+      "timestamp": 1785591858631
+    },
+    {
+      "deviceA": 2.28,
+      "deviceB": 1.974,
+      "timestamp": 1785591859039
+    },
+    {
+      "deviceA": 0.84,
+      "deviceB": 2.114,
+      "timestamp": 1785591859455
+    },
+    {
+      "deviceA": 0.6,
+      "deviceB": 2.196,
+      "timestamp": 1785591859837
+    },
+    {
+      "deviceA": 1.06,
+      "deviceB": 1.682,
+      "timestamp": 1785591860247
+    },
+    {
+      "deviceA": 1.61,
+      "deviceB": 1.278,
+      "timestamp": 1785591860678
+    },
+    {
+      "deviceA": 1.9,
+      "deviceB": 1.202,
+      "timestamp": 1785591861291
+    },
+    {
+      "deviceA": 1.9,
+      "deviceB": 1.414,
+      "timestamp": 1785591861599
+    },
+    {
+      "deviceA": 3.01,
+      "deviceB": 1.896,
+      "timestamp": 1785591861973
+    },
+    {
+      "deviceA": 1.47,
+      "deviceB": 1.978,
+      "timestamp": 1785591862394
+    },
+    {
+      "deviceA": 1.34,
+      "deviceB": 1.924,
+      "timestamp": 1785591862800
+    },
+    {
+      "deviceA": 2,
+      "deviceB": 1.944,
+      "timestamp": 1785591863210
+    }
+  ],
+  [
+    {
+      "deviceA": 0.43,
+      "deviceB": 0.286,
+      "timestamp": 1785591866389
+    },
+    {
+      "deviceA": 0.29,
+      "deviceB": 0.29,
+      "timestamp": 1785591866801
+    },
+    {
+      "deviceA": 3.1,
+      "deviceB": 0.866,
+      "timestamp": 1785591867210
+    },
+    {
+      "deviceA": 3.11,
+      "deviceB": 1.46,
+      "timestamp": 1785591867606
+    },
+    {
+      "deviceA": 0.34,
+      "deviceB": 1.454,
+      "timestamp": 1785591868021
+    },
+    {
+      "deviceA": 0.34,
+      "deviceB": 1.436,
+      "timestamp": 1785591868431
+    },
+    {
+      "deviceA": 0.55,
+      "deviceB": 1.488,
+      "timestamp": 1785591868839
+    },
+    {
+      "deviceA": 1.34,
+      "deviceB": 1.136,
+      "timestamp": 1785591869282
+    },
+    {
+      "deviceA": 1.46,
+      "deviceB": 0.806,
+      "timestamp": 1785591869658
+    },
+    {
+      "deviceA": 0.54,
+      "deviceB": 0.846,
+      "timestamp": 1785591870073
+    },
+    {
+      "deviceA": 1.04,
+      "deviceB": 0.986,
+      "timestamp": 1785591870467
+    },
+    {
+      "deviceA": 1.36,
+      "deviceB": 1.148,
+      "timestamp": 1785591870877
+    },
+    {
+      "deviceA": 0.93,
+      "deviceB": 1.066,
+      "timestamp": 1785591871279
+    },
+    {
+      "deviceA": 0.77,
+      "deviceB": 0.928,
+      "timestamp": 1785591871683
+    },
+    {
+      "deviceA": 0.77,
+      "deviceB": 0.974,
+      "timestamp": 1785591872105
+    },
+    {
+      "deviceA": 0.95,
+      "deviceB": 0.956,
+      "timestamp": 1785591872535
+    },
+    {
+      "deviceA": 1.32,
+      "deviceB": 0.948,
+      "timestamp": 1785591872914
+    }
+  ],
+  [
+    {
+      "deviceA": 0.25,
+      "deviceB": 0.838,
+      "timestamp": 1785591874932
+    },
+    {
+      "deviceA": 0.25,
+      "deviceB": 0.69,
+      "timestamp": 1785591875338
+    },
+    {
+      "deviceA": 0.53,
+      "deviceB": 0.538,
+      "timestamp": 1785591875744
+    },
+    {
+      "deviceA": 0.48,
+      "deviceB": 0.466,
+      "timestamp": 1785591876160
+    },
+    {
+      "deviceA": 2.58,
+      "deviceB": 0.818,
+      "timestamp": 1785591876598
+    },
+    {
+      "deviceA": 0.9,
+      "deviceB": 0.948,
+      "timestamp": 1785591877008
+    },
+    {
+      "deviceA": 0.54,
+      "deviceB": 1.006,
+      "timestamp": 1785591877418
+    },
+    {
+      "deviceA": 1.36,
+      "deviceB": 1.172,
+      "timestamp": 1785591877855
+    },
+    {
+      "deviceA": 1.68,
+      "deviceB": 1.412,
+      "timestamp": 1785591878248
+    },
+    {
+      "deviceA": 1.43,
+      "deviceB": 1.182,
+      "timestamp": 1785591878651
+    },
+    {
+      "deviceA": 1.43,
+      "deviceB": 1.288,
+      "timestamp": 1785591879063
+    },
+    {
+      "deviceA": 1.35,
+      "deviceB": 1.45,
+      "timestamp": 1785591879466
+    },
+    {
+      "deviceA": 1.86,
+      "deviceB": 1.55,
+      "timestamp": 1785591879875
+    },
+    {
+      "deviceA": 1.93,
+      "deviceB": 1.6,
+      "timestamp": 1785591880285
+    },
+    {
+      "deviceA": 0.87,
+      "deviceB": 1.488,
+      "timestamp": 1785591880692
+    },
+    {
+      "deviceA": 0.73,
+      "deviceB": 1.348,
+      "timestamp": 1785591881102
+    },
+    {
+      "deviceA": 0.57,
+      "deviceB": 1.192,
+      "timestamp": 1785591881505
+    }
+  ]
+]
