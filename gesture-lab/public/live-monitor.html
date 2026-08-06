@@ -239,9 +239,18 @@ async function poll() {
     const s = await res.json();
     dot.classList.toggle("on", s.live);
     const waitingForCalibration = s.live && s.calibrating;
-    statusText.textContent = s.live
-      ? (waitingForCalibration ? `已連線 ${s.esp_host}:${s.esp_port}（校準中）` : `已連線 ${s.esp_host}:${s.esp_port}`)
-      : "等待資料中…";
+    const deviceCalibrating = s.live && s.device_calibrating && !s.history.length;
+    if (s.live) {
+      if (deviceCalibrating) {
+        statusText.textContent = `已連線 ${s.esp_host}:${s.esp_port}（ESP32 韌體校準中，請等待…）`;
+      } else if (waitingForCalibration) {
+        statusText.textContent = `已連線 ${s.esp_host}:${s.esp_port}（校準中）`;
+      } else {
+        statusText.textContent = `已連線 ${s.esp_host}:${s.esp_port}`;
+      }
+    } else {
+      statusText.textContent = "等待資料中…";
+    }
     errText.textContent = s.live ? "" : (s.error || "");
     if (document.activeElement !== hostInput) hostInput.value = s.esp_host;
     drawChart(s.history);

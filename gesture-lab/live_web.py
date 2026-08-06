@@ -23,7 +23,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from train_lstm import predict, CLASSES, SEQ_LEN, MODEL_PATH
 
-DEFAULT_ESP_HOST = "172.20.10.11"
+DEFAULT_ESP_HOST = "172.20.10.9"
 DEFAULT_ESP_PORT = 80
 DEFAULT_WEB_PORT = 3020
 SMOOTH_WINDOW = 5          # 移動平均視窗
@@ -61,6 +61,7 @@ state = {
     "prediction": None,     # {label, emoji, probs: {cls: p}}
     "calibrating": True,
     "calibration_progress": 0.0,   # 0~1
+    "device_calibrating": False,   # ESP32 韌體端校準中（value=null）
     "model_baseline": load_model_baseline(),
     "live_baseline": None,
 }
@@ -155,12 +156,26 @@ def sse_worker(host, port, my_stop_event):
                             continue
                         if data.get("id") != "sensor-movement_score":
                             continue
+
+                        # 收到 movement_score 事件就更新時間戳，即使值是 null（ESP32 校準期間）
+                        last_data_ts = time.time()
+
+                        raw_value = data.get("value", data.get("state", "nan"))
+                        # ESP32 校準期間 value 為 null，此時保持連線狀態但不處理數值
+                        if raw_value is None:
+                            with lock:
+                                state["live"] = True
+                                state["device_calibrating"] = True
+                            continue
                         try:
-                            raw = float(data.get("value", data.get("state", "nan")))
+                            raw = float(raw_value)
                         except (TypeError, ValueError):
                             continue
                         if raw != raw:  # NaN
                             continue
+
+                        with lock:
+                            state["device_calibrating"] = False
                         smooth = ma.push(raw)
                         frame = {"Raw Score": raw, "Smoothed Score": smooth}
                         window.append(frame)

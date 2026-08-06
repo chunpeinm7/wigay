@@ -5,7 +5,7 @@ const path = require('path');
 const { Server } = require('socket.io');
 
 const PORT = process.env.PORT || 3010;
-const ESP32_HOST = process.env.ESP32_HOST || '172.20.10.11';
+const ESP32_HOST = process.env.ESP32_HOST || '172.20.10.9';
 const ESP32_PORT = Number(process.env.ESP32_PORT || 80);
 const ESP32_DATA_PATH = process.env.ESP32_DATA_PATH || '/sensor/movement_score';
 const ESP32_POLL_INTERVAL_MS = Number(process.env.ESP32_POLL_INTERVAL_MS || 100);
@@ -220,6 +220,10 @@ function buildDetectionMessage(socketId, sample) {
 let esp32PollingTimer = null;
 let lastBridgeValue = null;
 let bridgeRequestInFlight = false;
+let consecutiveFailures = 0;
+let currentBackoffMs = ESP32_POLL_INTERVAL_MS;
+const MAX_BACKOFF_MS = 10000; // 最大退避間隔 10 秒
+const BACKOFF_MULTIPLIER = 2;
 const smoothingWindow = [];
 
 function pushSmoothingValue(value) {
@@ -298,8 +302,16 @@ function emitBridgedSample(score) {
   io.emit('sensor:update', buildDetectionMessage('esp32-bridge', sample));
 }
 
+function scheduleNextPoll() {
+  if (esp32PollingTimer) {
+    clearTimeout(esp32PollingTimer);
+  }
+  esp32PollingTimer = setTimeout(pollESP32MovementScore, currentBackoffMs);
+}
+
 async function pollESP32MovementScore() {
   if (bridgeRequestInFlight) {
+    scheduleNextPoll();
     return;
   }
 
@@ -326,31 +338,62 @@ async function pollESP32MovementScore() {
 
     const value = parseESP32ResponseValue(body);
     if (Number.isFinite(value)) {
+      // 連線成功 — 重置退避
+      if (consecutiveFailures > 0) {
+        console.log(`[ESP32 bridge] 連線恢復！（先前連續失敗 ${consecutiveFailures} 次）`);
+        io.emit('server:log', {
+          level: 'info',
+          message: `ESP32 橋接連線恢復（先前連續失敗 ${consecutiveFailures} 次）`,
+          timestamp: Date.now()
+        });
+      }
+      consecutiveFailures = 0;
+      currentBackoffMs = ESP32_POLL_INTERVAL_MS;
       lastBridgeValue = value;
       emitBridgedSample(value);
     }
   } catch (err) {
+    consecutiveFailures++;
     const isTimeout = err?.name === 'TimeoutError' || err?.name === 'AbortError';
-    console.error(`[ESP32 bridge timeout] ${ESP32_HOST}:${ESP32_PORT}`);
-    io.emit('server:log', {
-      level: 'warn',
-      message: isTimeout
-        ? `ESP32 橋接超時：連線到 ${ESP32_HOST}:${ESP32_PORT} 回應過慢`
-        : `ESP32 橋接連線錯誤：無法連線到 ${ESP32_HOST}:${ESP32_PORT}`,
-      timestamp: Date.now()
-    });
+
+    // 指數退避：失敗時逐步拉長輪詢間隔，最多到 MAX_BACKOFF_MS
+    const previousBackoff = currentBackoffMs;
+    currentBackoffMs = Math.min(currentBackoffMs * BACKOFF_MULTIPLIER, MAX_BACKOFF_MS);
+
+    // 只在退避等級變化時或首次失敗時輸出 log，避免刷屏
+    if (consecutiveFailures === 1 || currentBackoffMs !== previousBackoff) {
+      const errorType = isTimeout ? '超時' : '連線錯誤';
+      console.error(
+        `[ESP32 bridge] ${errorType} — ${ESP32_HOST}:${ESP32_PORT}` +
+        ` （連續失敗 ${consecutiveFailures} 次，下次重試間隔 ${currentBackoffMs}ms）`
+      );
+    }
+
+    // 只在首次失敗時通知前端，避免刷 socket 訊息
+    if (consecutiveFailures === 1) {
+      io.emit('server:log', {
+        level: 'warn',
+        message: isTimeout
+          ? `ESP32 橋接超時：連線到 ${ESP32_HOST}:${ESP32_PORT} 回應過慢，進入退避重試`
+          : `ESP32 橋接連線錯誤：無法連線到 ${ESP32_HOST}:${ESP32_PORT}，進入退避重試`,
+        timestamp: Date.now()
+      });
+    }
   } finally {
     bridgeRequestInFlight = false;
+    scheduleNextPoll();
   }
 }
 
 function startESP32Bridge() {
   if (esp32PollingTimer) {
-    clearInterval(esp32PollingTimer);
+    clearTimeout(esp32PollingTimer);
   }
 
+  consecutiveFailures = 0;
+  currentBackoffMs = ESP32_POLL_INTERVAL_MS;
+  console.log(`[ESP32 bridge] 開始輪詢 http://${ESP32_HOST}:${ESP32_PORT}${ESP32_DATA_PATH}（間隔 ${ESP32_POLL_INTERVAL_MS}ms）`);
   pollESP32MovementScore();
-  esp32PollingTimer = setInterval(pollESP32MovementScore, ESP32_POLL_INTERVAL_MS);
 }
 
 app.get('/api/source-status', (req, res) => {
